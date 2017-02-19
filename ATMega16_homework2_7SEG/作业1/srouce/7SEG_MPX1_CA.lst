@@ -1,0 +1,293 @@
+Interrupt Vectors
+    00000 940C 002F JMP	__text_start|__start
+
+Program Code (text area)
+__text_start|__start:
+    0002F E5CF      LDI	R28,0x5F
+    00030 E0D4      LDI	R29,4
+    00031 BFCD      OUT	0x3D,R28
+    00032 BFDE      OUT	0x3E,R29
+    00033 51CE      SUBI	R28,0x1E
+    00034 40D0      SBCI	R29,0
+    00035 EA0A      LDI	R16,0xAA
+    00036 8308      ST	Y,R16
+    00037 2400      CLR	R0
+    00038 E6EA      LDI	R30,0x6A
+    00039 E0F0      LDI	R31,0
+    0003A E010      LDI	R17,0
+    0003B 36EA      CPI	R30,0x6A
+    0003C 07F1      CPC	R31,R17
+    0003D F011      BEQ	0x0040
+    0003E 9201      ST	Z+,R0
+    0003F CFFB      RJMP	0x003B
+    00040 8300      ST	Z,R16
+    00041 E5E4      LDI	R30,0x54
+    00042 E0F0      LDI	R31,0
+    00043 E6A0      LDI	R26,0x60
+    00044 E0B0      LDI	R27,0
+    00045 E010      LDI	R17,0
+    00046 E000      LDI	R16,0
+    00047 BF0B      OUT	0x3B,R16
+    00048 35EE      CPI	R30,0x5E
+    00049 07F1      CPC	R31,R17
+    0004A F021      BEQ	0x004F
+    0004B 95C8      LPM
+    0004C 9631      ADIW	R30,1
+    0004D 920D      ST	X+,R0
+    0004E CFF9      RJMP	0x0048
+    0004F 940E 0069 CALL	_main
+_exit:
+    00051 CFFF      RJMP	_exit
+_delay:
+  i                    --> R20
+  j                    --> R22
+  x                    --> R16
+    00052 940E 00F1 CALL	push_xgsetF000
+FILE: C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+(0001) #include <iom16v.h>
+(0002) 
+(0003) /*延时函数*/
+(0004) void delay(unsigned char x)
+(0005) {
+(0006)   unsigned int i,j;
+(0007)   for(i = 0 ; i < x ;i ++)
+    00054 2744      CLR	R20
+    00055 2755      CLR	R21
+    00056 C00B      RJMP	0x0062
+(0008)     for(j = 0 ; j < 1140; j++) ;
+    00057 2766      CLR	R22
+    00058 2777      CLR	R23
+    00059 C002      RJMP	0x005C
+    0005A 5F6F      SUBI	R22,0xFF
+    0005B 4F7F      SBCI	R23,0xFF
+    0005C 3764      CPI	R22,0x74
+    0005D E0E4      LDI	R30,4
+    0005E 077E      CPC	R23,R30
+    0005F F3D0      BCS	0x005A
+    00060 5F4F      SUBI	R20,0xFF
+    00061 4F5F      SBCI	R21,0xFF
+    00062 2E20      MOV	R2,R16
+    00063 2433      CLR	R3
+    00064 1542      CP	R20,R2
+    00065 0553      CPC	R21,R3
+    00066 F380      BCS	0x0057
+    00067 940C 00F6 JMP	pop_xgsetF000
+(0009) }
+(0010) 
+(0011) /*共阴数码管键码*/
+(0012) const unsigned char table[]={0x3f , 0x06 , 0x5b , 0x4f , 0x66 , 0x6d , 0x7d , 0x07 , 0x7f , 0x6f};
+(0013) 
+(0014) void main()
+(0015) {
+(0016)   
+(0017)   unsigned int seconds_gewei=0,seconds_shiwei=0,
+_main:
+  minutes_shiwei       --> R14
+  count                --> R12
+  minutes_gewei        --> R10
+  seconds_shiwei       --> R22
+  seconds_gewei        --> R20
+    00069 2744      CLR	R20
+    0006A 2755      CLR	R21
+    0006B 2766      CLR	R22
+    0006C 2777      CLR	R23
+(0018)   		   	   minutes_gewei=0,minutes_shiwei=0,
+    0006D 24AA      CLR	R10
+    0006E 24BB      CLR	R11
+    0006F 24EE      CLR	R14
+    00070 24FF      CLR	R15
+(0019)   		   	   count=1;
+    00071 E081      LDI	R24,1
+    00072 E090      LDI	R25,0
+    00073 016C      MOVW	R12,R24
+(0020)   
+(0021)   DDRC = 0xff;
+    00074 EF8F      LDI	R24,0xFF
+    00075 BB84      OUT	0x14,R24
+(0022)   DDRD = 0x0f;
+    00076 E08F      LDI	R24,0xF
+    00077 BB81      OUT	0x11,R24
+(0023)   PORTC = 0x00;
+    00078 2422      CLR	R2
+    00079 BA25      OUT	0x15,R2
+(0024)   PORTD = 0x00;
+    0007A BA22      OUT	0x12,R2
+    0007B C057      RJMP	0x00D3
+(0025)   
+(0026)   while(1)
+(0027)   {
+(0028)   
+(0029) 	PORTD = 0xfd;
+    0007C EF8D      LDI	R24,0xFD
+    0007D BB82      OUT	0x12,R24
+(0030) 	PORTC = table[seconds_gewei];  //渲染秒的个位数
+    0007E E680      LDI	R24,0x60
+    0007F E090      LDI	R25,0
+    00080 01FA      MOVW	R30,R20
+    00081 0FE8      ADD	R30,R24
+    00082 1FF9      ADC	R31,R25
+    00083 8020      LD	R2,Z
+    00084 BA25      OUT	0x15,R2
+(0031) 	delay(10);
+    00085 E00A      LDI	R16,0xA
+    00086 DFCB      RCALL	_delay
+(0032) 	
+(0033) 	PORTD = 0xfe;
+    00087 EF8E      LDI	R24,0xFE
+    00088 BB82      OUT	0x12,R24
+(0034) 	PORTC = table[seconds_shiwei];  //渲染秒的十位数
+    00089 E680      LDI	R24,0x60
+    0008A E090      LDI	R25,0
+    0008B 01FB      MOVW	R30,R22
+    0008C 0FE8      ADD	R30,R24
+    0008D 1FF9      ADC	R31,R25
+    0008E 8020      LD	R2,Z
+    0008F BA25      OUT	0x15,R2
+(0035) 	delay(10);
+    00090 E00A      LDI	R16,0xA
+    00091 DFC0      RCALL	_delay
+(0036) 	
+(0037) 	PORTD = 0xfb;
+    00092 EF8B      LDI	R24,0xFB
+    00093 BB82      OUT	0x12,R24
+(0038) 	PORTC = table[minutes_gewei];  //渲染分的个位数
+    00094 E680      LDI	R24,0x60
+    00095 E090      LDI	R25,0
+    00096 01F5      MOVW	R30,R10
+    00097 0FE8      ADD	R30,R24
+    00098 1FF9      ADC	R31,R25
+    00099 8020      LD	R2,Z
+    0009A BA25      OUT	0x15,R2
+(0039) 	delay(10);
+    0009B E00A      LDI	R16,0xA
+    0009C DFB5      RCALL	_delay
+(0040) 	
+(0041) 	PORTD = 0xf7;
+    0009D EF87      LDI	R24,0xF7
+    0009E BB82      OUT	0x12,R24
+(0042) 	PORTC = table[minutes_shiwei];  //渲染分的十位数
+    0009F E680      LDI	R24,0x60
+    000A0 E090      LDI	R25,0
+    000A1 01F7      MOVW	R30,R14
+    000A2 0FE8      ADD	R30,R24
+    000A3 1FF9      ADC	R31,R25
+    000A4 8020      LD	R2,Z
+    000A5 BA25      OUT	0x15,R2
+(0043) 	delay(10);
+    000A6 E00A      LDI	R16,0xA
+    000A7 DFAA      RCALL	_delay
+(0044) 	
+(0045) 	
+(0046) 	
+(0047) 	if(count%26==0)	   //当每1000ms时，秒的个位数加一
+    000A8 E12A      LDI	R18,0x1A
+    000A9 E030      LDI	R19,0
+    000AA 0186      MOVW	R16,R12
+    000AB 940E 00D5 CALL	mod16u
+    000AD 3000      CPI	R16,0
+    000AE 0701      CPC	R16,R17
+    000AF F429      BNE	0x00B5
+(0048) 	{
+(0049) 	  seconds_gewei++;
+    000B0 5F4F      SUBI	R20,0xFF
+    000B1 4F5F      SBCI	R21,0xFF
+(0050) 	  count=1;
+    000B2 E081      LDI	R24,1
+    000B3 E090      LDI	R25,0
+    000B4 016C      MOVW	R12,R24
+(0051) 	}
+(0052) 	
+(0053) 	if(seconds_gewei==10)  //当秒的个位数达到10时，秒的十位数就进一位
+    000B5 304A      CPI	R20,0xA
+    000B6 E0E0      LDI	R30,0
+    000B7 075E      CPC	R21,R30
+    000B8 F421      BNE	0x00BD
+(0054) 	{
+(0055) 	  seconds_shiwei++;
+    000B9 5F6F      SUBI	R22,0xFF
+    000BA 4F7F      SBCI	R23,0xFF
+(0056) 	  seconds_gewei=0;
+    000BB 2744      CLR	R20
+    000BC 2755      CLR	R21
+(0057) 	}
+(0058) 	
+(0059) 	if(seconds_shiwei==6)  //当秒的十位数达到6时，分的个位数加一，秒的十位数置零
+    000BD 3066      CPI	R22,6
+    000BE E0E0      LDI	R30,0
+    000BF 077E      CPC	R23,R30
+    000C0 F429      BNE	0x00C6
+(0060) 	{
+(0061) 	  minutes_gewei++;
+    000C1 01C5      MOVW	R24,R10
+    000C2 9601      ADIW	R24,1
+    000C3 015C      MOVW	R10,R24
+(0062) 	  seconds_shiwei=0;
+    000C4 2766      CLR	R22
+    000C5 2777      CLR	R23
+(0063) 	}
+(0064) 	
+(0065) 	if(minutes_gewei==10)  //当分的个位数达到10时，分的十位数加一，分的个位数置零
+    000C6 01C5      MOVW	R24,R10
+    000C7 308A      CPI	R24,0xA
+    000C8 E0E0      LDI	R30,0
+    000C9 079E      CPC	R25,R30
+    000CA F429      BNE	0x00D0
+(0066) 	{
+(0067) 	  minutes_shiwei++;
+    000CB 01C7      MOVW	R24,R14
+    000CC 9601      ADIW	R24,1
+    000CD 017C      MOVW	R14,R24
+(0068) 	  minutes_gewei=0;
+    000CE 24AA      CLR	R10
+    000CF 24BB      CLR	R11
+(0069) 	}
+(0070) 	count++;  						//40ms计数一次
+FILE: <library>
+    000D0 01C6      MOVW	R24,R12
+    000D1 9601      ADIW	R24,1
+    000D2 016C      MOVW	R12,R24
+    000D3 CFA8      RJMP	0x007C
+    000D4 9508      RET
+mod16u:
+    000D5 9468      BSET	6
+    000D6 C001      RJMP	xdiv16u
+div16u:
+    000D7 94E8      BCLR	6
+xdiv16u:
+    000D8 92EA      ST	-Y,R14
+    000D9 92FA      ST	-Y,R15
+    000DA 938A      ST	-Y,R24
+    000DB 24EE      CLR	R14
+    000DC 24FF      CLR	R15
+    000DD E180      LDI	R24,0x10
+    000DE 0F00      LSL	R16
+    000DF 1F11      ROL	R17
+    000E0 1CEE      ROL	R14
+    000E1 1CFF      ROL	R15
+    000E2 16E2      CP	R14,R18
+    000E3 06F3      CPC	R15,R19
+    000E4 F018      BCS	0x00E8
+    000E5 1AE2      SUB	R14,R18
+    000E6 0AF3      SBC	R15,R19
+    000E7 9503      INC	R16
+    000E8 958A      DEC	R24
+    000E9 F7A1      BNE	0x00DE
+    000EA F416      BRTC	0x00ED
+    000EB 2D0E      MOV	R16,R14
+    000EC 2D1F      MOV	R17,R15
+    000ED 9189      LD	R24,Y+
+    000EE 90F9      LD	R15,Y+
+    000EF 90E9      LD	R14,Y+
+    000F0 9508      RET
+push_xgsetF000:
+    000F1 937A      ST	-Y,R23
+    000F2 936A      ST	-Y,R22
+    000F3 935A      ST	-Y,R21
+    000F4 934A      ST	-Y,R20
+    000F5 9508      RET
+pop_xgsetF000:
+    000F6 9149      LD	R20,Y+
+    000F7 9159      LD	R21,Y+
+    000F8 9169      LD	R22,Y+
+    000F9 9179      LD	R23,Y+
+    000FA 9508      RET

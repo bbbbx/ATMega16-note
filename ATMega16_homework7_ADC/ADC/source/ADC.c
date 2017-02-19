@@ -1,0 +1,67 @@
+#include <iom16v.h>
+
+unsigned int SEG7_table_ca[] = { 0xC0 ,0xF9 ,0xA4 ,0xB0 ,0x99 ,0x92 ,0x82 ,0xF8 ,0x80 ,0x90 };  //共阳数码管码表0-9
+
+void delay_ms(unsigned int ms)  //延时函数
+{
+  unsigned int i , j ;
+  for( i = 0 ; i < ms ; i++)
+  {
+    for( j = 0 ; j < 1141 ; j++)
+	{
+	   ;
+	}
+  }
+}
+
+void ADC_init()
+{
+  ADMUX = (1<<REFS0)|(1<<MUX2);  		  		  			 //基准AVCC，通道4
+  ADCSRA = (1<<ADEN)|(1<<ADSC)|(1<<ADPS1)|(1<<ADPS0);		 //ADC使能、ADC开始转换、8分频
+}
+
+unsigned int get_AD()
+{
+  unsigned int ad;
+  ADCSRA |= 1<<ADSC;  //ADC开始转换
+  while(!(ADCSRA & (1<<ADIF))) ;  //等待采样结束
+  ad = ADC;		   	  //读取AD结果
+  ADCSRA &= ~(1<<ADIF);  //清ADC中断标志
+  return ad;         //返回结果
+}
+
+void main()
+{
+  unsigned long volts;
+  //初始化io
+  DDRC = 0xff;
+  DDRD = 0x0f;
+  PORTC = 0x00;
+  PORTD = 0x00;
+  
+  ADC_init();  //初始化ADC
+  
+  while(1)
+  {
+    volts = 1.0*get_AD()/1024*5000;  //获取电压值，单位mV
+	
+	PORTD = 0x08;
+	PORTC = SEG7_table_ca[volts % 10];  //渲染第4个数
+	delay_ms(10);
+	
+	volts = volts/10;
+	PORTD = 0x04;
+	PORTC = SEG7_table_ca[volts % 10];  //渲染第3个数
+	delay_ms(10);
+	
+	volts = volts/10;
+	PORTD = 0x02;
+	PORTC = SEG7_table_ca[volts % 10];  //渲染第2个数
+	delay_ms(10);
+	
+	PORTD = 0x01;
+	PORTC = SEG7_table_ca[volts / 10];  //渲染第1个数
+	PORTC &= ~0x80; 			 //加上小数点
+	delay_ms(10);
+  }
+}

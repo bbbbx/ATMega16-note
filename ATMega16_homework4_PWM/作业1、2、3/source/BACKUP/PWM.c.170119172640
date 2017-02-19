@@ -1,0 +1,20 @@
+#include <iom16v.h>
+
+void PWM_OC2_init()
+{
+  //DDRD = 0x80;	  //设置OC2位输出；
+  //PORTD = 0x80;	  //输出高电平
+  
+  TCCR2 = (1<<WGM21)|(1<<WGM20);
+  TCCR2 |= (1<<COM21)|(0<<COM20);
+  TCCR2 |= (1<<CS22)|(0<<CS21)|(1<<CS20);
+  
+  OCR2 = 0x33;
+}
+
+void main()
+{
+  PWM_OC2_init();
+  
+  while(1) {  };
+}

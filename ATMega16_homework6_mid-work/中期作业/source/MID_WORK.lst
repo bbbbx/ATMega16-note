@@ -1,0 +1,831 @@
+Interrupt Vectors
+    00000 940C 0037 JMP	__start|__text_start
+
+Program Code (text area)
+__start|__text_start:
+    00037 E5CF      LDI	R28,0x5F
+    00038 E0D4      LDI	R29,4
+    00039 BFCD      OUT	0x3D,R28
+    0003A BFDE      OUT	0x3E,R29
+    0003B 51CE      SUBI	R28,0x1E
+    0003C 40D0      SBCI	R29,0
+    0003D EA0A      LDI	R16,0xAA
+    0003E 8308      ST	Y,R16
+    0003F 2400      CLR	R0
+    00040 E7EA      LDI	R30,0x7A
+    00041 E0F0      LDI	R31,0
+    00042 E010      LDI	R17,0
+    00043 37EA      CPI	R30,0x7A
+    00044 07F1      CPC	R31,R17
+    00045 F011      BEQ	0x0048
+    00046 9201      ST	Z+,R0
+    00047 CFFB      RJMP	0x0043
+    00048 8300      ST	Z,R16
+    00049 E5E4      LDI	R30,0x54
+    0004A E0F0      LDI	R31,0
+    0004B E6A0      LDI	R26,0x60
+    0004C E0B0      LDI	R27,0
+    0004D E010      LDI	R17,0
+    0004E E000      LDI	R16,0
+    0004F BF0B      OUT	0x3B,R16
+    00050 36EE      CPI	R30,0x6E
+    00051 07F1      CPC	R31,R17
+    00052 F021      BEQ	0x0057
+    00053 95C8      LPM
+    00054 9631      ADIW	R30,1
+    00055 920D      ST	X+,R0
+    00056 CFF9      RJMP	0x0050
+    00057 940E 0217 CALL	_main
+_exit:
+    00059 CFFF      RJMP	_exit
+_delay_ms:
+  i                    --> R20
+  j                    --> R22
+  ms                   --> R16
+    0005A 940E 0252 CALL	push_xgsetF000
+FILE: C:\Users\z\Desktop\中期作业\source\mid_work.c
+(0001) #include <iom16v.h>
+(0002) 
+(0003) unsigned char SEG7_num_ca[] = { 0xC0 ,0xF9 ,0xA4 ,0xB0 ,0x99 ,0x92 ,0x82 ,0xF8 ,0x80 ,0x90 };  //共阳数码管码表0-9
+(0004) unsigned char SEG7_numWithDot_ca[] = { 0x40 ,0x79 ,0x24 ,0x30 ,0x19 ,0x12 ,0x02 ,0x78 ,0x00 ,0x10 };  //共阳数码管码表带小数点0-9
+(0005) 
+(0006) /*
+(0007) -------说明---------
+(0008) SEG7_flag：1显示年份
+(0009) SEG7_flag：2显示日期
+(0010) SEG7_flag：3显示时分
+(0011) 
+(0012) LED_flag：1流水灯正方向
+(0013) LED_flag：2流水灯反方向
+(0014) 
+(0015) alarm_clock_flag：1开启闹钟
+(0016) alarm_clock_flag：0关闭闹钟
+(0017) 
+(0018) motor：1开启舵机
+(0019) motor：0关闭舵机
+(0020) 
+(0021) SEG7_flag：数码管状态，LED_flag：LED状态，alarm_clock_flag：闹钟状态，motor_EN：舵机使能
+(0022) */
+(0023) int SEG7_flag=0 , alarm_clock_flag=1 , motor_EN=0;
+(0024) 
+(0025) void delay_ms(unsigned int ms)  //延时函数
+(0026) {
+(0027)   unsigned int i , j ; 
+(0028)   for (i = 0 ; i < ms ; i++)
+    0005C 2744      CLR	R20
+    0005D 2755      CLR	R21
+    0005E C00B      RJMP	0x006A
+(0029)     for(j = 0 ; j < 1141 ; j++) ;
+    0005F 2766      CLR	R22
+    00060 2777      CLR	R23
+    00061 C002      RJMP	0x0064
+    00062 5F6F      SUBI	R22,0xFF
+    00063 4F7F      SBCI	R23,0xFF
+    00064 3765      CPI	R22,0x75
+    00065 E0E4      LDI	R30,4
+    00066 077E      CPC	R23,R30
+    00067 F3D0      BCS	0x0062
+    00068 5F4F      SUBI	R20,0xFF
+    00069 4F5F      SBCI	R21,0xFF
+    0006A 1740      CP	R20,R16
+    0006B 0751      CPC	R21,R17
+    0006C F390      BCS	0x005F
+    0006D 940C 0257 JMP	pop_xgsetF000
+(0030) }
+(0031) 
+(0032) void SEG7_init()  //数码管IO初始化函数
+(0033) {
+(0034)   DDRA = 0xff;
+_SEG7_init:
+    0006F EF8F      LDI	R24,0xFF
+    00070 BB8A      OUT	0x1A,R24
+(0035)   PORTA = 0x00;
+    00071 2422      CLR	R2
+    00072 BA2B      OUT	0x1B,R2
+(0036)   DDRB = 0xff;
+    00073 BB87      OUT	0x17,R24
+(0037)   PORTB = 0x00;
+    00074 BA28      OUT	0x18,R2
+    00075 9508      RET
+(0038)   
+(0039) }
+(0040) 
+(0041) void SEG7_show_year()  //数码管显示年份2017函数
+(0042) {
+(0043)   //渲染2
+(0044)   PORTB |= (1<<PB0);
+_SEG7_show_year:
+    00076 9AC0      SBI	0x18,0
+(0045)   PORTB &= ~(1<<PB1);
+    00077 98C1      CBI	0x18,1
+(0046)   PORTB &= ~(1<<PB2);
+    00078 98C2      CBI	0x18,2
+(0047)   PORTB &= ~(1<<PB3);
+    00079 98C3      CBI	0x18,3
+(0048)   PORTA = SEG7_num_ca[2];
+    0007A 9020 0062 LDS	R2,SEG7_num_ca+2
+    0007C BA2B      OUT	0x1B,R2
+(0049)   delay_ms(10);
+    0007D E00A      LDI	R16,0xA
+    0007E E010      LDI	R17,0
+    0007F DFDA      RCALL	_delay_ms
+(0050)   //渲染0
+(0051)   PORTB &= ~(1<<PB0);
+    00080 98C0      CBI	0x18,0
+(0052)   PORTB |= (1<<PB1);
+    00081 9AC1      SBI	0x18,1
+(0053)   PORTB &= ~(1<<PB2);
+    00082 98C2      CBI	0x18,2
+(0054)   PORTB &= ~(1<<PB3);
+    00083 98C3      CBI	0x18,3
+(0055)   PORTA = SEG7_num_ca[0];
+    00084 9020 0060 LDS	R2,SEG7_num_ca
+    00086 BA2B      OUT	0x1B,R2
+(0056)   delay_ms(10);
+    00087 E00A      LDI	R16,0xA
+    00088 E010      LDI	R17,0
+    00089 DFD0      RCALL	_delay_ms
+(0057)   //渲染1
+(0058)   PORTB &= ~(1<<PB0);
+    0008A 98C0      CBI	0x18,0
+(0059)   PORTB &= ~(1<<PB1);
+    0008B 98C1      CBI	0x18,1
+(0060)   PORTB |= (1<<PB2);
+    0008C 9AC2      SBI	0x18,2
+(0061)   PORTB &= ~(1<<PB3);
+    0008D 98C3      CBI	0x18,3
+(0062)   PORTA = SEG7_num_ca[1];
+    0008E 9020 0061 LDS	R2,SEG7_num_ca+1
+    00090 BA2B      OUT	0x1B,R2
+(0063)   delay_ms(10);
+    00091 E00A      LDI	R16,0xA
+    00092 E010      LDI	R17,0
+    00093 DFC6      RCALL	_delay_ms
+(0064)   //渲染7
+(0065)   PORTB &= ~(1<<PB0);
+    00094 98C0      CBI	0x18,0
+(0066)   PORTB &= ~(1<<PB1);
+    00095 98C1      CBI	0x18,1
+(0067)   PORTB &= ~(1<<PB2);
+    00096 98C2      CBI	0x18,2
+(0068)   PORTB |= (1<<PB3);
+    00097 9AC3      SBI	0x18,3
+(0069)   PORTA = SEG7_num_ca[7];
+    00098 9020 0067 LDS	R2,SEG7_num_ca+7
+    0009A BA2B      OUT	0x1B,R2
+(0070)   delay_ms(40);
+    0009B E208      LDI	R16,0x28
+    0009C E010      LDI	R17,0
+    0009D CFBC      RJMP	_delay_ms
+(0071) }
+(0072) 
+(0073) void SEG7_show_date()  //数码管显示日期0203函数
+(0074) {
+(0075)   //渲染0
+(0076)   PORTB |= (1<<PB0);
+_SEG7_show_date:
+    0009E 9AC0      SBI	0x18,0
+(0077)   PORTB &= ~(1<<PB1);
+    0009F 98C1      CBI	0x18,1
+(0078)   PORTB &= ~(1<<PB2);
+    000A0 98C2      CBI	0x18,2
+(0079)   PORTB &= ~(1<<PB3);
+    000A1 98C3      CBI	0x18,3
+(0080)   PORTA = SEG7_num_ca[0];
+    000A2 9020 0060 LDS	R2,SEG7_num_ca
+    000A4 BA2B      OUT	0x1B,R2
+(0081)   delay_ms(10);
+    000A5 E00A      LDI	R16,0xA
+    000A6 E010      LDI	R17,0
+    000A7 DFB2      RCALL	_delay_ms
+(0082)   //渲染2
+(0083)   PORTB &= ~(1<<PB0);
+    000A8 98C0      CBI	0x18,0
+(0084)   PORTB |= (1<<PB1);
+    000A9 9AC1      SBI	0x18,1
+(0085)   PORTB &= ~(1<<PB2);
+    000AA 98C2      CBI	0x18,2
+(0086)   PORTB &= ~(1<<PB3);
+    000AB 98C3      CBI	0x18,3
+(0087)   PORTA = SEG7_num_ca[2];
+    000AC 9020 0062 LDS	R2,SEG7_num_ca+2
+    000AE BA2B      OUT	0x1B,R2
+(0088)   delay_ms(10);
+    000AF E00A      LDI	R16,0xA
+    000B0 E010      LDI	R17,0
+    000B1 DFA8      RCALL	_delay_ms
+(0089)   //渲染0
+(0090)   PORTB &= ~(1<<PB0);
+    000B2 98C0      CBI	0x18,0
+(0091)   PORTB &= ~(1<<PB1);
+    000B3 98C1      CBI	0x18,1
+(0092)   PORTB |= (1<<PB2);
+    000B4 9AC2      SBI	0x18,2
+(0093)   PORTB &= ~(1<<PB3);
+    000B5 98C3      CBI	0x18,3
+(0094)   PORTA = SEG7_num_ca[0];
+    000B6 9020 0060 LDS	R2,SEG7_num_ca
+    000B8 BA2B      OUT	0x1B,R2
+(0095)   delay_ms(10);
+    000B9 E00A      LDI	R16,0xA
+    000BA E010      LDI	R17,0
+    000BB DF9E      RCALL	_delay_ms
+(0096)   //渲染3
+(0097)   PORTB &= ~(1<<PB0);
+    000BC 98C0      CBI	0x18,0
+(0098)   PORTB &= ~(1<<PB1);
+    000BD 98C1      CBI	0x18,1
+(0099)   PORTB &= ~(1<<PB2);
+    000BE 98C2      CBI	0x18,2
+(0100)   PORTB |= (1<<PB3);
+    000BF 9AC3      SBI	0x18,3
+(0101)   PORTA = SEG7_num_ca[3];
+    000C0 9020 0063 LDS	R2,SEG7_num_ca+3
+    000C2 BA2B      OUT	0x1B,R2
+(0102)   delay_ms(40);
+    000C3 E208      LDI	R16,0x28
+    000C4 E010      LDI	R17,0
+    000C5 CF94      RJMP	_delay_ms
+(0103) }
+(0104) 
+(0105) void SEG7_show_time()  //数码管显示时分17.54函数
+(0106) {
+(0107)   //渲染1
+(0108)   PORTB |= (1<<PB0);
+_SEG7_show_time:
+    000C6 9AC0      SBI	0x18,0
+(0109)   PORTB &= ~(1<<PB1);
+    000C7 98C1      CBI	0x18,1
+(0110)   PORTB &= ~(1<<PB2);
+    000C8 98C2      CBI	0x18,2
+(0111)   PORTB &= ~(1<<PB3);
+    000C9 98C3      CBI	0x18,3
+(0112)   PORTA = SEG7_num_ca[1];
+    000CA 9020 0061 LDS	R2,SEG7_num_ca+1
+    000CC BA2B      OUT	0x1B,R2
+(0113)   delay_ms(10);
+    000CD E00A      LDI	R16,0xA
+    000CE E010      LDI	R17,0
+    000CF DF8A      RCALL	_delay_ms
+(0114)   //渲染0
+(0115)   PORTB &= ~(1<<PB0);
+    000D0 98C0      CBI	0x18,0
+(0116)   PORTB |= (1<<PB1);
+    000D1 9AC1      SBI	0x18,1
+(0117)   PORTB &= ~(1<<PB2);
+    000D2 98C2      CBI	0x18,2
+(0118)   PORTB &= ~(1<<PB3);
+    000D3 98C3      CBI	0x18,3
+(0119)   PORTA = SEG7_numWithDot_ca[7];
+    000D4 9020 0071 LDS	R2,SEG7_numWithDot_ca+7
+    000D6 BA2B      OUT	0x1B,R2
+(0120)   delay_ms(10);
+    000D7 E00A      LDI	R16,0xA
+    000D8 E010      LDI	R17,0
+    000D9 DF80      RCALL	_delay_ms
+(0121)   //渲染0
+(0122)   PORTB &= ~(1<<PB0);
+    000DA 98C0      CBI	0x18,0
+(0123)   PORTB &= ~(1<<PB1);
+    000DB 98C1      CBI	0x18,1
+(0124)   PORTB |= (1<<PB2);
+    000DC 9AC2      SBI	0x18,2
+(0125)   PORTB &= ~(1<<PB3);
+    000DD 98C3      CBI	0x18,3
+(0126)   PORTA = SEG7_num_ca[5];
+    000DE 9020 0065 LDS	R2,SEG7_num_ca+5
+    000E0 BA2B      OUT	0x1B,R2
+(0127)   delay_ms(10);
+    000E1 E00A      LDI	R16,0xA
+    000E2 E010      LDI	R17,0
+    000E3 DF76      RCALL	_delay_ms
+(0128)   //渲染3
+(0129)   PORTB &= ~(1<<PB0);
+    000E4 98C0      CBI	0x18,0
+(0130)   PORTB &= ~(1<<PB1);
+    000E5 98C1      CBI	0x18,1
+(0131)   PORTB &= ~(1<<PB2);
+    000E6 98C2      CBI	0x18,2
+(0132)   PORTB |= (1<<PB3);
+    000E7 9AC3      SBI	0x18,3
+(0133)   PORTA = SEG7_num_ca[4];
+    000E8 9020 0064 LDS	R2,SEG7_num_ca+4
+    000EA BA2B      OUT	0x1B,R2
+(0134)   delay_ms(40);
+    000EB E208      LDI	R16,0x28
+    000EC E010      LDI	R17,0
+    000ED CF6C      RJMP	_delay_ms
+(0135) }
+(0136) 
+(0137) void button_init()  //矩阵按键IO初始化函数
+(0138) {
+(0139)   DDRC = 0x0f;
+_button_init:
+    000EE E08F      LDI	R24,0xF
+    000EF BB84      OUT	0x14,R24
+(0140)   PORTC = 0xff;
+    000F0 EF8F      LDI	R24,0xFF
+    000F1 BB85      OUT	0x15,R24
+    000F2 9508      RET
+_button_scan:
+    000F3 934A      ST	-Y,R20
+    000F4 935A      ST	-Y,R21
+(0141) }
+(0142) 
+(0143) void button_scan()  //扫描矩阵按键函数
+(0144) {
+(0145)   //扫描第一列
+(0146)   PORTC = 0xf7;
+    000F5 EF87      LDI	R24,0xF7
+    000F6 BB85      OUT	0x15,R24
+(0147)   switch(PINC&(0xf0))
+    000F7 B343      IN	R20,0x13
+    000F8 2755      CLR	R21
+    000F9 7F40      ANDI	R20,0xF0
+    000FA 7050      ANDI	R21,0
+    000FB 3B40      CPI	R20,0xB0
+    000FC E0E0      LDI	R30,0
+    000FD 075E      CPC	R21,R30
+    000FE F159      BEQ	0x012A
+    000FF EB80      LDI	R24,0xB0
+    00100 E090      LDI	R25,0
+    00101 1784      CP	R24,R20
+    00102 0795      CPC	R25,R21
+    00103 F02C      BLT	0x0109
+    00104 3740      CPI	R20,0x70
+    00105 E0E0      LDI	R30,0
+    00106 075E      CPC	R21,R30
+    00107 F0E1      BEQ	0x0124
+    00108 C021      RJMP	0x012A
+    00109 3D40      CPI	R20,0xD0
+    0010A E0E0      LDI	R30,0
+    0010B 075E      CPC	R21,R30
+    0010C F081      BEQ	0x011D
+    0010D 3D40      CPI	R20,0xD0
+    0010E E0E0      LDI	R30,0
+    0010F 075E      CPC	R21,R30
+    00110 F0CC      BLT	0x012A
+    00111 3E40      CPI	R20,0xE0
+    00112 E0E0      LDI	R30,0
+    00113 075E      CPC	R21,R30
+    00114 F009      BEQ	0x0116
+    00115 C014      RJMP	0x012A
+(0148)   {
+(0149)     case 0xe0: SEG7_flag=1 ;
+    00116 E081      LDI	R24,1
+    00117 E090      LDI	R25,0
+    00118 9390 0075 STS	SEG7_flag+1,R25
+    0011A 9380 0074 STS	SEG7_flag,R24
+(0150) 	  	   	   break;  	   	  //按键0
+    0011C C00D      RJMP	0x012A
+(0151) 	case 0xd0: alarm_clock_flag=1 ; 
+    0011D E081      LDI	R24,1
+    0011E E090      LDI	R25,0
+    0011F 9390 0077 STS	alarm_clock_flag+1,R25
+    00121 9380 0076 STS	alarm_clock_flag,R24
+(0152) 	  	   	   break;  	   	  //按键4
+    00123 C006      RJMP	0x012A
+(0153) 	case 0xb0:  
+(0154) 	  	   	   break;  	   	  //按键8
+(0155)     case 0x70: motor_EN=1 ; 
+    00124 E081      LDI	R24,1
+    00125 E090      LDI	R25,0
+    00126 9390 0079 STS	motor_EN+1,R25
+    00128 9380 0078 STS	motor_EN,R24
+(0156) 	  	   	   break;  	   	  //按键12
+(0157)   }
+(0158)   //扫描第二列
+(0159)   PORTC = 0xfb;
+    0012A EF8B      LDI	R24,0xFB
+    0012B BB85      OUT	0x15,R24
+(0160)   switch(PINC&(0xf0))
+    0012C B343      IN	R20,0x13
+    0012D 2755      CLR	R21
+    0012E 7F40      ANDI	R20,0xF0
+    0012F 7050      ANDI	R21,0
+    00130 3B40      CPI	R20,0xB0
+    00131 E0E0      LDI	R30,0
+    00132 075E      CPC	R21,R30
+    00133 F139      BEQ	0x015B
+    00134 EB80      LDI	R24,0xB0
+    00135 E090      LDI	R25,0
+    00136 1784      CP	R24,R20
+    00137 0795      CPC	R25,R21
+    00138 F034      BLT	0x013F
+    00139 3740      CPI	R20,0x70
+    0013A E0E0      LDI	R30,0
+    0013B 075E      CPC	R21,R30
+    0013C F409      BNE	0x013E
+    0013D C048      RJMP	0x0186
+    0013E C047      RJMP	0x0186
+    0013F 3D40      CPI	R20,0xD0
+    00140 E0E0      LDI	R30,0
+    00141 075E      CPC	R21,R30
+    00142 F089      BEQ	0x0154
+    00143 3D40      CPI	R20,0xD0
+    00144 E0E0      LDI	R30,0
+    00145 075E      CPC	R21,R30
+    00146 F40C      BGE	0x0148
+    00147 C03E      RJMP	0x0186
+    00148 3E40      CPI	R20,0xE0
+    00149 E0E0      LDI	R30,0
+    0014A 075E      CPC	R21,R30
+    0014B F009      BEQ	0x014D
+    0014C C039      RJMP	0x0186
+(0161)   {
+(0162)     case 0xe0: SEG7_flag=2 ;
+    0014D E082      LDI	R24,2
+    0014E E090      LDI	R25,0
+    0014F 9390 0075 STS	SEG7_flag+1,R25
+    00151 9380 0074 STS	SEG7_flag,R24
+(0163) 	  	   	   break;  	   	  //按键1
+    00153 C032      RJMP	0x0186
+(0164) 	case 0xd0: alarm_clock_flag=0 ; 
+    00154 2422      CLR	R2
+    00155 2433      CLR	R3
+    00156 9230 0077 STS	alarm_clock_flag+1,R3
+    00158 9220 0076 STS	alarm_clock_flag,R2
+(0165) 	  	   	   break;  	   	  //按键5
+    0015A C02B      RJMP	0x0186
+(0166) 	case 0xb0: LED_init();
+    0015B D0B1      RCALL	_LED_init
+(0167) 		 	   PORTD = 0x01;
+    0015C E081      LDI	R24,1
+    0015D BB82      OUT	0x12,R24
+(0168) 			   delay_ms(100);
+    0015E E604      LDI	R16,0x64
+    0015F E010      LDI	R17,0
+    00160 DEF9      RCALL	_delay_ms
+(0169) 			   PORTD = 0x02;
+    00161 E082      LDI	R24,2
+    00162 BB82      OUT	0x12,R24
+(0170) 			   delay_ms(100);
+    00163 E604      LDI	R16,0x64
+    00164 E010      LDI	R17,0
+    00165 DEF4      RCALL	_delay_ms
+(0171) 			   PORTD = 0x04;
+    00166 E084      LDI	R24,4
+    00167 BB82      OUT	0x12,R24
+(0172) 			   delay_ms(100);
+    00168 E604      LDI	R16,0x64
+    00169 E010      LDI	R17,0
+    0016A DEEF      RCALL	_delay_ms
+(0173) 			   PORTD = 0x08;
+    0016B E088      LDI	R24,0x8
+    0016C BB82      OUT	0x12,R24
+(0174) 			   delay_ms(100);
+    0016D E604      LDI	R16,0x64
+    0016E E010      LDI	R17,0
+    0016F DEEA      RCALL	_delay_ms
+(0175) 			   PORTD = 0x10;
+    00170 E180      LDI	R24,0x10
+    00171 BB82      OUT	0x12,R24
+(0176) 			   delay_ms(100);
+    00172 E604      LDI	R16,0x64
+    00173 E010      LDI	R17,0
+    00174 DEE5      RCALL	_delay_ms
+(0177) 			   PORTD = 0x20;
+    00175 E280      LDI	R24,0x20
+    00176 BB82      OUT	0x12,R24
+(0178) 			   delay_ms(100);
+    00177 E604      LDI	R16,0x64
+    00178 E010      LDI	R17,0
+    00179 DEE0      RCALL	_delay_ms
+(0179) 			   PORTD = 0x40;
+    0017A E480      LDI	R24,0x40
+    0017B BB82      OUT	0x12,R24
+(0180) 			   delay_ms(100);
+    0017C E604      LDI	R16,0x64
+    0017D E010      LDI	R17,0
+    0017E DEDB      RCALL	_delay_ms
+(0181) 			   PORTD = 0x80;
+    0017F E880      LDI	R24,0x80
+    00180 BB82      OUT	0x12,R24
+(0182) 			   delay_ms(100);
+    00181 E604      LDI	R16,0x64
+    00182 E010      LDI	R17,0
+    00183 DED6      RCALL	_delay_ms
+(0183) 			   PORTD = 0x00;
+    00184 2422      CLR	R2
+    00185 BA22      OUT	0x12,R2
+(0184) 	  	   	   break;  	   	  //按键9
+(0185)     case 0x70:  ; 
+(0186) 	  	   	   break;  	   	  //按键13
+(0187)   }
+(0188)   //扫描第三列
+(0189)   PORTC = 0xfd;
+    00186 EF8D      LDI	R24,0xFD
+    00187 BB85      OUT	0x15,R24
+(0190)   switch(PINC&(0xf0))
+    00188 B343      IN	R20,0x13
+    00189 2755      CLR	R21
+    0018A 7F40      ANDI	R20,0xF0
+    0018B 7050      ANDI	R21,0
+    0018C 3B40      CPI	R20,0xB0
+    0018D E0E0      LDI	R30,0
+    0018E 075E      CPC	R21,R30
+    0018F F109      BEQ	0x01B1
+    00190 EB80      LDI	R24,0xB0
+    00191 E090      LDI	R25,0
+    00192 1784      CP	R24,R20
+    00193 0795      CPC	R25,R21
+    00194 F034      BLT	0x019B
+    00195 3740      CPI	R20,0x70
+    00196 E0E0      LDI	R30,0
+    00197 075E      CPC	R21,R30
+    00198 F409      BNE	0x019A
+    00199 C042      RJMP	0x01DC
+    0019A C041      RJMP	0x01DC
+    0019B 3D40      CPI	R20,0xD0
+    0019C E0E0      LDI	R30,0
+    0019D 075E      CPC	R21,R30
+    0019E F409      BNE	0x01A0
+    0019F C03C      RJMP	0x01DC
+    001A0 3D40      CPI	R20,0xD0
+    001A1 E0E0      LDI	R30,0
+    001A2 075E      CPC	R21,R30
+    001A3 F40C      BGE	0x01A5
+    001A4 C037      RJMP	0x01DC
+    001A5 3E40      CPI	R20,0xE0
+    001A6 E0E0      LDI	R30,0
+    001A7 075E      CPC	R21,R30
+    001A8 F009      BEQ	0x01AA
+    001A9 C032      RJMP	0x01DC
+(0191)   {
+(0192)     case 0xe0: SEG7_flag=3 ;
+    001AA E083      LDI	R24,3
+    001AB E090      LDI	R25,0
+    001AC 9390 0075 STS	SEG7_flag+1,R25
+    001AE 9380 0074 STS	SEG7_flag,R24
+(0193) 	  	   	   break;  	   	  //按键2
+    001B0 C02B      RJMP	0x01DC
+(0194) 	case 0xd0: 
+(0195) 	  	   	   break;  	   	  //按键6
+(0196) 	case 0xb0: LED_init();
+    001B1 D05B      RCALL	_LED_init
+(0197) 		 	   PORTD = 0x80;
+    001B2 E880      LDI	R24,0x80
+    001B3 BB82      OUT	0x12,R24
+(0198) 			   delay_ms(100);
+    001B4 E604      LDI	R16,0x64
+    001B5 E010      LDI	R17,0
+    001B6 DEA3      RCALL	_delay_ms
+(0199) 			   PORTD = 0x40;
+    001B7 E480      LDI	R24,0x40
+    001B8 BB82      OUT	0x12,R24
+(0200) 			   delay_ms(100);
+    001B9 E604      LDI	R16,0x64
+    001BA E010      LDI	R17,0
+    001BB DE9E      RCALL	_delay_ms
+(0201) 			   PORTD = 0x20;
+    001BC E280      LDI	R24,0x20
+    001BD BB82      OUT	0x12,R24
+(0202) 			   delay_ms(100);
+    001BE E604      LDI	R16,0x64
+    001BF E010      LDI	R17,0
+    001C0 DE99      RCALL	_delay_ms
+(0203) 			   PORTD = 0x10;
+    001C1 E180      LDI	R24,0x10
+    001C2 BB82      OUT	0x12,R24
+(0204) 			   delay_ms(100);
+    001C3 E604      LDI	R16,0x64
+    001C4 E010      LDI	R17,0
+    001C5 DE94      RCALL	_delay_ms
+(0205) 			   PORTD = 0x08;
+    001C6 E088      LDI	R24,0x8
+    001C7 BB82      OUT	0x12,R24
+(0206) 			   delay_ms(100);
+    001C8 E604      LDI	R16,0x64
+    001C9 E010      LDI	R17,0
+    001CA DE8F      RCALL	_delay_ms
+(0207) 			   PORTD = 0x04;
+    001CB E084      LDI	R24,4
+    001CC BB82      OUT	0x12,R24
+(0208) 			   delay_ms(100);
+    001CD E604      LDI	R16,0x64
+    001CE E010      LDI	R17,0
+    001CF DE8A      RCALL	_delay_ms
+(0209) 			   PORTD = 0x02;
+    001D0 E082      LDI	R24,2
+    001D1 BB82      OUT	0x12,R24
+(0210) 			   delay_ms(100);
+    001D2 E604      LDI	R16,0x64
+    001D3 E010      LDI	R17,0
+    001D4 DE85      RCALL	_delay_ms
+(0211) 			   PORTD = 0x01;
+    001D5 E081      LDI	R24,1
+    001D6 BB82      OUT	0x12,R24
+(0212) 			   delay_ms(100);
+    001D7 E604      LDI	R16,0x64
+    001D8 E010      LDI	R17,0
+    001D9 DE80      RCALL	_delay_ms
+(0213) 			   PORTD = 0x00;
+    001DA 2422      CLR	R2
+    001DB BA22      OUT	0x12,R2
+(0214) 	  	   	   break;  	   	  //按键10
+(0215)     case 0x70:  ; 
+(0216) 	  	   	   break;  	   	  //按键14
+(0217)   }
+(0218)   //扫描第四列
+(0219)   PORTC = 0xfe;
+    001DC EF8E      LDI	R24,0xFE
+    001DD BB85      OUT	0x15,R24
+(0220)   switch(PINC&(0xf0))
+    001DE B343      IN	R20,0x13
+    001DF 2755      CLR	R21
+    001E0 7F40      ANDI	R20,0xF0
+    001E1 7050      ANDI	R21,0
+    001E2 3B40      CPI	R20,0xB0
+    001E3 E0E0      LDI	R30,0
+    001E4 075E      CPC	R21,R30
+    001E5 F0B9      BEQ	0x01FD
+    001E6 EB80      LDI	R24,0xB0
+    001E7 E090      LDI	R25,0
+    001E8 1784      CP	R24,R20
+    001E9 0795      CPC	R25,R21
+    001EA F02C      BLT	0x01F0
+    001EB 3740      CPI	R20,0x70
+    001EC E0E0      LDI	R30,0
+    001ED 075E      CPC	R21,R30
+    001EE F071      BEQ	0x01FD
+    001EF C00D      RJMP	0x01FD
+    001F0 3D40      CPI	R20,0xD0
+    001F1 E0E0      LDI	R30,0
+    001F2 075E      CPC	R21,R30
+    001F3 F049      BEQ	0x01FD
+    001F4 3D40      CPI	R20,0xD0
+    001F5 E0E0      LDI	R30,0
+    001F6 075E      CPC	R21,R30
+    001F7 F02C      BLT	0x01FD
+    001F8 3E40      CPI	R20,0xE0
+    001F9 E0E0      LDI	R30,0
+    001FA 075E      CPC	R21,R30
+    001FB F009      BEQ	0x01FD
+    001FC C000      RJMP	0x01FD
+    001FD 9159      LD	R21,Y+
+    001FE 9149      LD	R20,Y+
+    001FF 9508      RET
+(0221)   {
+(0222)     case 0xe0: 
+(0223) 	  	   	   break;  	   	  //按键3
+(0224) 	case 0xd0:  
+(0225) 	  	   	   break;  	   	  //按键7
+(0226) 	case 0xb0: 
+(0227) 	  	   	   break;  	   	  //按键11
+(0228)     case 0x70:  ; 
+(0229) 	  	   	   break;  	   	  //按键15
+(0230)   }
+(0231) }
+(0232) 
+(0233) void alarm_clock_open()  //开启闹钟
+(0234) {
+(0235)   PORTB &= ~(1<<PB4);
+_alarm_clock_open:
+    00200 98C4      CBI	0x18,4
+    00201 9508      RET
+(0236) }
+(0237) 
+(0238) void alarm_clock_close()  //关闭闹钟
+(0239) {
+(0240)   PORTB |= (1<<PB4);
+_alarm_clock_close:
+    00202 9AC4      SBI	0x18,4
+    00203 9508      RET
+(0241) }
+(0242) 
+(0243) void PWM_OC2_init()  //OC2初始化
+(0244) {
+(0245)   DDRD = 0x80;
+_PWM_OC2_init:
+    00204 E880      LDI	R24,0x80
+    00205 BB81      OUT	0x11,R24
+(0246)   PORTD = 0x00;
+    00206 2422      CLR	R2
+    00207 BA22      OUT	0x12,R2
+(0247)   TCCR2 = (0<<WGM21)|(1<<WGM20)|(1<<COM21)|(0<<COM20)|(1<<CS22)|(1<<CS21)|(0<<CS20); //相位修正PWM模式，256分频，周期为16.4ms
+    00208 E686      LDI	R24,0x66
+    00209 BD85      OUT	0x25,R24
+(0248)   OCR2 = 0x1b;
+    0020A E18B      LDI	R24,0x1B
+    0020B BD83      OUT	0x23,R24
+    0020C 9508      RET
+(0249) }
+(0250) 
+(0251) void LED_init()
+(0252) {
+(0253)   DDRD = 0xff;
+_LED_init:
+    0020D EF8F      LDI	R24,0xFF
+    0020E BB81      OUT	0x11,R24
+(0254)   PORTD = 0x00;
+    0020F 2422      CLR	R2
+    00210 BA22      OUT	0x12,R2
+(0255)   DDRB = 0xf0;
+    00211 EF80      LDI	R24,0xF0
+    00212 BB87      OUT	0x17,R24
+(0256)   PORTB |= 1<<PB6;
+    00213 9AC6      SBI	0x18,6
+(0257)   PORTB |= 0<<PB7;
+    00214 B228      IN	R2,0x18
+    00215 BA28      OUT	0x18,R2
+    00216 9508      RET
+(0258) }
+(0259) 
+(0260) void main()
+(0261) {
+(0262)   SEG7_init();  //初始化数码管引脚
+_main:
+    00217 DE57      RCALL	_SEG7_init
+(0263)   button_init();  //初始化矩阵键盘引脚
+    00218 DED5      RCALL	_button_init
+    00219 C036      RJMP	0x0250
+(0264)   
+(0265)   while(1)
+(0266)   {
+(0267)     button_scan();  //扫描矩阵按键
+    0021A DED8      RCALL	_button_scan
+(0268) 	
+(0269)     switch(SEG7_flag)
+    0021B 9020 0074 LDS	R2,SEG7_flag
+    0021D 9030 0075 LDS	R3,SEG7_flag+1
+    0021F 01C1      MOVW	R24,R2
+    00220 3081      CPI	R24,1
+    00221 E0E0      LDI	R30,0
+    00222 079E      CPC	R25,R30
+    00223 F049      BEQ	0x022D
+    00224 3082      CPI	R24,2
+    00225 E0E0      LDI	R30,0
+    00226 079E      CPC	R25,R30
+    00227 F039      BEQ	0x022F
+    00228 3083      CPI	R24,3
+    00229 E0E0      LDI	R30,0
+    0022A 079E      CPC	R25,R30
+    0022B F029      BEQ	0x0231
+    0022C C005      RJMP	0x0232
+(0270) 	{
+(0271) 	  case 1 : SEG7_show_year();  //数码管显示年份2017
+    0022D DE48      RCALL	_SEG7_show_year
+(0272) 	  	   	   break;
+    0022E C003      RJMP	0x0232
+(0273) 	  case 2 : SEG7_show_date();  //数码管显示日期0203
+    0022F DE6E      RCALL	_SEG7_show_date
+(0274) 	  	   	   break;
+    00230 C001      RJMP	0x0232
+(0275) 	  case 3 : SEG7_show_time();  //数码管显示时分17.54
+    00231 DE94      RCALL	_SEG7_show_time
+(0276) 	  	   	   break;
+(0277) 	}
+(0278) 	
+(0279) 	switch(alarm_clock_flag)
+    00232 9020 0076 LDS	R2,alarm_clock_flag
+    00234 9030 0077 LDS	R3,alarm_clock_flag+1
+    00236 2022      TST	R2
+    00237 F411      BNE	0x023A
+    00238 2033      TST	R3
+    00239 F031      BEQ	0x0240
+    0023A 01C1      MOVW	R24,R2
+    0023B 3081      CPI	R24,1
+    0023C E0E0      LDI	R30,0
+    0023D 079E      CPC	R25,R30
+    0023E F019      BEQ	0x0242
+    0023F C003      RJMP	0x0243
+(0280) 	{
+(0281) 	  case 0 : alarm_clock_close();  //关闭闹钟
+    00240 DFC1      RCALL	_alarm_clock_close
+(0282) 	  	   	   break;
+    00241 C001      RJMP	0x0243
+(0283) 	  case 1 : alarm_clock_open();  //开启闹钟
+    00242 DFBD      RCALL	_alarm_clock_open
+(0284) 	  	   	   break;
+(0285) 	}
+(0286) 	
+(0287) 	switch(motor_EN)
+    00243 9140 0078 LDS	R20,motor_EN
+    00245 9150 0079 LDS	R21,motor_EN+1
+    00247 3040      CPI	R20,0
+    00248 0745      CPC	R20,R21
+    00249 F031      BEQ	0x0250
+    0024A 3041      CPI	R20,1
+    0024B E0E0      LDI	R30,0
+    0024C 075E      CPC	R21,R30
+    0024D F009      BEQ	0x024F
+    0024E C001      RJMP	0x0250
+(0288) 	{
+(0289) 	  case 0 : break;
+(0290) 	  case 1 : PWM_OC2_init();  //开启舵机
+FILE: <library>
+    0024F DFB4      RCALL	_PWM_OC2_init
+    00250 CFC9      RJMP	0x021A
+    00251 9508      RET
+push_xgsetF000:
+    00252 937A      ST	-Y,R23
+    00253 936A      ST	-Y,R22
+    00254 935A      ST	-Y,R21
+    00255 934A      ST	-Y,R20
+    00256 9508      RET
+pop_xgsetF000:
+    00257 9149      LD	R20,Y+
+    00258 9159      LD	R21,Y+
+    00259 9169      LD	R22,Y+
+    0025A 9179      LD	R23,Y+
+    0025B 9508      RET

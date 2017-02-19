@@ -1,0 +1,103 @@
+#include <iom16v.h>
+
+void delay_ms(unsigned int n)	//延时函数
+{
+  unsigned int i,j;
+  for(i = 0 ; i < n ; i ++)
+    for(j = 0 ; j <1141; j ++) ;
+}
+
+const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xff};  //共阳数码管键码
+
+void main()
+{
+  unsigned char button=PINA&0xf0 , gewei=10 , shiwei=10;
+  DDRA = 0x0f;
+  DDRC = 0xff;
+  DDRD = 0x03;
+  
+  PORTA = 0xf0;
+  PORTC = 0x00;
+  PORTD = 0x03;
+  while(1)
+  {
+    PORTA = 0xfe;	//扫描第一列
+	switch(button)
+	{
+	  case 0xe0: gewei=0 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xd0: gewei=4 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xeb: gewei=8 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xe7: gewei=2 ; 
+	  	   		 shiwei=1 ;
+	  	   		 break;
+	}
+	
+	
+	PORTA = 0xfd;	//扫描第二列
+	switch(button)
+	{
+	  case 0xe0: gewei=1 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xd0: gewei=5 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xeb: gewei=9 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xe7: gewei=3 ; 
+	  	   		 shiwei=1 ;
+	  	   		 break;
+	}
+	
+	
+	PORTA = 0xfb;	//扫描第三列
+	switch(button)
+	{
+	  case 0xe0: gewei=2 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xd0: gewei=6 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xeb: gewei=0 ; 
+	  	   		 shiwei=1 ;
+	  	   		 break;
+	  case 0xe7: gewei=4 ; 
+	  	   		 shiwei=1 ;
+	  	   		 break;
+	}
+	
+	
+	PORTA = 0xf7;	//扫描第四列
+	switch(button)
+	{
+	  case 0xe0: gewei=3 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xd0: gewei=7 ; 
+	  	   		 shiwei=0 ;
+	  	   		 break;
+	  case 0xeb: gewei=1 ; 
+	  	   		 shiwei=1 ;
+	  	   		 break;
+	  case 0xe7: gewei=5 ; 
+	  	   		 shiwei=1 ;
+	  	   		 break;
+	}
+	
+	PORTD = 0x02;
+	PORTC = table_ca[gewei];
+	delay_ms(20);
+	
+	PORTD = 0x01;
+	PORTC = table_ca[shiwei];
+	delay_ms(10);
+  }
+}

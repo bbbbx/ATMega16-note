@@ -1,0 +1,525 @@
+                        .module _7SEG.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile 7SEG.c
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+ 0000                   .dbfunc e delay_ms _delay_ms fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              x -> R16,R17
+                        .even
+ 0000           _delay_ms::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 4
+ 0004           ; #include <iom16v.h>
+ 0004           ; 
+ 0004           ; void delay_ms(unsigned int x)  //延时函数
+ 0004           ; {
+ 0004                   .dbline 6
+ 0004           ;   unsigned int i,j;
+ 0004           ;   for(i = 0 ; i < x ; i ++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 7
+ 000A           ;     for(j = 0 ; j <1141 ; j ++)  ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 7
+ 0010           L7:
+ 0010                   .dbline 7
+ 0010 6F5F              subi R22,255  ; offset = 1
+ 0012 7F4F              sbci R23,255
+ 0014           L9:
+ 0014                   .dbline 7
+ 0014 6537              cpi R22,117
+ 0016 E4E0              ldi R30,4
+ 0018 7E07              cpc R23,R30
+ 001A D0F3              brlo L6
+ 001C           X0:
+ 001C           L3:
+ 001C                   .dbline 6
+ 001C 4F5F              subi R20,255  ; offset = 1
+ 001E 5F4F              sbci R21,255
+ 0020           L5:
+ 0020                   .dbline 6
+ 0020 4017              cp R20,R16
+ 0022 5107              cpc R21,R17
+ 0024 90F3              brlo L2
+ 0026           X1:
+ 0026                   .dbline -2
+ 0026           L1:
+ 0026                   .dbline 0 ; func end
+ 0026 0C940000          xjmp pop_xgsetF000
+ 002A                   .dbsym r i 20 i
+ 002A                   .dbsym r j 22 i
+ 002A                   .dbsym r x 16 i
+ 002A                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+ 0000           _table_ca::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 C0F9              .byte 192,249
+                        .area data(ram, con, rel)
+ 0002                   .dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 A4B0              .byte 164,176
+                        .area data(ram, con, rel)
+ 0004                   .dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 9992              .byte 153,146
+                        .area data(ram, con, rel)
+ 0006                   .dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 82F8              .byte 130,248
+                        .area data(ram, con, rel)
+ 0008                   .dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 8090              .byte 128,144
+                        .area data(ram, con, rel)
+ 000A                   .dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+ 000A                   .dbsym e table_ca _table_ca A[10:10]c
+                        .area text(rom, con, rel)
+ 002A                   .dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+ 002A                   .dbfunc e main _main fV
+ 002A           ;   daoshu_gewei -> R10
+ 002A           ;          gewei -> y+1
+ 002A           ;          count -> R20,R21
+ 002A           ;           flag -> R14,R15
+ 002A           ;  daoshu_shiwei -> R12
+ 002A           ;         shiwei -> y+0
+                        .even
+ 002A           _main::
+ 002A 2297              sbiw R28,2
+ 002C                   .dbline -1
+ 002C                   .dbline 13
+ 002C           ; }
+ 002C           ; 
+ 002C           ; const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};  //共阳数码管键码
+ 002C           ; 
+ 002C           ; void main()
+ 002C           ; {
+ 002C                   .dbline 14
+ 002C           ;   char gewei=0 , shiwei=0 ,daoshu_gewei=9 , daoshu_shiwei=9;
+ 002C 0024              clr R0
+ 002E 0982              std y+1,R0
+ 0030                   .dbline 14
+ 0030 0882              std y+0,R0
+ 0032                   .dbline 14
+ 0032 89E0              ldi R24,9
+ 0034 A82E              mov R10,R24
+ 0036                   .dbline 14
+ 0036 C82E              mov R12,R24
+ 0038                   .dbline 15
+ 0038           ;   int count=1 , flag=0;
+ 0038 41E0              ldi R20,1
+ 003A 50E0              ldi R21,0
+ 003C                   .dbline 15
+ 003C EE24              clr R14
+ 003E FF24              clr R15
+ 0040                   .dbline 17
+ 0040           ;   
+ 0040           ;   DDRA = 0x00;
+ 0040 2224              clr R2
+ 0042 2ABA              out 0x1a,R2
+ 0044                   .dbline 18
+ 0044           ;   DDRC = 0xff;
+ 0044 8FEF              ldi R24,255
+ 0046 84BB              out 0x14,R24
+ 0048                   .dbline 19
+ 0048           ;   DDRD = 0x03;
+ 0048 83E0              ldi R24,3
+ 004A 81BB              out 0x11,R24
+ 004C                   .dbline 21
+ 004C           ;   
+ 004C           ;   PORTA = 0xff;
+ 004C 8FEF              ldi R24,255
+ 004E 8BBB              out 0x1b,R24
+ 0050                   .dbline 22
+ 0050           ;   PORTC = 0x00;
+ 0050 25BA              out 0x15,R2
+ 0052                   .dbline 23
+ 0052           ;   PORTD = 0x00;
+ 0052 22BA              out 0x12,R2
+ 0054 A7C0              xjmp L12
+ 0056           L11:
+ 0056                   .dbline 26
+ 0056           ;   
+ 0056           ;   while(1)
+ 0056           ;   {
+ 0056                   .dbline 27
+ 0056           ;     if((PINA&(1<<PA0))==0)  //判断按键PA0是否被按下
+ 0056 C899              sbic 0x19,0
+ 0058 03C0              rjmp L14
+ 005A           X2:
+ 005A                   .dbline 28
+ 005A           ;       {
+ 005A                   .dbline 29
+ 005A           ;       flag=1;
+ 005A 81E0              ldi R24,1
+ 005C 90E0              ldi R25,0
+ 005E 7C01              movw R14,R24
+ 0060                   .dbline 30
+ 0060           ;       }
+ 0060           L14:
+ 0060                   .dbline 32
+ 0060           ;       
+ 0060           ;       if((PINA&(1<<PA1))==0)  //判断按键PA1是否被按下
+ 0060 C999              sbic 0x19,1
+ 0062 03C0              rjmp L16
+ 0064           X3:
+ 0064                   .dbline 33
+ 0064           ;       {
+ 0064                   .dbline 34
+ 0064           ;         flag=2;
+ 0064 82E0              ldi R24,2
+ 0066 90E0              ldi R25,0
+ 0068 7C01              movw R14,R24
+ 006A                   .dbline 35
+ 006A           ;       }
+ 006A           L16:
+ 006A                   .dbline 37
+ 006A           ;       
+ 006A           ;       if((PINA&(1<<PA2))==0)  //判断按键PA2是否被按下
+ 006A CA99              sbic 0x19,2
+ 006C 03C0              rjmp L18
+ 006E           X4:
+ 006E                   .dbline 38
+ 006E           ;       {
+ 006E                   .dbline 39
+ 006E           ;         flag=3;
+ 006E 83E0              ldi R24,3
+ 0070 90E0              ldi R25,0
+ 0072 7C01              movw R14,R24
+ 0074                   .dbline 40
+ 0074           ;       }
+ 0074           L18:
+ 0074                   .dbline 42
+ 0074           ;       
+ 0074           ;       if(flag==1)                             //正数
+ 0074 C701              movw R24,R14
+ 0076 8130              cpi R24,1
+ 0078 E0E0              ldi R30,0
+ 007A 9E07              cpc R25,R30
+ 007C 29F5              brne L20
+ 007E           X5:
+ 007E                   .dbline 43
+ 007E           ;       {
+ 007E                   .dbline 44
+ 007E           ;         PORTD = 0x02;
+ 007E 82E0              ldi R24,2
+ 0080 82BB              out 0x12,R24
+ 0082                   .dbline 45
+ 0082           ;         PORTC = table_ca[gewei];
+ 0082 80E0              ldi R24,<_table_ca
+ 0084 90E0              ldi R25,>_table_ca
+ 0086 E981              ldd R30,y+1
+ 0088 FF27              clr R31
+ 008A E80F              add R30,R24
+ 008C F91F              adc R31,R25
+ 008E 2080              ldd R2,z+0
+ 0090 25BA              out 0x15,R2
+ 0092                   .dbline 46
+ 0092           ;         delay_ms(20);
+ 0092 04E1              ldi R16,20
+ 0094 10E0              ldi R17,0
+ 0096 B4DF              xcall _delay_ms
+ 0098                   .dbline 48
+ 0098           ;         
+ 0098           ;         PORTD = 0x01;
+ 0098 81E0              ldi R24,1
+ 009A 82BB              out 0x12,R24
+ 009C                   .dbline 49
+ 009C           ;         PORTC = table_ca[shiwei];
+ 009C 80E0              ldi R24,<_table_ca
+ 009E 90E0              ldi R25,>_table_ca
+ 00A0 E881              ldd R30,y+0
+ 00A2 FF27              clr R31
+ 00A4 E80F              add R30,R24
+ 00A6 F91F              adc R31,R25
+ 00A8 2080              ldd R2,z+0
+ 00AA 25BA              out 0x15,R2
+ 00AC                   .dbline 50
+ 00AC           ;         delay_ms(20);
+ 00AC 04E1              ldi R16,20
+ 00AE 10E0              ldi R17,0
+ 00B0 A7DF              xcall _delay_ms
+ 00B2                   .dbline 52
+ 00B2           ;         
+ 00B2           ;         count++;
+ 00B2 4F5F              subi R20,255  ; offset = 1
+ 00B4 5F4F              sbci R21,255
+ 00B6                   .dbline 53
+ 00B6           ;         if(count==25)
+ 00B6 4931              cpi R20,25
+ 00B8 E0E0              ldi R30,0
+ 00BA 5E07              cpc R21,R30
+ 00BC 29F4              brne L22
+ 00BE           X6:
+ 00BE                   .dbline 54
+ 00BE           ;         {
+ 00BE                   .dbline 55
+ 00BE           ;           gewei++;
+ 00BE 0980              ldd R0,y+1
+ 00C0 0394              inc R0
+ 00C2 0982              std y+1,R0
+ 00C4                   .dbline 56
+ 00C4           ;           count=0;
+ 00C4 4427              clr R20
+ 00C6 5527              clr R21
+ 00C8                   .dbline 57
+ 00C8           ;         }
+ 00C8           L22:
+ 00C8                   .dbline 58
+ 00C8           ;       }
+ 00C8           L20:
+ 00C8                   .dbline 60
+ 00C8           ;       
+ 00C8           ;       if(flag==2)                             //倒数
+ 00C8 C701              movw R24,R14
+ 00CA 8230              cpi R24,2
+ 00CC E0E0              ldi R30,0
+ 00CE 9E07              cpc R25,R30
+ 00D0 19F5              brne L24
+ 00D2           X7:
+ 00D2                   .dbline 61
+ 00D2           ;       {
+ 00D2                   .dbline 62
+ 00D2           ;         PORTD = 0x02;
+ 00D2 82E0              ldi R24,2
+ 00D4 82BB              out 0x12,R24
+ 00D6                   .dbline 63
+ 00D6           ;         PORTC = table_ca[daoshu_gewei];
+ 00D6 80E0              ldi R24,<_table_ca
+ 00D8 90E0              ldi R25,>_table_ca
+ 00DA EA2D              mov R30,R10
+ 00DC FF27              clr R31
+ 00DE E80F              add R30,R24
+ 00E0 F91F              adc R31,R25
+ 00E2 2080              ldd R2,z+0
+ 00E4 25BA              out 0x15,R2
+ 00E6                   .dbline 64
+ 00E6           ;         delay_ms(20);
+ 00E6 04E1              ldi R16,20
+ 00E8 10E0              ldi R17,0
+ 00EA 8ADF              xcall _delay_ms
+ 00EC                   .dbline 66
+ 00EC           ;         
+ 00EC           ;         PORTD = 0x01;
+ 00EC 81E0              ldi R24,1
+ 00EE 82BB              out 0x12,R24
+ 00F0                   .dbline 67
+ 00F0           ;         PORTC = table_ca[daoshu_shiwei];
+ 00F0 80E0              ldi R24,<_table_ca
+ 00F2 90E0              ldi R25,>_table_ca
+ 00F4 EC2D              mov R30,R12
+ 00F6 FF27              clr R31
+ 00F8 E80F              add R30,R24
+ 00FA F91F              adc R31,R25
+ 00FC 2080              ldd R2,z+0
+ 00FE 25BA              out 0x15,R2
+ 0100                   .dbline 68
+ 0100           ;         delay_ms(20);
+ 0100 04E1              ldi R16,20
+ 0102 10E0              ldi R17,0
+ 0104 7DDF              xcall _delay_ms
+ 0106                   .dbline 70
+ 0106           ;         
+ 0106           ;         count++;
+ 0106 4F5F              subi R20,255  ; offset = 1
+ 0108 5F4F              sbci R21,255
+ 010A                   .dbline 71
+ 010A           ;         if(count==25)
+ 010A 4931              cpi R20,25
+ 010C E0E0              ldi R30,0
+ 010E 5E07              cpc R21,R30
+ 0110 19F4              brne L26
+ 0112           X8:
+ 0112                   .dbline 72
+ 0112           ;         {
+ 0112                   .dbline 73
+ 0112           ;           daoshu_gewei--;
+ 0112 AA94              dec R10
+ 0114                   .dbline 74
+ 0114           ;               count=0;
+ 0114 4427              clr R20
+ 0116 5527              clr R21
+ 0118                   .dbline 75
+ 0118           ;         }
+ 0118           L26:
+ 0118                   .dbline 76
+ 0118           ;       }
+ 0118           L24:
+ 0118                   .dbline 78
+ 0118           ;       
+ 0118           ;       if(flag==3)                         //置零
+ 0118 C701              movw R24,R14
+ 011A 8330              cpi R24,3
+ 011C E0E0              ldi R30,0
+ 011E 9E07              cpc R25,R30
+ 0120 11F5              brne L28
+ 0122           X9:
+ 0122                   .dbline 79
+ 0122           ;       {
+ 0122                   .dbline 80
+ 0122           ;         PORTD = 0x02;
+ 0122 82E0              ldi R24,2
+ 0124 82BB              out 0x12,R24
+ 0126                   .dbline 81
+ 0126           ;         PORTC = table_ca[0];
+ 0126 20900000          lds R2,_table_ca
+ 012A 25BA              out 0x15,R2
+ 012C                   .dbline 82
+ 012C           ;         gewei=0;
+ 012C 0024              clr R0
+ 012E 0982              std y+1,R0
+ 0130                   .dbline 83
+ 0130           ;         delay_ms(20);
+ 0130 04E1              ldi R16,20
+ 0132 10E0              ldi R17,0
+ 0134 65DF              xcall _delay_ms
+ 0136                   .dbline 85
+ 0136           ;         
+ 0136           ;         PORTD = 0x01;
+ 0136 81E0              ldi R24,1
+ 0138 82BB              out 0x12,R24
+ 013A                   .dbline 86
+ 013A           ;         PORTC = table_ca[0];
+ 013A 20900000          lds R2,_table_ca
+ 013E 25BA              out 0x15,R2
+ 0140                   .dbline 87
+ 0140           ;         shiwei=0;
+ 0140 0024              clr R0
+ 0142 0882              std y+0,R0
+ 0144                   .dbline 88
+ 0144           ;         delay_ms(20);
+ 0144 04E1              ldi R16,20
+ 0146 10E0              ldi R17,0
+ 0148 5BDF              xcall _delay_ms
+ 014A                   .dbline 90
+ 014A           ;         
+ 014A           ;         gewei=0 , shiwei=0 ,daoshu_gewei=9 , daoshu_shiwei=9;  //初始化各值
+ 014A 0024              clr R0
+ 014C 0982              std y+1,R0
+ 014E 0882              std y+0,R0
+ 0150 89E0              ldi R24,9
+ 0152 A82E              mov R10,R24
+ 0154 C82E              mov R12,R24
+ 0156                   .dbline 92
+ 0156           ;         
+ 0156           ;         count++;
+ 0156 4F5F              subi R20,255  ; offset = 1
+ 0158 5F4F              sbci R21,255
+ 015A                   .dbline 93
+ 015A           ;         if(count==25)
+ 015A 4931              cpi R20,25
+ 015C E0E0              ldi R30,0
+ 015E 5E07              cpc R21,R30
+ 0160 11F4              brne L30
+ 0162           X10:
+ 0162                   .dbline 94
+ 0162           ;         {
+ 0162                   .dbline 95
+ 0162           ;           count=0;
+ 0162 4427              clr R20
+ 0164 5527              clr R21
+ 0166                   .dbline 96
+ 0166           ;         }
+ 0166           L30:
+ 0166                   .dbline 97
+ 0166           ;       }
+ 0166           L28:
+ 0166                   .dbline 99
+ 0166           ;       
+ 0166           ;       if(gewei==10)
+ 0166 8981              ldd R24,y+1
+ 0168 8A30              cpi R24,10
+ 016A 29F4              brne L32
+ 016C           X11:
+ 016C                   .dbline 100
+ 016C           ;       {
+ 016C                   .dbline 101
+ 016C           ;         shiwei++;
+ 016C 0880              ldd R0,y+0
+ 016E 0394              inc R0
+ 0170 0882              std y+0,R0
+ 0172                   .dbline 102
+ 0172           ;         gewei=0;
+ 0172 0024              clr R0
+ 0174 0982              std y+1,R0
+ 0176                   .dbline 103
+ 0176           ;       }
+ 0176           L32:
+ 0176                   .dbline 104
+ 0176           ;       shiwei= (shiwei>=10)?0:shiwei;
+ 0176 8881              ldd R24,y+0
+ 0178 8A30              cpi R24,10
+ 017A 18F0              brlo L34
+ 017C           X12:
+ 017C 6627              clr R22
+ 017E 7727              clr R23
+ 0180 02C0              xjmp L35
+ 0182           L34:
+ 0182 6881              ldd R22,y+0
+ 0184 7727              clr R23
+ 0186           L35:
+ 0186 6883              std y+0,R22
+ 0188                   .dbline 106
+ 0188           ;       
+ 0188           ;       if(daoshu_gewei==-1)
+ 0188 8A2D              mov R24,R10
+ 018A 8F3F              cpi R24,255
+ 018C 11F4              brne L36
+ 018E           X13:
+ 018E                   .dbline 107
+ 018E           ;       {
+ 018E                   .dbline 108
+ 018E           ;         daoshu_shiwei--;
+ 018E CA94              dec R12
+ 0190                   .dbline 109
+ 0190           ;         daoshu_gewei=0;
+ 0190 AA24              clr R10
+ 0192                   .dbline 110
+ 0192           ;       }
+ 0192           L36:
+ 0192                   .dbline 111
+ 0192           ;       daoshu_shiwei= (daoshu_shiwei<0)?9:daoshu_shiwei;
+ 0192 8C2D              mov R24,R12
+ 0194 8030              cpi R24,0
+ 0196 18F4              brsh L38
+ 0198           X14:
+ 0198 69E0              ldi R22,9
+ 019A 70E0              ldi R23,0
+ 019C 02C0              xjmp L39
+ 019E           L38:
+ 019E 6C2D              mov R22,R12
+ 01A0 7727              clr R23
+ 01A2           L39:
+ 01A2 C62E              mov R12,R22
+ 01A4                   .dbline 112
+ 01A4           ;   }
+ 01A4           L12:
+ 01A4                   .dbline 25
+ 01A4 58CF              xjmp L11
+ 01A6           X15:
+ 01A6                   .dbline -2
+ 01A6           L10:
+ 01A6                   .dbline 0 ; func end
+ 01A6 2296              adiw R28,2
+ 01A8 0895              ret
+ 01AA                   .dbsym r daoshu_gewei 10 c
+ 01AA                   .dbsym l gewei 1 c
+ 01AA                   .dbsym r count 20 I
+ 01AA                   .dbsym r flag 14 I
+ 01AA                   .dbsym r daoshu_shiwei 12 c
+ 01AA                   .dbsym l shiwei 0 c
+ 01AA                   .dbend
+ 01AA           ; }

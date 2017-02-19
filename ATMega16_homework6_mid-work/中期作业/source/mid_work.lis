@@ -1,0 +1,1229 @@
+                        .module mid_work.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile mid_work.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile mid_work.c
+ 0000           _SEG7_num_ca::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 C0F9              .byte 192,249
+                        .area data(ram, con, rel)
+ 0002                   .dbfile mid_work.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 A4B0              .byte 164,176
+                        .area data(ram, con, rel)
+ 0004                   .dbfile mid_work.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 9992              .byte 153,146
+                        .area data(ram, con, rel)
+ 0006                   .dbfile mid_work.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 82F8              .byte 130,248
+                        .area data(ram, con, rel)
+ 0008                   .dbfile mid_work.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 8090              .byte 128,144
+                        .area data(ram, con, rel)
+ 000A                   .dbfile mid_work.c
+ 000A                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 000A                   .dbsym e SEG7_num_ca _SEG7_num_ca A[10:10]c
+ 000A           _SEG7_numWithDot_ca::
+ 000A                   .blkb 2
+                        .area idata
+ 000A 4079              .byte 64,'y
+                        .area data(ram, con, rel)
+ 000C                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 000C                   .blkb 2
+                        .area idata
+ 000C 2430              .byte 36,48
+                        .area data(ram, con, rel)
+ 000E                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 000E                   .blkb 2
+                        .area idata
+ 000E 1912              .byte 25,18
+                        .area data(ram, con, rel)
+ 0010                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 0010                   .blkb 2
+                        .area idata
+ 0010 0278              .byte 2,'x
+                        .area data(ram, con, rel)
+ 0012                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 0012                   .blkb 2
+                        .area idata
+ 0012 0010              .byte 0,16
+                        .area data(ram, con, rel)
+ 0014                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 0014                   .dbsym e SEG7_numWithDot_ca _SEG7_numWithDot_ca A[10:10]c
+ 0014           _SEG7_flag::
+ 0014                   .blkb 2
+                        .area idata
+ 0014 0000              .word 0
+                        .area data(ram, con, rel)
+ 0016                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 0016                   .dbsym e SEG7_flag _SEG7_flag I
+ 0016           _alarm_clock_flag::
+ 0016                   .blkb 2
+                        .area idata
+ 0016 0100              .word 1
+                        .area data(ram, con, rel)
+ 0018                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 0018                   .dbsym e alarm_clock_flag _alarm_clock_flag I
+ 0018           _motor_EN::
+ 0018                   .blkb 2
+                        .area idata
+ 0018 0000              .word 0
+                        .area data(ram, con, rel)
+ 001A                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 001A                   .dbsym e motor_EN _motor_EN I
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\z\Desktop\中期作业\source\mid_work.c
+ 0000                   .dbfunc e delay_ms _delay_ms fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;             ms -> R16,R17
+                        .even
+ 0000           _delay_ms::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 26
+ 0004           ; #include <iom16v.h>
+ 0004           ; 
+ 0004           ; unsigned char SEG7_num_ca[] = { 0xC0 ,0xF9 ,0xA4 ,0xB0 ,0x99 ,0x92 ,0x82 ,0xF8 ,0x80 ,0x90 };  //共阳数码管码表0-9
+ 0004           ; unsigned char SEG7_numWithDot_ca[] = { 0x40 ,0x79 ,0x24 ,0x30 ,0x19 ,0x12 ,0x02 ,0x78 ,0x00 ,0x10 };  //共阳数码管码表带小数点0-9
+ 0004           ; 
+ 0004           ; /*
+ 0004           ; -------说明---------
+ 0004           ; SEG7_flag：1显示年份
+ 0004           ; SEG7_flag：2显示日期
+ 0004           ; SEG7_flag：3显示时分
+ 0004           ; 
+ 0004           ; LED_flag：1流水灯正方向
+ 0004           ; LED_flag：2流水灯反方向
+ 0004           ; 
+ 0004           ; alarm_clock_flag：1开启闹钟
+ 0004           ; alarm_clock_flag：0关闭闹钟
+ 0004           ; 
+ 0004           ; motor：1开启舵机
+ 0004           ; motor：0关闭舵机
+ 0004           ; 
+ 0004           ; SEG7_flag：数码管状态，LED_flag：LED状态，alarm_clock_flag：闹钟状态，motor_EN：舵机使能
+ 0004           ; */
+ 0004           ; int SEG7_flag=0 , alarm_clock_flag=1 , motor_EN=0;
+ 0004           ; 
+ 0004           ; void delay_ms(unsigned int ms)  //延时函数
+ 0004           ; {
+ 0004                   .dbline 28
+ 0004           ;   unsigned int i , j ; 
+ 0004           ;   for (i = 0 ; i < ms ; i++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 29
+ 000A           ;     for(j = 0 ; j < 1141 ; j++) ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 29
+ 0010           L7:
+ 0010                   .dbline 29
+ 0010 6F5F              subi R22,255  ; offset = 1
+ 0012 7F4F              sbci R23,255
+ 0014           L9:
+ 0014                   .dbline 29
+ 0014 6537              cpi R22,117
+ 0016 E4E0              ldi R30,4
+ 0018 7E07              cpc R23,R30
+ 001A D0F3              brlo L6
+ 001C           X0:
+ 001C           L3:
+ 001C                   .dbline 28
+ 001C 4F5F              subi R20,255  ; offset = 1
+ 001E 5F4F              sbci R21,255
+ 0020           L5:
+ 0020                   .dbline 28
+ 0020 4017              cp R20,R16
+ 0022 5107              cpc R21,R17
+ 0024 90F3              brlo L2
+ 0026           X1:
+ 0026                   .dbline -2
+ 0026           L1:
+ 0026                   .dbline 0 ; func end
+ 0026 0C940000          xjmp pop_xgsetF000
+ 002A                   .dbsym r i 20 i
+ 002A                   .dbsym r j 22 i
+ 002A                   .dbsym r ms 16 i
+ 002A                   .dbend
+ 002A                   .dbfunc e SEG7_init _SEG7_init fV
+                        .even
+ 002A           _SEG7_init::
+ 002A                   .dbline -1
+ 002A                   .dbline 33
+ 002A           ; }
+ 002A           ; 
+ 002A           ; void SEG7_init()  //数码管IO初始化函数
+ 002A           ; {
+ 002A                   .dbline 34
+ 002A           ;   DDRA = 0xff;
+ 002A 8FEF              ldi R24,255
+ 002C 8ABB              out 0x1a,R24
+ 002E                   .dbline 35
+ 002E           ;   PORTA = 0x00;
+ 002E 2224              clr R2
+ 0030 2BBA              out 0x1b,R2
+ 0032                   .dbline 36
+ 0032           ;   DDRB = 0xff;
+ 0032 87BB              out 0x17,R24
+ 0034                   .dbline 37
+ 0034           ;   PORTB = 0x00;
+ 0034 28BA              out 0x18,R2
+ 0036                   .dbline -2
+ 0036           L10:
+ 0036                   .dbline 0 ; func end
+ 0036 0895              ret
+ 0038                   .dbend
+ 0038                   .dbfunc e SEG7_show_year _SEG7_show_year fV
+                        .even
+ 0038           _SEG7_show_year::
+ 0038                   .dbline -1
+ 0038                   .dbline 42
+ 0038           ;   
+ 0038           ; }
+ 0038           ; 
+ 0038           ; void SEG7_show_year()  //数码管显示年份2017函数
+ 0038           ; {
+ 0038                   .dbline 44
+ 0038           ;   //渲染2
+ 0038           ;   PORTB |= (1<<PB0);
+ 0038 C09A              sbi 0x18,0
+ 003A                   .dbline 45
+ 003A           ;   PORTB &= ~(1<<PB1);
+ 003A C198              cbi 0x18,1
+ 003C                   .dbline 46
+ 003C           ;   PORTB &= ~(1<<PB2);
+ 003C C298              cbi 0x18,2
+ 003E                   .dbline 47
+ 003E           ;   PORTB &= ~(1<<PB3);
+ 003E C398              cbi 0x18,3
+ 0040                   .dbline 48
+ 0040           ;   PORTA = SEG7_num_ca[2];
+ 0040 20900200          lds R2,_SEG7_num_ca+2
+ 0044 2BBA              out 0x1b,R2
+ 0046                   .dbline 49
+ 0046           ;   delay_ms(10);
+ 0046 0AE0              ldi R16,10
+ 0048 10E0              ldi R17,0
+ 004A DADF              xcall _delay_ms
+ 004C                   .dbline 51
+ 004C           ;   //渲染0
+ 004C           ;   PORTB &= ~(1<<PB0);
+ 004C C098              cbi 0x18,0
+ 004E                   .dbline 52
+ 004E           ;   PORTB |= (1<<PB1);
+ 004E C19A              sbi 0x18,1
+ 0050                   .dbline 53
+ 0050           ;   PORTB &= ~(1<<PB2);
+ 0050 C298              cbi 0x18,2
+ 0052                   .dbline 54
+ 0052           ;   PORTB &= ~(1<<PB3);
+ 0052 C398              cbi 0x18,3
+ 0054                   .dbline 55
+ 0054           ;   PORTA = SEG7_num_ca[0];
+ 0054 20900000          lds R2,_SEG7_num_ca
+ 0058 2BBA              out 0x1b,R2
+ 005A                   .dbline 56
+ 005A           ;   delay_ms(10);
+ 005A 0AE0              ldi R16,10
+ 005C 10E0              ldi R17,0
+ 005E D0DF              xcall _delay_ms
+ 0060                   .dbline 58
+ 0060           ;   //渲染1
+ 0060           ;   PORTB &= ~(1<<PB0);
+ 0060 C098              cbi 0x18,0
+ 0062                   .dbline 59
+ 0062           ;   PORTB &= ~(1<<PB1);
+ 0062 C198              cbi 0x18,1
+ 0064                   .dbline 60
+ 0064           ;   PORTB |= (1<<PB2);
+ 0064 C29A              sbi 0x18,2
+ 0066                   .dbline 61
+ 0066           ;   PORTB &= ~(1<<PB3);
+ 0066 C398              cbi 0x18,3
+ 0068                   .dbline 62
+ 0068           ;   PORTA = SEG7_num_ca[1];
+ 0068 20900100          lds R2,_SEG7_num_ca+1
+ 006C 2BBA              out 0x1b,R2
+ 006E                   .dbline 63
+ 006E           ;   delay_ms(10);
+ 006E 0AE0              ldi R16,10
+ 0070 10E0              ldi R17,0
+ 0072 C6DF              xcall _delay_ms
+ 0074                   .dbline 65
+ 0074           ;   //渲染7
+ 0074           ;   PORTB &= ~(1<<PB0);
+ 0074 C098              cbi 0x18,0
+ 0076                   .dbline 66
+ 0076           ;   PORTB &= ~(1<<PB1);
+ 0076 C198              cbi 0x18,1
+ 0078                   .dbline 67
+ 0078           ;   PORTB &= ~(1<<PB2);
+ 0078 C298              cbi 0x18,2
+ 007A                   .dbline 68
+ 007A           ;   PORTB |= (1<<PB3);
+ 007A C39A              sbi 0x18,3
+ 007C                   .dbline 69
+ 007C           ;   PORTA = SEG7_num_ca[7];
+ 007C 20900700          lds R2,_SEG7_num_ca+7
+ 0080 2BBA              out 0x1b,R2
+ 0082                   .dbline 70
+ 0082           ;   delay_ms(40);
+ 0082 08E2              ldi R16,40
+ 0084 10E0              ldi R17,0
+ 0086                   .dbline -2
+ 0086           L11:
+ 0086                   .dbline 0 ; func end
+ 0086 BCCF              xjmp _delay_ms
+ 0088                   .dbend
+ 0088                   .dbfunc e SEG7_show_date _SEG7_show_date fV
+                        .even
+ 0088           _SEG7_show_date::
+ 0088                   .dbline -1
+ 0088                   .dbline 74
+ 0088           ; }
+ 0088           ; 
+ 0088           ; void SEG7_show_date()  //数码管显示日期0203函数
+ 0088           ; {
+ 0088                   .dbline 76
+ 0088           ;   //渲染0
+ 0088           ;   PORTB |= (1<<PB0);
+ 0088 C09A              sbi 0x18,0
+ 008A                   .dbline 77
+ 008A           ;   PORTB &= ~(1<<PB1);
+ 008A C198              cbi 0x18,1
+ 008C                   .dbline 78
+ 008C           ;   PORTB &= ~(1<<PB2);
+ 008C C298              cbi 0x18,2
+ 008E                   .dbline 79
+ 008E           ;   PORTB &= ~(1<<PB3);
+ 008E C398              cbi 0x18,3
+ 0090                   .dbline 80
+ 0090           ;   PORTA = SEG7_num_ca[0];
+ 0090 20900000          lds R2,_SEG7_num_ca
+ 0094 2BBA              out 0x1b,R2
+ 0096                   .dbline 81
+ 0096           ;   delay_ms(10);
+ 0096 0AE0              ldi R16,10
+ 0098 10E0              ldi R17,0
+ 009A B2DF              xcall _delay_ms
+ 009C                   .dbline 83
+ 009C           ;   //渲染2
+ 009C           ;   PORTB &= ~(1<<PB0);
+ 009C C098              cbi 0x18,0
+ 009E                   .dbline 84
+ 009E           ;   PORTB |= (1<<PB1);
+ 009E C19A              sbi 0x18,1
+ 00A0                   .dbline 85
+ 00A0           ;   PORTB &= ~(1<<PB2);
+ 00A0 C298              cbi 0x18,2
+ 00A2                   .dbline 86
+ 00A2           ;   PORTB &= ~(1<<PB3);
+ 00A2 C398              cbi 0x18,3
+ 00A4                   .dbline 87
+ 00A4           ;   PORTA = SEG7_num_ca[2];
+ 00A4 20900200          lds R2,_SEG7_num_ca+2
+ 00A8 2BBA              out 0x1b,R2
+ 00AA                   .dbline 88
+ 00AA           ;   delay_ms(10);
+ 00AA 0AE0              ldi R16,10
+ 00AC 10E0              ldi R17,0
+ 00AE A8DF              xcall _delay_ms
+ 00B0                   .dbline 90
+ 00B0           ;   //渲染0
+ 00B0           ;   PORTB &= ~(1<<PB0);
+ 00B0 C098              cbi 0x18,0
+ 00B2                   .dbline 91
+ 00B2           ;   PORTB &= ~(1<<PB1);
+ 00B2 C198              cbi 0x18,1
+ 00B4                   .dbline 92
+ 00B4           ;   PORTB |= (1<<PB2);
+ 00B4 C29A              sbi 0x18,2
+ 00B6                   .dbline 93
+ 00B6           ;   PORTB &= ~(1<<PB3);
+ 00B6 C398              cbi 0x18,3
+ 00B8                   .dbline 94
+ 00B8           ;   PORTA = SEG7_num_ca[0];
+ 00B8 20900000          lds R2,_SEG7_num_ca
+ 00BC 2BBA              out 0x1b,R2
+ 00BE                   .dbline 95
+ 00BE           ;   delay_ms(10);
+ 00BE 0AE0              ldi R16,10
+ 00C0 10E0              ldi R17,0
+ 00C2 9EDF              xcall _delay_ms
+ 00C4                   .dbline 97
+ 00C4           ;   //渲染3
+ 00C4           ;   PORTB &= ~(1<<PB0);
+ 00C4 C098              cbi 0x18,0
+ 00C6                   .dbline 98
+ 00C6           ;   PORTB &= ~(1<<PB1);
+ 00C6 C198              cbi 0x18,1
+ 00C8                   .dbline 99
+ 00C8           ;   PORTB &= ~(1<<PB2);
+ 00C8 C298              cbi 0x18,2
+ 00CA                   .dbline 100
+ 00CA           ;   PORTB |= (1<<PB3);
+ 00CA C39A              sbi 0x18,3
+ 00CC                   .dbline 101
+ 00CC           ;   PORTA = SEG7_num_ca[3];
+ 00CC 20900300          lds R2,_SEG7_num_ca+3
+ 00D0 2BBA              out 0x1b,R2
+ 00D2                   .dbline 102
+ 00D2           ;   delay_ms(40);
+ 00D2 08E2              ldi R16,40
+ 00D4 10E0              ldi R17,0
+ 00D6                   .dbline -2
+ 00D6           L15:
+ 00D6                   .dbline 0 ; func end
+ 00D6 94CF              xjmp _delay_ms
+ 00D8                   .dbend
+ 00D8                   .dbfunc e SEG7_show_time _SEG7_show_time fV
+                        .even
+ 00D8           _SEG7_show_time::
+ 00D8                   .dbline -1
+ 00D8                   .dbline 106
+ 00D8           ; }
+ 00D8           ; 
+ 00D8           ; void SEG7_show_time()  //数码管显示时分17.54函数
+ 00D8           ; {
+ 00D8                   .dbline 108
+ 00D8           ;   //渲染1
+ 00D8           ;   PORTB |= (1<<PB0);
+ 00D8 C09A              sbi 0x18,0
+ 00DA                   .dbline 109
+ 00DA           ;   PORTB &= ~(1<<PB1);
+ 00DA C198              cbi 0x18,1
+ 00DC                   .dbline 110
+ 00DC           ;   PORTB &= ~(1<<PB2);
+ 00DC C298              cbi 0x18,2
+ 00DE                   .dbline 111
+ 00DE           ;   PORTB &= ~(1<<PB3);
+ 00DE C398              cbi 0x18,3
+ 00E0                   .dbline 112
+ 00E0           ;   PORTA = SEG7_num_ca[1];
+ 00E0 20900100          lds R2,_SEG7_num_ca+1
+ 00E4 2BBA              out 0x1b,R2
+ 00E6                   .dbline 113
+ 00E6           ;   delay_ms(10);
+ 00E6 0AE0              ldi R16,10
+ 00E8 10E0              ldi R17,0
+ 00EA 8ADF              xcall _delay_ms
+ 00EC                   .dbline 115
+ 00EC           ;   //渲染0
+ 00EC           ;   PORTB &= ~(1<<PB0);
+ 00EC C098              cbi 0x18,0
+ 00EE                   .dbline 116
+ 00EE           ;   PORTB |= (1<<PB1);
+ 00EE C19A              sbi 0x18,1
+ 00F0                   .dbline 117
+ 00F0           ;   PORTB &= ~(1<<PB2);
+ 00F0 C298              cbi 0x18,2
+ 00F2                   .dbline 118
+ 00F2           ;   PORTB &= ~(1<<PB3);
+ 00F2 C398              cbi 0x18,3
+ 00F4                   .dbline 119
+ 00F4           ;   PORTA = SEG7_numWithDot_ca[7];
+ 00F4 20901100          lds R2,_SEG7_numWithDot_ca+7
+ 00F8 2BBA              out 0x1b,R2
+ 00FA                   .dbline 120
+ 00FA           ;   delay_ms(10);
+ 00FA 0AE0              ldi R16,10
+ 00FC 10E0              ldi R17,0
+ 00FE 80DF              xcall _delay_ms
+ 0100                   .dbline 122
+ 0100           ;   //渲染0
+ 0100           ;   PORTB &= ~(1<<PB0);
+ 0100 C098              cbi 0x18,0
+ 0102                   .dbline 123
+ 0102           ;   PORTB &= ~(1<<PB1);
+ 0102 C198              cbi 0x18,1
+ 0104                   .dbline 124
+ 0104           ;   PORTB |= (1<<PB2);
+ 0104 C29A              sbi 0x18,2
+ 0106                   .dbline 125
+ 0106           ;   PORTB &= ~(1<<PB3);
+ 0106 C398              cbi 0x18,3
+ 0108                   .dbline 126
+ 0108           ;   PORTA = SEG7_num_ca[5];
+ 0108 20900500          lds R2,_SEG7_num_ca+5
+ 010C 2BBA              out 0x1b,R2
+ 010E                   .dbline 127
+ 010E           ;   delay_ms(10);
+ 010E 0AE0              ldi R16,10
+ 0110 10E0              ldi R17,0
+ 0112 76DF              xcall _delay_ms
+ 0114                   .dbline 129
+ 0114           ;   //渲染3
+ 0114           ;   PORTB &= ~(1<<PB0);
+ 0114 C098              cbi 0x18,0
+ 0116                   .dbline 130
+ 0116           ;   PORTB &= ~(1<<PB1);
+ 0116 C198              cbi 0x18,1
+ 0118                   .dbline 131
+ 0118           ;   PORTB &= ~(1<<PB2);
+ 0118 C298              cbi 0x18,2
+ 011A                   .dbline 132
+ 011A           ;   PORTB |= (1<<PB3);
+ 011A C39A              sbi 0x18,3
+ 011C                   .dbline 133
+ 011C           ;   PORTA = SEG7_num_ca[4];
+ 011C 20900400          lds R2,_SEG7_num_ca+4
+ 0120 2BBA              out 0x1b,R2
+ 0122                   .dbline 134
+ 0122           ;   delay_ms(40);
+ 0122 08E2              ldi R16,40
+ 0124 10E0              ldi R17,0
+ 0126                   .dbline -2
+ 0126           L18:
+ 0126                   .dbline 0 ; func end
+ 0126 6CCF              xjmp _delay_ms
+ 0128                   .dbend
+ 0128                   .dbfunc e button_init _button_init fV
+                        .even
+ 0128           _button_init::
+ 0128                   .dbline -1
+ 0128                   .dbline 138
+ 0128           ; }
+ 0128           ; 
+ 0128           ; void button_init()  //矩阵按键IO初始化函数
+ 0128           ; {
+ 0128                   .dbline 139
+ 0128           ;   DDRC = 0x0f;
+ 0128 8FE0              ldi R24,15
+ 012A 84BB              out 0x14,R24
+ 012C                   .dbline 140
+ 012C           ;   PORTC = 0xff;
+ 012C 8FEF              ldi R24,255
+ 012E 85BB              out 0x15,R24
+ 0130                   .dbline -2
+ 0130           L23:
+ 0130                   .dbline 0 ; func end
+ 0130 0895              ret
+ 0132                   .dbend
+ 0132                   .dbfunc e button_scan _button_scan fV
+                        .even
+ 0132           _button_scan::
+ 0132 4A93              st -y,R20
+ 0134 5A93              st -y,R21
+ 0136                   .dbline -1
+ 0136                   .dbline 144
+ 0136           ; }
+ 0136           ; 
+ 0136           ; void button_scan()  //扫描矩阵按键函数
+ 0136           ; {
+ 0136                   .dbline 146
+ 0136           ;   //扫描第一列
+ 0136           ;   PORTC = 0xf7;
+ 0136 87EF              ldi R24,247
+ 0138 85BB              out 0x15,R24
+ 013A                   .dbline 147
+ 013A           ;   switch(PINC&(0xf0))
+ 013A 43B3              in R20,0x13
+ 013C 5527              clr R21
+ 013E 407F              andi R20,240
+ 0140 5070              andi R21,0
+ 0142 403B              cpi R20,176
+ 0144 E0E0              ldi R30,0
+ 0146 5E07              cpc R21,R30
+ 0148 59F1              breq L26
+ 014A           X2:
+ 014A 80EB              ldi R24,176
+ 014C 90E0              ldi R25,0
+ 014E 8417              cp R24,R20
+ 0150 9507              cpc R25,R21
+ 0152 2CF0              brlt L33
+ 0154           X3:
+ 0154           L32:
+ 0154 4037              cpi R20,112
+ 0156 E0E0              ldi R30,0
+ 0158 5E07              cpc R21,R30
+ 015A E1F0              breq L31
+ 015C           X4:
+ 015C 21C0              xjmp L25
+ 015E           L33:
+ 015E 403D              cpi R20,208
+ 0160 E0E0              ldi R30,0
+ 0162 5E07              cpc R21,R30
+ 0164 81F0              breq L29
+ 0166           X5:
+ 0166 403D              cpi R20,208
+ 0168 E0E0              ldi R30,0
+ 016A 5E07              cpc R21,R30
+ 016C CCF0              brlt L25
+ 016E           X6:
+ 016E           L34:
+ 016E 403E              cpi R20,224
+ 0170 E0E0              ldi R30,0
+ 0172 5E07              cpc R21,R30
+ 0174 09F0              breq L28
+ 0176           X7:
+ 0176 14C0              xjmp L25
+ 0178           L28:
+ 0178                   .dbline 149
+ 0178           ;   {
+ 0178           ;     case 0xe0: SEG7_flag=1 ;
+ 0178 81E0              ldi R24,1
+ 017A 90E0              ldi R25,0
+ 017C 90931500          sts _SEG7_flag+1,R25
+ 0180 80931400          sts _SEG7_flag,R24
+ 0184                   .dbline 150
+ 0184           ;                          break;                 //按键0
+ 0184 0DC0              xjmp L26
+ 0186           L29:
+ 0186                   .dbline 151
+ 0186           ;       case 0xd0: alarm_clock_flag=1 ; 
+ 0186 81E0              ldi R24,1
+ 0188 90E0              ldi R25,0
+ 018A 90931700          sts _alarm_clock_flag+1,R25
+ 018E 80931600          sts _alarm_clock_flag,R24
+ 0192                   .dbline 152
+ 0192           ;                          break;                 //按键4
+ 0192 06C0              xjmp L26
+ 0194           L31:
+ 0194                   .dbline 155
+ 0194           ;       case 0xb0:  
+ 0194           ;                          break;                 //按键8
+ 0194           ;     case 0x70: motor_EN=1 ; 
+ 0194 81E0              ldi R24,1
+ 0196 90E0              ldi R25,0
+ 0198 90931900          sts _motor_EN+1,R25
+ 019C 80931800          sts _motor_EN,R24
+ 01A0                   .dbline 156
+ 01A0           ;                          break;                 //按键12
+ 01A0           L25:
+ 01A0           L26:
+ 01A0                   .dbline 159
+ 01A0           ;   }
+ 01A0           ;   //扫描第二列
+ 01A0           ;   PORTC = 0xfb;
+ 01A0 8BEF              ldi R24,251
+ 01A2 85BB              out 0x15,R24
+ 01A4                   .dbline 160
+ 01A4           ;   switch(PINC&(0xf0))
+ 01A4 43B3              in R20,0x13
+ 01A6 5527              clr R21
+ 01A8 407F              andi R20,240
+ 01AA 5070              andi R21,0
+ 01AC 403B              cpi R20,176
+ 01AE E0E0              ldi R30,0
+ 01B0 5E07              cpc R21,R30
+ 01B2 39F1              breq L40
+ 01B4           X8:
+ 01B4 80EB              ldi R24,176
+ 01B6 90E0              ldi R25,0
+ 01B8 8417              cp R24,R20
+ 01BA 9507              cpc R25,R21
+ 01BC 34F0              brlt L43
+ 01BE           X9:
+ 01BE           L42:
+ 01BE 4037              cpi R20,112
+ 01C0 E0E0              ldi R30,0
+ 01C2 5E07              cpc R21,R30
+ 01C4 09F4              brne X26
+ 01C6 48C0              xjmp L36
+ 01C8           X26:
+ 01C8           X10:
+ 01C8 47C0              xjmp L35
+ 01CA           L43:
+ 01CA 403D              cpi R20,208
+ 01CC E0E0              ldi R30,0
+ 01CE 5E07              cpc R21,R30
+ 01D0 89F0              breq L39
+ 01D2           X11:
+ 01D2 403D              cpi R20,208
+ 01D4 E0E0              ldi R30,0
+ 01D6 5E07              cpc R21,R30
+ 01D8 0CF4              brge X27
+ 01DA 3EC0              xjmp L35
+ 01DC           X27:
+ 01DC           X12:
+ 01DC           L44:
+ 01DC 403E              cpi R20,224
+ 01DE E0E0              ldi R30,0
+ 01E0 5E07              cpc R21,R30
+ 01E2 09F0              breq L38
+ 01E4           X13:
+ 01E4 39C0              xjmp L35
+ 01E6           L38:
+ 01E6                   .dbline 162
+ 01E6           ;   {
+ 01E6           ;     case 0xe0: SEG7_flag=2 ;
+ 01E6 82E0              ldi R24,2
+ 01E8 90E0              ldi R25,0
+ 01EA 90931500          sts _SEG7_flag+1,R25
+ 01EE 80931400          sts _SEG7_flag,R24
+ 01F2                   .dbline 163
+ 01F2           ;                          break;                 //按键1
+ 01F2 32C0              xjmp L36
+ 01F4           L39:
+ 01F4                   .dbline 164
+ 01F4           ;       case 0xd0: alarm_clock_flag=0 ; 
+ 01F4 2224              clr R2
+ 01F6 3324              clr R3
+ 01F8 30921700          sts _alarm_clock_flag+1,R3
+ 01FC 20921600          sts _alarm_clock_flag,R2
+ 0200                   .dbline 165
+ 0200           ;                          break;                 //按键5
+ 0200 2BC0              xjmp L36
+ 0202           L40:
+ 0202                   .dbline 166
+ 0202           ;       case 0xb0: LED_init();
+ 0202 B1D0              xcall _LED_init
+ 0204                   .dbline 167
+ 0204           ;                          PORTD = 0x01;
+ 0204 81E0              ldi R24,1
+ 0206 82BB              out 0x12,R24
+ 0208                   .dbline 168
+ 0208           ;                          delay_ms(100);
+ 0208 04E6              ldi R16,100
+ 020A 10E0              ldi R17,0
+ 020C F9DE              xcall _delay_ms
+ 020E                   .dbline 169
+ 020E           ;                          PORTD = 0x02;
+ 020E 82E0              ldi R24,2
+ 0210 82BB              out 0x12,R24
+ 0212                   .dbline 170
+ 0212           ;                          delay_ms(100);
+ 0212 04E6              ldi R16,100
+ 0214 10E0              ldi R17,0
+ 0216 F4DE              xcall _delay_ms
+ 0218                   .dbline 171
+ 0218           ;                          PORTD = 0x04;
+ 0218 84E0              ldi R24,4
+ 021A 82BB              out 0x12,R24
+ 021C                   .dbline 172
+ 021C           ;                          delay_ms(100);
+ 021C 04E6              ldi R16,100
+ 021E 10E0              ldi R17,0
+ 0220 EFDE              xcall _delay_ms
+ 0222                   .dbline 173
+ 0222           ;                          PORTD = 0x08;
+ 0222 88E0              ldi R24,8
+ 0224 82BB              out 0x12,R24
+ 0226                   .dbline 174
+ 0226           ;                          delay_ms(100);
+ 0226 04E6              ldi R16,100
+ 0228 10E0              ldi R17,0
+ 022A EADE              xcall _delay_ms
+ 022C                   .dbline 175
+ 022C           ;                          PORTD = 0x10;
+ 022C 80E1              ldi R24,16
+ 022E 82BB              out 0x12,R24
+ 0230                   .dbline 176
+ 0230           ;                          delay_ms(100);
+ 0230 04E6              ldi R16,100
+ 0232 10E0              ldi R17,0
+ 0234 E5DE              xcall _delay_ms
+ 0236                   .dbline 177
+ 0236           ;                          PORTD = 0x20;
+ 0236 80E2              ldi R24,32
+ 0238 82BB              out 0x12,R24
+ 023A                   .dbline 178
+ 023A           ;                          delay_ms(100);
+ 023A 04E6              ldi R16,100
+ 023C 10E0              ldi R17,0
+ 023E E0DE              xcall _delay_ms
+ 0240                   .dbline 179
+ 0240           ;                          PORTD = 0x40;
+ 0240 80E4              ldi R24,64
+ 0242 82BB              out 0x12,R24
+ 0244                   .dbline 180
+ 0244           ;                          delay_ms(100);
+ 0244 04E6              ldi R16,100
+ 0246 10E0              ldi R17,0
+ 0248 DBDE              xcall _delay_ms
+ 024A                   .dbline 181
+ 024A           ;                          PORTD = 0x80;
+ 024A 80E8              ldi R24,128
+ 024C 82BB              out 0x12,R24
+ 024E                   .dbline 182
+ 024E           ;                          delay_ms(100);
+ 024E 04E6              ldi R16,100
+ 0250 10E0              ldi R17,0
+ 0252 D6DE              xcall _delay_ms
+ 0254                   .dbline 183
+ 0254           ;                          PORTD = 0x00;
+ 0254 2224              clr R2
+ 0256 22BA              out 0x12,R2
+ 0258                   .dbline 184
+ 0258           ;                          break;                 //按键9
+ 0258                   .dbline 185
+ 0258           ;     case 0x70:  ; 
+ 0258                   .dbline 186
+ 0258           ;                          break;                 //按键13
+ 0258           L35:
+ 0258           L36:
+ 0258                   .dbline 189
+ 0258           ;   }
+ 0258           ;   //扫描第三列
+ 0258           ;   PORTC = 0xfd;
+ 0258 8DEF              ldi R24,253
+ 025A 85BB              out 0x15,R24
+ 025C                   .dbline 190
+ 025C           ;   switch(PINC&(0xf0))
+ 025C 43B3              in R20,0x13
+ 025E 5527              clr R21
+ 0260 407F              andi R20,240
+ 0262 5070              andi R21,0
+ 0264 403B              cpi R20,176
+ 0266 E0E0              ldi R30,0
+ 0268 5E07              cpc R21,R30
+ 026A 09F1              breq L50
+ 026C           X14:
+ 026C 80EB              ldi R24,176
+ 026E 90E0              ldi R25,0
+ 0270 8417              cp R24,R20
+ 0272 9507              cpc R25,R21
+ 0274 34F0              brlt L53
+ 0276           X15:
+ 0276           L52:
+ 0276 4037              cpi R20,112
+ 0278 E0E0              ldi R30,0
+ 027A 5E07              cpc R21,R30
+ 027C 09F4              brne X28
+ 027E 42C0              xjmp L46
+ 0280           X28:
+ 0280           X16:
+ 0280 41C0              xjmp L45
+ 0282           L53:
+ 0282 403D              cpi R20,208
+ 0284 E0E0              ldi R30,0
+ 0286 5E07              cpc R21,R30
+ 0288 09F4              brne X29
+ 028A 3CC0              xjmp L46
+ 028C           X29:
+ 028C           X17:
+ 028C 403D              cpi R20,208
+ 028E E0E0              ldi R30,0
+ 0290 5E07              cpc R21,R30
+ 0292 0CF4              brge X30
+ 0294 37C0              xjmp L45
+ 0296           X30:
+ 0296           X18:
+ 0296           L54:
+ 0296 403E              cpi R20,224
+ 0298 E0E0              ldi R30,0
+ 029A 5E07              cpc R21,R30
+ 029C 09F0              breq L48
+ 029E           X19:
+ 029E 32C0              xjmp L45
+ 02A0           L48:
+ 02A0                   .dbline 192
+ 02A0           ;   {
+ 02A0           ;     case 0xe0: SEG7_flag=3 ;
+ 02A0 83E0              ldi R24,3
+ 02A2 90E0              ldi R25,0
+ 02A4 90931500          sts _SEG7_flag+1,R25
+ 02A8 80931400          sts _SEG7_flag,R24
+ 02AC                   .dbline 193
+ 02AC           ;                          break;                 //按键2
+ 02AC 2BC0              xjmp L46
+ 02AE           L50:
+ 02AE                   .dbline 196
+ 02AE           ;       case 0xd0: 
+ 02AE           ;                          break;                 //按键6
+ 02AE           ;       case 0xb0: LED_init();
+ 02AE 5BD0              xcall _LED_init
+ 02B0                   .dbline 197
+ 02B0           ;                          PORTD = 0x80;
+ 02B0 80E8              ldi R24,128
+ 02B2 82BB              out 0x12,R24
+ 02B4                   .dbline 198
+ 02B4           ;                          delay_ms(100);
+ 02B4 04E6              ldi R16,100
+ 02B6 10E0              ldi R17,0
+ 02B8 A3DE              xcall _delay_ms
+ 02BA                   .dbline 199
+ 02BA           ;                          PORTD = 0x40;
+ 02BA 80E4              ldi R24,64
+ 02BC 82BB              out 0x12,R24
+ 02BE                   .dbline 200
+ 02BE           ;                          delay_ms(100);
+ 02BE 04E6              ldi R16,100
+ 02C0 10E0              ldi R17,0
+ 02C2 9EDE              xcall _delay_ms
+ 02C4                   .dbline 201
+ 02C4           ;                          PORTD = 0x20;
+ 02C4 80E2              ldi R24,32
+ 02C6 82BB              out 0x12,R24
+ 02C8                   .dbline 202
+ 02C8           ;                          delay_ms(100);
+ 02C8 04E6              ldi R16,100
+ 02CA 10E0              ldi R17,0
+ 02CC 99DE              xcall _delay_ms
+ 02CE                   .dbline 203
+ 02CE           ;                          PORTD = 0x10;
+ 02CE 80E1              ldi R24,16
+ 02D0 82BB              out 0x12,R24
+ 02D2                   .dbline 204
+ 02D2           ;                          delay_ms(100);
+ 02D2 04E6              ldi R16,100
+ 02D4 10E0              ldi R17,0
+ 02D6 94DE              xcall _delay_ms
+ 02D8                   .dbline 205
+ 02D8           ;                          PORTD = 0x08;
+ 02D8 88E0              ldi R24,8
+ 02DA 82BB              out 0x12,R24
+ 02DC                   .dbline 206
+ 02DC           ;                          delay_ms(100);
+ 02DC 04E6              ldi R16,100
+ 02DE 10E0              ldi R17,0
+ 02E0 8FDE              xcall _delay_ms
+ 02E2                   .dbline 207
+ 02E2           ;                          PORTD = 0x04;
+ 02E2 84E0              ldi R24,4
+ 02E4 82BB              out 0x12,R24
+ 02E6                   .dbline 208
+ 02E6           ;                          delay_ms(100);
+ 02E6 04E6              ldi R16,100
+ 02E8 10E0              ldi R17,0
+ 02EA 8ADE              xcall _delay_ms
+ 02EC                   .dbline 209
+ 02EC           ;                          PORTD = 0x02;
+ 02EC 82E0              ldi R24,2
+ 02EE 82BB              out 0x12,R24
+ 02F0                   .dbline 210
+ 02F0           ;                          delay_ms(100);
+ 02F0 04E6              ldi R16,100
+ 02F2 10E0              ldi R17,0
+ 02F4 85DE              xcall _delay_ms
+ 02F6                   .dbline 211
+ 02F6           ;                          PORTD = 0x01;
+ 02F6 81E0              ldi R24,1
+ 02F8 82BB              out 0x12,R24
+ 02FA                   .dbline 212
+ 02FA           ;                          delay_ms(100);
+ 02FA 04E6              ldi R16,100
+ 02FC 10E0              ldi R17,0
+ 02FE 80DE              xcall _delay_ms
+ 0300                   .dbline 213
+ 0300           ;                          PORTD = 0x00;
+ 0300 2224              clr R2
+ 0302 22BA              out 0x12,R2
+ 0304                   .dbline 214
+ 0304           ;                          break;                 //按键10
+ 0304                   .dbline 215
+ 0304           ;     case 0x70:  ; 
+ 0304                   .dbline 216
+ 0304           ;                          break;                 //按键14
+ 0304           L45:
+ 0304           L46:
+ 0304                   .dbline 219
+ 0304           ;   }
+ 0304           ;   //扫描第四列
+ 0304           ;   PORTC = 0xfe;
+ 0304 8EEF              ldi R24,254
+ 0306 85BB              out 0x15,R24
+ 0308                   .dbline 220
+ 0308           ;   switch(PINC&(0xf0))
+ 0308 43B3              in R20,0x13
+ 030A 5527              clr R21
+ 030C 407F              andi R20,240
+ 030E 5070              andi R21,0
+ 0310 403B              cpi R20,176
+ 0312 E0E0              ldi R30,0
+ 0314 5E07              cpc R21,R30
+ 0316 B9F0              breq L56
+ 0318           X20:
+ 0318 80EB              ldi R24,176
+ 031A 90E0              ldi R25,0
+ 031C 8417              cp R24,R20
+ 031E 9507              cpc R25,R21
+ 0320 2CF0              brlt L63
+ 0322           X21:
+ 0322           L62:
+ 0322 4037              cpi R20,112
+ 0324 E0E0              ldi R30,0
+ 0326 5E07              cpc R21,R30
+ 0328 71F0              breq L56
+ 032A           X22:
+ 032A 0DC0              xjmp L55
+ 032C           L63:
+ 032C 403D              cpi R20,208
+ 032E E0E0              ldi R30,0
+ 0330 5E07              cpc R21,R30
+ 0332 49F0              breq L56
+ 0334           X23:
+ 0334 403D              cpi R20,208
+ 0336 E0E0              ldi R30,0
+ 0338 5E07              cpc R21,R30
+ 033A 2CF0              brlt L55
+ 033C           X24:
+ 033C           L64:
+ 033C 403E              cpi R20,224
+ 033E E0E0              ldi R30,0
+ 0340 5E07              cpc R21,R30
+ 0342 09F0              breq L56
+ 0344           X25:
+ 0344 00C0              xjmp L55
+ 0346           L55:
+ 0346           L56:
+ 0346                   .dbline -2
+ 0346           L24:
+ 0346                   .dbline 0 ; func end
+ 0346 5991              ld R21,y+
+ 0348 4991              ld R20,y+
+ 034A 0895              ret
+ 034C                   .dbend
+ 034C                   .dbfunc e alarm_clock_open _alarm_clock_open fV
+                        .even
+ 034C           _alarm_clock_open::
+ 034C                   .dbline -1
+ 034C                   .dbline 234
+ 034C           ;   {
+ 034C           ;     case 0xe0: 
+ 034C           ;                          break;                 //按键3
+ 034C           ;       case 0xd0:  
+ 034C           ;                          break;                 //按键7
+ 034C           ;       case 0xb0: 
+ 034C           ;                          break;                 //按键11
+ 034C           ;     case 0x70:  ; 
+ 034C           ;                          break;                 //按键15
+ 034C           ;   }
+ 034C           ; }
+ 034C           ; 
+ 034C           ; void alarm_clock_open()  //开启闹钟
+ 034C           ; {
+ 034C                   .dbline 235
+ 034C           ;   PORTB &= ~(1<<PB4);
+ 034C C498              cbi 0x18,4
+ 034E                   .dbline -2
+ 034E           L65:
+ 034E                   .dbline 0 ; func end
+ 034E 0895              ret
+ 0350                   .dbend
+ 0350                   .dbfunc e alarm_clock_close _alarm_clock_close fV
+                        .even
+ 0350           _alarm_clock_close::
+ 0350                   .dbline -1
+ 0350                   .dbline 239
+ 0350           ; }
+ 0350           ; 
+ 0350           ; void alarm_clock_close()  //关闭闹钟
+ 0350           ; {
+ 0350                   .dbline 240
+ 0350           ;   PORTB |= (1<<PB4);
+ 0350 C49A              sbi 0x18,4
+ 0352                   .dbline -2
+ 0352           L66:
+ 0352                   .dbline 0 ; func end
+ 0352 0895              ret
+ 0354                   .dbend
+ 0354                   .dbfunc e PWM_OC2_init _PWM_OC2_init fV
+                        .even
+ 0354           _PWM_OC2_init::
+ 0354                   .dbline -1
+ 0354                   .dbline 244
+ 0354           ; }
+ 0354           ; 
+ 0354           ; void PWM_OC2_init()  //OC2初始化
+ 0354           ; {
+ 0354                   .dbline 245
+ 0354           ;   DDRD = 0x80;
+ 0354 80E8              ldi R24,128
+ 0356 81BB              out 0x11,R24
+ 0358                   .dbline 246
+ 0358           ;   PORTD = 0x00;
+ 0358 2224              clr R2
+ 035A 22BA              out 0x12,R2
+ 035C                   .dbline 247
+ 035C           ;   TCCR2 = (0<<WGM21)|(1<<WGM20)|(1<<COM21)|(0<<COM20)|(1<<CS22)|(1<<CS21)|(0<<CS20); //相位修正PWM模式，256分频，周期为16.4ms
+ 035C 86E6              ldi R24,102
+ 035E 85BD              out 0x25,R24
+ 0360                   .dbline 248
+ 0360           ;   OCR2 = 0x1b;
+ 0360 8BE1              ldi R24,27
+ 0362 83BD              out 0x23,R24
+ 0364                   .dbline -2
+ 0364           L67:
+ 0364                   .dbline 0 ; func end
+ 0364 0895              ret
+ 0366                   .dbend
+ 0366                   .dbfunc e LED_init _LED_init fV
+                        .even
+ 0366           _LED_init::
+ 0366                   .dbline -1
+ 0366                   .dbline 252
+ 0366           ; }
+ 0366           ; 
+ 0366           ; void LED_init()
+ 0366           ; {
+ 0366                   .dbline 253
+ 0366           ;   DDRD = 0xff;
+ 0366 8FEF              ldi R24,255
+ 0368 81BB              out 0x11,R24
+ 036A                   .dbline 254
+ 036A           ;   PORTD = 0x00;
+ 036A 2224              clr R2
+ 036C 22BA              out 0x12,R2
+ 036E                   .dbline 255
+ 036E           ;   DDRB = 0xf0;
+ 036E 80EF              ldi R24,240
+ 0370 87BB              out 0x17,R24
+ 0372                   .dbline 256
+ 0372           ;   PORTB |= 1<<PB6;
+ 0372 C69A              sbi 0x18,6
+ 0374                   .dbline 257
+ 0374           ;   PORTB |= 0<<PB7;
+ 0374 28B2              in R2,0x18
+ 0376 28BA              out 0x18,R2
+ 0378                   .dbline -2
+ 0378           L68:
+ 0378                   .dbline 0 ; func end
+ 0378 0895              ret
+ 037A                   .dbend
+ 037A                   .dbfunc e main _main fV
+                        .even
+ 037A           _main::
+ 037A                   .dbline -1
+ 037A                   .dbline 261
+ 037A           ; }
+ 037A           ; 
+ 037A           ; void main()
+ 037A           ; {
+ 037A                   .dbline 262
+ 037A           ;   SEG7_init();  //初始化数码管引脚
+ 037A 57DE              xcall _SEG7_init
+ 037C                   .dbline 263
+ 037C           ;   button_init();  //初始化矩阵键盘引脚
+ 037C D5DE              xcall _button_init
+ 037E 36C0              xjmp L71
+ 0380           L70:
+ 0380                   .dbline 266
+ 0380           ;   
+ 0380           ;   while(1)
+ 0380           ;   {
+ 0380                   .dbline 267
+ 0380           ;     button_scan();  //扫描矩阵按键
+ 0380 D8DE              xcall _button_scan
+ 0382                   .dbline 269
+ 0382           ;       
+ 0382           ;     switch(SEG7_flag)
+ 0382 20901400          lds R2,_SEG7_flag
+ 0386 30901500          lds R3,_SEG7_flag+1
+ 038A C101              movw R24,R2
+ 038C 8130              cpi R24,1
+ 038E E0E0              ldi R30,0
+ 0390 9E07              cpc R25,R30
+ 0392 49F0              breq L75
+ 0394           X31:
+ 0394 8230              cpi R24,2
+ 0396 E0E0              ldi R30,0
+ 0398 9E07              cpc R25,R30
+ 039A 39F0              breq L76
+ 039C           X32:
+ 039C 8330              cpi R24,3
+ 039E E0E0              ldi R30,0
+ 03A0 9E07              cpc R25,R30
+ 03A2 29F0              breq L77
+ 03A4           X33:
+ 03A4 05C0              xjmp L73
+ 03A6           L75:
+ 03A6                   .dbline 271
+ 03A6           ;       {
+ 03A6           ;         case 1 : SEG7_show_year();  //数码管显示年份2017
+ 03A6 48DE              xcall _SEG7_show_year
+ 03A8                   .dbline 272
+ 03A8           ;                          break;
+ 03A8 03C0              xjmp L74
+ 03AA           L76:
+ 03AA                   .dbline 273
+ 03AA           ;         case 2 : SEG7_show_date();  //数码管显示日期0203
+ 03AA 6EDE              xcall _SEG7_show_date
+ 03AC                   .dbline 274
+ 03AC           ;                          break;
+ 03AC 01C0              xjmp L74
+ 03AE           L77:
+ 03AE                   .dbline 275
+ 03AE           ;         case 3 : SEG7_show_time();  //数码管显示时分17.54
+ 03AE 94DE              xcall _SEG7_show_time
+ 03B0                   .dbline 276
+ 03B0           ;                          break;
+ 03B0           L73:
+ 03B0           L74:
+ 03B0                   .dbline 279
+ 03B0           ;       }
+ 03B0           ;       
+ 03B0           ;       switch(alarm_clock_flag)
+ 03B0 20901600          lds R2,_alarm_clock_flag
+ 03B4 30901700          lds R3,_alarm_clock_flag+1
+ 03B8 2220              tst R2
+ 03BA 11F4              brne X34
+ 03BC 3320              tst R3
+ 03BE 31F0              breq L80
+ 03C0           X34:
+ 03C0 C101              movw R24,R2
+ 03C2 8130              cpi R24,1
+ 03C4 E0E0              ldi R30,0
+ 03C6 9E07              cpc R25,R30
+ 03C8 19F0              breq L81
+ 03CA           X35:
+ 03CA 03C0              xjmp L78
+ 03CC           L80:
+ 03CC                   .dbline 281
+ 03CC           ;       {
+ 03CC           ;         case 0 : alarm_clock_close();  //关闭闹钟
+ 03CC C1DF              xcall _alarm_clock_close
+ 03CE                   .dbline 282
+ 03CE           ;                          break;
+ 03CE 01C0              xjmp L79
+ 03D0           L81:
+ 03D0                   .dbline 283
+ 03D0           ;         case 1 : alarm_clock_open();  //开启闹钟
+ 03D0 BDDF              xcall _alarm_clock_open
+ 03D2                   .dbline 284
+ 03D2           ;                          break;
+ 03D2           L78:
+ 03D2           L79:
+ 03D2                   .dbline 287
+ 03D2           ;       }
+ 03D2           ;       
+ 03D2           ;       switch(motor_EN)
+ 03D2 40911800          lds R20,_motor_EN
+ 03D6 50911900          lds R21,_motor_EN+1
+ 03DA 4030              cpi R20,0
+ 03DC 4507              cpc R20,R21
+ 03DE 31F0              breq L83
+ 03E0           X36:
+ 03E0 4130              cpi R20,1
+ 03E2 E0E0              ldi R30,0
+ 03E4 5E07              cpc R21,R30
+ 03E6 09F0              breq L85
+ 03E8           X37:
+ 03E8 01C0              xjmp L82
+ 03EA           L85:
+ 03EA                   .dbline 290
+ 03EA           ;       {
+ 03EA           ;         case 0 : break;
+ 03EA           ;         case 1 : PWM_OC2_init();  //开启舵机
+ 03EA B4DF              xcall _PWM_OC2_init
+ 03EC                   .dbline 291
+ 03EC           ;                          break;
+ 03EC           L82:
+ 03EC           L83:
+ 03EC                   .dbline 293
+ 03EC           ;       }
+ 03EC           ;   }
+ 03EC           L71:
+ 03EC                   .dbline 265
+ 03EC C9CF              xjmp L70
+ 03EE           X38:
+ 03EE                   .dbline -2
+ 03EE           L69:
+ 03EE                   .dbline 0 ; func end
+ 03EE 0895              ret
+ 03F0                   .dbend
+ 03F0           ; }

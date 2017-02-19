@@ -1,0 +1,71 @@
+XL
+H 3 areas 5 global symbols
+M LED.c
+S push_xgsetF000 Ref0000
+S pop_xgsetF000 Ref0000
+A text size 56 flags 0
+dbfile LED.c
+dbfile C:\Users\z\Desktop\作业\作业1\srouce\LED.c
+dbfunc e delay 0 fV
+dbsym r i 14 I
+dbsym r j 16 I
+dbsym r x 10 i
+dbline FFFFFFFF 4
+dbline 4 4
+dbline 6 4
+dbline 7 A
+dbline 7 E
+dbline 7 E
+dbline 7 12
+dbline 6 1A
+dbline 6 1E
+dbline FFFFFFFE 24
+dbline 0 24
+dbfunc e main 28 fV
+dbsym r n 14 c
+dbline FFFFFFFF 28
+dbline B 28
+dbline D 28
+dbline E 2C
+dbline 11 32
+dbline 12 32
+dbline 13 36
+dbline 14 36
+dbline 15 46
+dbline 16 4C
+dbline 12 4C
+dbline 12 4E
+dbline 17 52
+dbline 10 52
+dbline FFFFFFFE 54
+dbline 0 54
+S _main Def0028
+S _delay Def0000
+A data size 8 flags 20
+dbfile LED.c
+dbfile C:\Users\z\Desktop\作业\作业1\srouce\LED.c
+dbsym e dis 0 A[8:8]c
+S _dis Def0000
+A idata size 8 flags 0
+T 00 00 01 02
+R 00 00 02 00
+T 02 00 04 08
+R 00 00 02 00
+T 04 00 10 20
+R 00 00 02 00
+T 06 00 40 80
+R 00 00 02 00
+T 00 00 0E 94 00 00 44 27 55 27 0A C0 66 27 77 27
+R 00 00 00 00 12 04 00 00
+T 0E 00 6F 5F 7F 4F 65 37 E4 E0 7E 07 D4 F3 4F 5F
+R 00 00 00 00
+T 1C 00 5F 4F 40 17 51 07 98 F3 0C 94 00 00
+R 00 00 00 00 12 0C 01 00
+T 28 00 8F EF 8A BB 22 24 2B BA 10 C0 44 27 0C C0
+R 00 00 00 00
+T 36 00 80 E0 90 E0 E4 2F FF 27 E8 0F F9 1F 20 80
+R 00 00 00 00 20 02 01 00 00 00 40 04 01 00 00 00
+T 44 00 2B BA 04 E6 10 E0 DA DF 43 95 48 30 90 F3
+R 00 00 00 00
+T 52 00 EF CF 08 95
+R 00 00 00 00

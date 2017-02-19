@@ -1,0 +1,165 @@
+#include <iom16v.h>
+
+const unsigned char delayMs = 100;  //延时，单位：ms
+
+void delay(int n)  //延时函数
+{
+  int i , j;
+  for (i = 0 ; i < n ; i ++)  
+    for(j = 0 ; j < 1141 ; j++)  ;
+}
+
+void LED_down_0()  //按下下按键时
+{
+  if((PINC & (1<<PC3)) == 0)
+  {
+    while(1)
+	{
+      PORTA = 0x01;
+	  delay(delayMs);
+	  PORTA = 0x10;
+	  delay(delayMs);
+	  PORTA = 0x00;
+	  PORTB = 0x01;
+	  delay(delayMs);
+	  PORTB = 0x10;
+	  delay(delayMs);
+	  PORTB = 0x00;
+	}
+  }
+}
+
+void LED_down_1()  //按下下按键时
+{
+  if((PINC & (1<<PC3)) == 0)
+  {
+    while(1)
+	{
+      PORTA = 0x02;
+	  delay(delayMs);
+	  PORTA = 0x20;
+	  delay(delayMs);
+	  PORTA = 0x00;
+	  PORTB = 0x02;
+	  delay(delayMs);
+	  PORTB = 0x20;
+	  delay(delayMs);
+	  PORTB = 0x00;
+	}
+  }
+}
+
+void LED_down_2()  //按下下按键时
+{
+  if((PINC & (1<<PC3)) == 0)
+  {
+    while(1)
+	{
+      PORTA = 0x04;
+	  delay(delayMs);
+	  PORTA = 0x40;
+	  delay(delayMs);
+	  PORTA = 0x00;
+	  PORTB = 0x04;
+	  delay(delayMs);
+	  PORTB = 0x40;
+	  delay(delayMs);
+	  PORTB = 0x00;
+	}
+  }
+}
+
+void LED_down_3()  //按下下按键时
+{
+  if((PINC & (1<<PC3)) == 0)
+  {
+    while(1)
+	{
+      PORTA = 0x08;
+	  delay(delayMs);
+	  PORTA = 0x80;
+	  delay(delayMs);
+	  PORTA = 0x00;
+	  PORTB = 0x08;
+	  delay(delayMs);
+	  PORTB = 0x80;
+	  delay(delayMs);
+	  PORTB = 0x00;
+	}
+  }
+}
+
+void LED_right()  //向右移动，初始值
+{
+  
+}
+
+void LED_up()
+{
+
+}
+
+void LED_down()
+{
+
+}
+
+void LED_left()
+{
+
+}
+
+void LED_init()
+{
+  PORTA = 0x01;
+  delay(delayMs);
+  LED_down_0();  //按下下按键时
+  PORTA = 0x02;
+  delay(delayMs);
+  LED_down_1();  //按下下按键时
+  PORTA = 0x04;
+  delay(delayMs);
+  LED_down_2();  //按下下按键时
+  PORTA = 0x08;
+  delay(delayMs);
+  LED_down_3();  //按下下按键时
+}
+
+void main()
+{
+  DDRA = 0xff;
+  DDRB = 0xff;
+  DDRC = 0x00;
+  PORTA = 0x00;
+  PORTB = 0x00;
+  PORTC = 0x0f;
+  while(1)
+  {
+    PORTA = 0x01;
+	delay(100);
+	LED_up();
+	LED_down();
+	LED_left();
+	LED_right();
+	
+	PORTA = 0x02;
+	delay(100);
+	LED_up();
+	LED_down();
+	LED_left();
+	LED_right();
+	
+	PORTA = 0x04;
+	delay(100);
+	LED_up();
+	LED_down();
+	LED_left();
+	LED_right();
+	
+	PORTA = 0x08;
+	LED_up();
+	LED_down();
+	LED_left();
+	LED_right();
+  }
+}

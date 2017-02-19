@@ -1,0 +1,419 @@
+                        .module LED.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile LED.c
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业3\srouce\LED.c
+ 0000                   .dbfunc e delay _delay fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              n -> R16,R17
+                        .even
+ 0000           _delay::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 4
+ 0004           ; #include <iom16v.h> 
+ 0004           ; 
+ 0004           ; void delay(int n)
+ 0004           ; {
+ 0004                   .dbline 6
+ 0004           ;   int i , j;
+ 0004           ;   for (i = 0 ; i < n ; i ++)  
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0AC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 7
+ 000A           ;     for(j = 0 ; j < 1141 ; j++)  ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E           L6:
+ 000E                   .dbline 7
+ 000E           L7:
+ 000E                   .dbline 7
+ 000E 6F5F              subi R22,255  ; offset = 1
+ 0010 7F4F              sbci R23,255
+ 0012                   .dbline 7
+ 0012 6537              cpi R22,117
+ 0014 E4E0              ldi R30,4
+ 0016 7E07              cpc R23,R30
+ 0018 D4F3              brlt L6
+ 001A           X0:
+ 001A           L3:
+ 001A                   .dbline 6
+ 001A 4F5F              subi R20,255  ; offset = 1
+ 001C 5F4F              sbci R21,255
+ 001E           L5:
+ 001E                   .dbline 6
+ 001E 4017              cp R20,R16
+ 0020 5107              cpc R21,R17
+ 0022 9CF3              brlt L2
+ 0024           X1:
+ 0024                   .dbline -2
+ 0024           L1:
+ 0024                   .dbline 0 ; func end
+ 0024 0C940000          xjmp pop_xgsetF000
+ 0028                   .dbsym r i 20 I
+ 0028                   .dbsym r j 22 I
+ 0028                   .dbsym r n 16 I
+ 0028                   .dbend
+ 0028                   .dbfunc e main _main fV
+ 0028           ;            run -> R20,R21
+                        .even
+ 0028           _main::
+ 0028                   .dbline -1
+ 0028                   .dbline 11
+ 0028           ; }
+ 0028           ; 
+ 0028           ; void main()
+ 0028           ; {
+ 0028                   .dbline 12
+ 0028           ;   unsigned int run = 0;
+ 0028 4427              clr R20
+ 002A 5527              clr R21
+ 002C                   .dbline 13
+ 002C           ;   DDRA = 0xff;
+ 002C 8FEF              ldi R24,255
+ 002E 8ABB              out 0x1a,R24
+ 0030                   .dbline 14
+ 0030           ;   PORTA = 0x00;
+ 0030 2224              clr R2
+ 0032 2BBA              out 0x1b,R2
+ 0034                   .dbline 15
+ 0034           ;   DDRB = 0x00;
+ 0034 27BA              out 0x17,R2
+ 0036                   .dbline 16
+ 0036           ;   PORTB = 0x01;
+ 0036 81E0              ldi R24,1
+ 0038 88BB              out 0x18,R24
+ 003A 78C0              xjmp L12
+ 003C           L11:
+ 003C                   .dbline 18
+ 003C           ;   while(1)
+ 003C           ;   {
+ 003C                   .dbline 19
+ 003C           ;     if ((PINB & (1<<PB0) ) == 0)  //判断是否按下按键
+ 003C B099              sbic 0x16,0
+ 003E 02C0              rjmp L14
+ 0040           X2:
+ 0040                   .dbline 20
+ 0040           ;     {
+ 0040                   .dbline 21
+ 0040           ;         run++;
+ 0040 4F5F              subi R20,255  ; offset = 1
+ 0042 5F4F              sbci R21,255
+ 0044                   .dbline 22
+ 0044           ;     }
+ 0044           L14:
+ 0044                   .dbline 23
+ 0044           ;       switch(run)
+ 0044 4130              cpi R20,1
+ 0046 E0E0              ldi R30,0
+ 0048 5E07              cpc R21,R30
+ 004A 31F0              breq L18
+ 004C           X3:
+ 004C 4230              cpi R20,2
+ 004E E0E0              ldi R30,0
+ 0050 5E07              cpc R21,R30
+ 0052 09F4              brne X22
+ 0054 69C0              xjmp L51
+ 0056           X22:
+ 0056           X4:
+ 0056 6AC0              xjmp L17
+ 0058           L18:
+ 0058                   .dbline 26
+ 0058           ;       {
+ 0058           ;         case 1:
+ 0058           ;                    PORTA = 0x01;  delay(100);  if((PINB & (1<<PB0) ) == 0)    //判断是否按下按键
+ 0058 81E0              ldi R24,1
+ 005A 8BBB              out 0x1b,R24
+ 005C                   .dbline 26
+ 005C 04E6              ldi R16,100
+ 005E 10E0              ldi R17,0
+ 0060 CFDF              xcall _delay
+ 0062                   .dbline 26
+ 0062 B099              sbic 0x16,0
+ 0064 06C0              rjmp L19
+ 0066           X5:
+ 0066                   .dbline 27
+ 0066           ;                                                                                { 
+ 0066                   .dbline 28
+ 0066           ;                                                                                  delay(75); 
+ 0066 0BE4              ldi R16,75
+ 0068 10E0              ldi R17,0
+ 006A CADF              xcall _delay
+ 006C                   .dbline 29
+ 006C           ;                                                                                  if((PINB & (1<<PB0) ) == 0)   //75ms后再次判断是否按下按键，有则跳出switch（多次试验后75ms效果较好）
+ 006C B099              sbic 0x16,0
+ 006E 01C0              rjmp L21
+ 0070           X6:
+ 0070                   .dbline 30
+ 0070           ;                                                                                  { 
+ 0070                   .dbline 31
+ 0070           ;                                                                                    break;
+ 0070 5DC0              xjmp L17
+ 0072           L21:
+ 0072                   .dbline 33
+ 0072           ;                                                                                  } 
+ 0072           ;                                                                                }
+ 0072           L19:
+ 0072                   .dbline 34
+ 0072           ;                        PORTA = 0x02;  delay(100);  if((PINB & (1<<PB0) ) == 0)  //判断是否按下按键
+ 0072 82E0              ldi R24,2
+ 0074 8BBB              out 0x1b,R24
+ 0076                   .dbline 34
+ 0076 04E6              ldi R16,100
+ 0078 10E0              ldi R17,0
+ 007A C2DF              xcall _delay
+ 007C                   .dbline 34
+ 007C B099              sbic 0x16,0
+ 007E 06C0              rjmp L23
+ 0080           X7:
+ 0080                   .dbline 35
+ 0080           ;                                                                                { 
+ 0080                   .dbline 36
+ 0080           ;                                                                                  delay(75); 
+ 0080 0BE4              ldi R16,75
+ 0082 10E0              ldi R17,0
+ 0084 BDDF              xcall _delay
+ 0086                   .dbline 37
+ 0086           ;                                                                                  if((PINB & (1<<PB0) ) == 0)  //75ms后再次判断是否按下按键，有则跳出switch（多次试验后75ms效果较好）
+ 0086 B099              sbic 0x16,0
+ 0088 01C0              rjmp L25
+ 008A           X8:
+ 008A                   .dbline 38
+ 008A           ;                                                                                  { 
+ 008A                   .dbline 39
+ 008A           ;                                                                                    break;
+ 008A 50C0              xjmp L17
+ 008C           L25:
+ 008C                   .dbline 41
+ 008C           ;                                                                                  } 
+ 008C           ;                                                                                }
+ 008C           L23:
+ 008C                   .dbline 42
+ 008C           ;                        PORTA = 0x04;  delay(100);  if((PINB & (1<<PB0) ) == 0)  //判断是否按下按键
+ 008C 84E0              ldi R24,4
+ 008E 8BBB              out 0x1b,R24
+ 0090                   .dbline 42
+ 0090 04E6              ldi R16,100
+ 0092 10E0              ldi R17,0
+ 0094 B5DF              xcall _delay
+ 0096                   .dbline 42
+ 0096 B099              sbic 0x16,0
+ 0098 06C0              rjmp L27
+ 009A           X9:
+ 009A                   .dbline 43
+ 009A           ;                                                                                { 
+ 009A                   .dbline 44
+ 009A           ;                                                                                  delay(75); 
+ 009A 0BE4              ldi R16,75
+ 009C 10E0              ldi R17,0
+ 009E B0DF              xcall _delay
+ 00A0                   .dbline 45
+ 00A0           ;                                                                                  if((PINB & (1<<PB0) ) == 0)  //75ms后再次判断是否按下按键，有则跳出switch（多次试验后75ms效果较好）
+ 00A0 B099              sbic 0x16,0
+ 00A2 01C0              rjmp L29
+ 00A4           X10:
+ 00A4                   .dbline 46
+ 00A4           ;                                                                                  { 
+ 00A4                   .dbline 47
+ 00A4           ;                                                                                    break;
+ 00A4 43C0              xjmp L17
+ 00A6           L29:
+ 00A6                   .dbline 49
+ 00A6           ;                                                                                  } 
+ 00A6           ;                                                                                }
+ 00A6           L27:
+ 00A6                   .dbline 50
+ 00A6           ;                        PORTA = 0x08;  delay(100);  if((PINB & (1<<PB0) ) == 0)  //判断是否按下按键
+ 00A6 88E0              ldi R24,8
+ 00A8 8BBB              out 0x1b,R24
+ 00AA                   .dbline 50
+ 00AA 04E6              ldi R16,100
+ 00AC 10E0              ldi R17,0
+ 00AE A8DF              xcall _delay
+ 00B0                   .dbline 50
+ 00B0 B099              sbic 0x16,0
+ 00B2 06C0              rjmp L31
+ 00B4           X11:
+ 00B4                   .dbline 51
+ 00B4           ;                                                                                { 
+ 00B4                   .dbline 52
+ 00B4           ;                                                                                  delay(75); 
+ 00B4 0BE4              ldi R16,75
+ 00B6 10E0              ldi R17,0
+ 00B8 A3DF              xcall _delay
+ 00BA                   .dbline 53
+ 00BA           ;                                                                                  if((PINB & (1<<PB0) ) == 0)  //75ms后再次判断是否按下按键，有则跳出switch（多次试验后75ms效果较好）
+ 00BA B099              sbic 0x16,0
+ 00BC 01C0              rjmp L33
+ 00BE           X12:
+ 00BE                   .dbline 54
+ 00BE           ;                                                                                  { 
+ 00BE                   .dbline 55
+ 00BE           ;                                                                                    break;
+ 00BE 36C0              xjmp L17
+ 00C0           L33:
+ 00C0                   .dbline 57
+ 00C0           ;                                                                                  } 
+ 00C0           ;                                                                                }
+ 00C0           L31:
+ 00C0                   .dbline 58
+ 00C0           ;                        PORTA = 0x10;  delay(100);  if((PINB & (1<<PB0) ) == 0)  //判断是否按下按键
+ 00C0 80E1              ldi R24,16
+ 00C2 8BBB              out 0x1b,R24
+ 00C4                   .dbline 58
+ 00C4 04E6              ldi R16,100
+ 00C6 10E0              ldi R17,0
+ 00C8 9BDF              xcall _delay
+ 00CA                   .dbline 58
+ 00CA B099              sbic 0x16,0
+ 00CC 06C0              rjmp L35
+ 00CE           X13:
+ 00CE                   .dbline 59
+ 00CE           ;                                                                                { 
+ 00CE                   .dbline 60
+ 00CE           ;                                                                                  delay(75); 
+ 00CE 0BE4              ldi R16,75
+ 00D0 10E0              ldi R17,0
+ 00D2 96DF              xcall _delay
+ 00D4                   .dbline 61
+ 00D4           ;                                                                                  if((PINB & (1<<PB0) ) == 0)  //75ms后再次判断是否按下按键，有则跳出switch（多次试验后75ms效果较好）
+ 00D4 B099              sbic 0x16,0
+ 00D6 01C0              rjmp L37
+ 00D8           X14:
+ 00D8                   .dbline 62
+ 00D8           ;                                                                                  { 
+ 00D8                   .dbline 63
+ 00D8           ;                                                                                    break;
+ 00D8 29C0              xjmp L17
+ 00DA           L37:
+ 00DA                   .dbline 65
+ 00DA           ;                                                                                  } 
+ 00DA           ;                                                                                }
+ 00DA           L35:
+ 00DA                   .dbline 66
+ 00DA           ;                        PORTA = 0x20;  delay(100);  if((PINB & (1<<PB0) ) == 0)  //判断是否按下按键
+ 00DA 80E2              ldi R24,32
+ 00DC 8BBB              out 0x1b,R24
+ 00DE                   .dbline 66
+ 00DE 04E6              ldi R16,100
+ 00E0 10E0              ldi R17,0
+ 00E2 8EDF              xcall _delay
+ 00E4                   .dbline 66
+ 00E4 B099              sbic 0x16,0
+ 00E6 06C0              rjmp L39
+ 00E8           X15:
+ 00E8                   .dbline 67
+ 00E8           ;                                                                                { 
+ 00E8                   .dbline 68
+ 00E8           ;                                                                                  delay(75); 
+ 00E8 0BE4              ldi R16,75
+ 00EA 10E0              ldi R17,0
+ 00EC 89DF              xcall _delay
+ 00EE                   .dbline 69
+ 00EE           ;                                                                                  if((PINB & (1<<PB0) ) == 0)  //75ms后再次判断是否按下按键，有则跳出switch（多次试验后75ms效果较好）
+ 00EE B099              sbic 0x16,0
+ 00F0 01C0              rjmp L41
+ 00F2           X16:
+ 00F2                   .dbline 70
+ 00F2           ;                                                                                  { 
+ 00F2                   .dbline 71
+ 00F2           ;                                                                                    break;
+ 00F2 1CC0              xjmp L17
+ 00F4           L41:
+ 00F4                   .dbline 73
+ 00F4           ;                                                                                  } 
+ 00F4           ;                                                                                }
+ 00F4           L39:
+ 00F4                   .dbline 74
+ 00F4           ;                        PORTA = 0x40;  delay(100);  if((PINB & (1<<PB0) ) == 0)  //判断是否按下按键
+ 00F4 80E4              ldi R24,64
+ 00F6 8BBB              out 0x1b,R24
+ 00F8                   .dbline 74
+ 00F8 04E6              ldi R16,100
+ 00FA 10E0              ldi R17,0
+ 00FC 81DF              xcall _delay
+ 00FE                   .dbline 74
+ 00FE B099              sbic 0x16,0
+ 0100 06C0              rjmp L43
+ 0102           X17:
+ 0102                   .dbline 75
+ 0102           ;                                                                                { 
+ 0102                   .dbline 76
+ 0102           ;                                                                                  delay(75); 
+ 0102 0BE4              ldi R16,75
+ 0104 10E0              ldi R17,0
+ 0106 7CDF              xcall _delay
+ 0108                   .dbline 77
+ 0108           ;                                                                                  if((PINB & (1<<PB0) ) == 0)  //75ms后再次判断是否按下按键，有则跳出switch（多次试验后75ms效果较好）
+ 0108 B099              sbic 0x16,0
+ 010A 01C0              rjmp L45
+ 010C           X18:
+ 010C                   .dbline 78
+ 010C           ;                                                                                  { 
+ 010C                   .dbline 79
+ 010C           ;                                                                                    break;
+ 010C 0FC0              xjmp L17
+ 010E           L45:
+ 010E                   .dbline 81
+ 010E           ;                                                                                  } 
+ 010E           ;                                                                                }
+ 010E           L43:
+ 010E                   .dbline 82
+ 010E           ;                        PORTA = 0x80;  delay(100);  if((PINB & (1<<PB0) ) == 0)  //判断是否按下按键
+ 010E 80E8              ldi R24,128
+ 0110 8BBB              out 0x1b,R24
+ 0112                   .dbline 82
+ 0112 04E6              ldi R16,100
+ 0114 10E0              ldi R17,0
+ 0116 74DF              xcall _delay
+ 0118                   .dbline 82
+ 0118 B099              sbic 0x16,0
+ 011A 08C0              rjmp L17
+ 011C           X19:
+ 011C                   .dbline 83
+ 011C           ;                                                                                { 
+ 011C                   .dbline 84
+ 011C           ;                                                                                  delay(75); 
+ 011C 0BE4              ldi R16,75
+ 011E 10E0              ldi R17,0
+ 0120 6FDF              xcall _delay
+ 0122                   .dbline 85
+ 0122           ;                                                                                  if((PINB & (1<<PB0) ) == 0)  //75ms后再次判断是否按下按键，有则跳出switch（多次试验后75ms效果较好）
+ 0122 B099              sbic 0x16,0
+ 0124 03C0              rjmp L17
+ 0126           X20:
+ 0126                   .dbline 86
+ 0126           ;                                                                                  { 
+ 0126                   .dbline 87
+ 0126           ;                                                                                    break;
+ 0126 02C0              xjmp L17
+ 0128           L51:
+ 0128                   .dbline 92
+ 0128           ;                                                                                  } 
+ 0128           ;                                                                                }
+ 0128           ;                        break;
+ 0128           ;         case 2:
+ 0128           ;                    PORTA = 0x00;
+ 0128 2224              clr R2
+ 012A 2BBA              out 0x1b,R2
+ 012C                   .dbline 93
+ 012C           ;                        break;
+ 012C                   .dbline 94
+ 012C           ;         default : break;
+ 012C           L17:
+ 012C                   .dbline 96
+ 012C           ;       }
+ 012C           ;   }
+ 012C           L12:
+ 012C                   .dbline 17
+ 012C 87CF              xjmp L11
+ 012E           X21:
+ 012E                   .dbline -2
+ 012E           L10:
+ 012E                   .dbline 0 ; func end
+ 012E 0895              ret
+ 0130                   .dbsym r run 20 i
+ 0130                   .dbend
+ 0130           ; }

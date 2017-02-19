@@ -1,0 +1,95 @@
+#include <iom16v.h>
+
+void delay_ms(unsigned int x)  //延时函数
+{
+  unsigned int i,j;
+  for(i = 0 ; i < x ; i ++)
+    for(j = 0 ; j <1141 ; j ++)  ;
+}
+
+const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};  //共阳数码管键码
+
+void main()
+{
+  unsigned char gewei , shiwei;
+  unsigned int count , flag;
+  
+  DDRA = 0x00;
+  DDRC = 0xff;
+  DDRD = 0x03;
+  
+  PORTA = 0xff;
+  PORTC = 0x00;
+  PORTD = 0x00;
+  
+  while(1)
+  {
+    if((PINA&(1<<PA0))==0)  //判断按键PA0是否被按下
+	{
+      flag=1;
+	}
+	
+	if((PINA&(1<<PA1))==0)  //判断按键PA1是否被按下
+	{
+	  flag=2;
+	}
+	
+	if((PINA&(1<<PA2))==0)  //判断按键PA2是否被按下
+	{
+	  flag=3;
+	}
+	
+	if(flag==1)
+	{
+	  PORTD = 0x02;
+	  PORTC = table_ca[gewei];
+	  delay_ms(20);
+	  
+	  PORTD = 0x01;
+	  PORTC = table_ca[shiwei];
+	  delay_ms(20);
+	  
+	  count++;
+	}
+	
+	if(flag==2)
+	{
+	  PORTD = 0x02;
+	  PORTC = table_ca[gewei];
+	  delay_ms(20);
+	  
+	  PORTD = 0x01;
+	  PORTC = table_ca[shiwei];
+	  delay_ms(20);
+	  
+	  count++;
+	}
+	
+	if(flag==3)
+	{
+	  PORTD = 0x02;
+	  PORTC = table_ca[0];
+	  gewei=0;
+	  delay_ms(20);
+	  
+	  PORTD = 0x01;
+	  PORTC = table_ca[0];
+	  shiwei=0;
+	  delay_ms(20);
+	  
+	  count++;
+	}
+	
+	if(count==25)
+	{
+	  gewei++;
+	  count=0;
+	}
+	
+	if(gewei==10)
+	{
+	  shiwei++;
+	  gewei=0;
+	}
+  }
+}

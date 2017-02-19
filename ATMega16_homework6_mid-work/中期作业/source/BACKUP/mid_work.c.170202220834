@@ -1,0 +1,49 @@
+#include <iom16v.h>
+
+unsigned char SEG7_num_ca[] = { 0xC0 ,0xF9 ,0xA4 ,0xB0 ,0x99 ,0x92 ,0x82 ,0xF8 ,0x80 ,0x90 };  //共阳数码管码表0-9
+
+void delay_ms(unsigned int ms)
+{
+  unsigned int i , j ; 
+  for (i = 0 ; i < ms ; i++)
+    for(j = 0 ; j < 1141 ; j++) ;
+}
+
+void SEG7_show_year()  //数码管显示年份
+{
+  DDRA |= 0xff;
+  PORTA |= 0x00;
+  DDRB |= 0x0f;
+  PORTB |= 0x00;
+  
+  PORTB = 0x01;
+  PORTA = SEG7_num_ca[2];
+  delay_ms(20);
+  
+  PORTB = 0x02;
+  PORTA = SEG7_num_ca[0];
+  delay_ms(20);
+  
+  PORTB = 0x04;
+  PORTA = SEG7_num_ca[1];
+  delay_ms(20);
+  
+  PORTB = 0x08;
+  PORTA = SEG7_num_ca[7];
+  delay_ms(20);
+}
+
+void SEG7_show_date()  //数码管显示日期
+{
+
+}
+
+void SEG7_show_time()  //数码管显示时分
+{
+
+}
+
+void main()
+{
+
+}

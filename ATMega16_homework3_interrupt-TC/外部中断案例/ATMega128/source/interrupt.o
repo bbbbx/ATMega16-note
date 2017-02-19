@@ -1,0 +1,65 @@
+XL
+H 3 areas 4 global symbols
+M interrupt.c
+A text size 80 flags 0
+dbfile interrupt.c
+dbfile C:\Users\z\Desktop\作业\外部中断案例\source\interrupt.c
+dbfunc e seriver0 0 fV
+dbline FFFFFFFF C
+dbline 7 C
+dbline 8 C
+dbline 9 1E
+dbline FFFFFFFE 26
+dbline 0 26
+dbfunc e seriver1 34 fV
+dbline FFFFFFFF 40
+dbline E 40
+dbline F 40
+dbline 10 52
+dbline FFFFFFFE 5A
+dbline 0 5A
+dbfunc e main 68 fV
+dbline FFFFFFFF 68
+dbline 14 68
+dbline 15 68
+dbline 16 6C
+dbline 18 6E
+dbline 19 74
+dbline 1A 7A
+dbline 1B 7C
+dbline 1B 7C
+dbline 1B 7C
+dbline FFFFFFFE 7E
+dbline 0 7E
+S _main Def0068
+S _seriver0 Def0000
+S _seriver1 Def0034
+A vector size C flags C
+A bss size 2 flags 20
+dbfile C:\Users\z\Desktop\作业\外部中断案例\source\interrupt.c
+dbsym e COUNT 0 I
+S _COUNT Def0000
+T 04 00 0C 94 00 00
+R 00 00 01 00 10 04 00 00
+T 00 00 2A 92 3A 92 8A 93 9A 93 2F B6 2A 92 80 91
+R 00 00 00 00
+T 0E 00 00 00 90 91 01 00 01 96 90 93 01 00 80 93
+R 00 00 00 00 00 02 02 00 00 06 02 00 00 0C 02 00
+T 1C 00 00 00 1C 01 20 94 30 94 2B BA 29 90 2F BE
+R 00 00 00 00 00 02 02 00
+T 2A 00 99 91 89 91 39 90 29 90 18 95
+R 00 00 00 00
+T 08 00 0C 94 1A 00
+R 00 00 01 00 10 04 00 00
+T 34 00 2A 92 3A 92 8A 93 9A 93 2F B6 2A 92 80 91
+R 00 00 00 00
+T 42 00 00 00 90 91 01 00 01 97 90 93 01 00 80 93
+R 00 00 00 00 00 02 02 00 00 06 02 00 00 0C 02 00
+T 50 00 00 00 1C 01 20 94 30 94 2B BA 29 90 2F BE
+R 00 00 00 00 00 02 02 00
+T 5E 00 99 91 89 91 39 90 29 90 18 95
+R 00 00 00 00
+T 68 00 8F EF 8A BB 8B BB 8A E0 80 93 6A 00 89 B7
+R 00 00 00 00
+T 76 00 83 60 89 BF 78 94 FF CF 08 95
+R 00 00 00 00

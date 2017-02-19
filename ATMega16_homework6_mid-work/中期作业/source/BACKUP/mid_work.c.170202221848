@@ -1,0 +1,95 @@
+#include <iom16v.h>
+
+unsigned char SEG7_num_ca[] = { 0xC0 ,0xF9 ,0xA4 ,0xB0 ,0x99 ,0x92 ,0x82 ,0xF8 ,0x80 ,0x90 };  //共阳数码管码表0-9
+unsigned char SEG7_numWithDot_ca[] = { 0x40 ,0x79 ,0x24 ,0x30 ,0x19 ,0x12 ,0x02 ,0x78 ,0x00 ,0x10 };  //共阳数码管码表带小数点0-9
+
+void delay_ms(unsigned int ms)
+{
+  unsigned int i , j ; 
+  for (i = 0 ; i < ms ; i++)
+    for(j = 0 ; j < 1141 ; j++) ;
+}
+
+void SEG7_show_year()  //数码管显示年份
+{
+  //初始化IO
+  DDRA |= 0xff;
+  PORTA |= 0x00;
+  DDRB |= 0x0f;
+  PORTB |= 0x00;
+  //渲染2
+  PORTB = 0x01;
+  PORTA = SEG7_num_ca[2];
+  delay_ms(10);
+  //渲染0
+  PORTB = 0x02;
+  PORTA = SEG7_num_ca[0];
+  delay_ms(10);
+  //渲染1
+  PORTB = 0x04;
+  PORTA = SEG7_num_ca[1];
+  delay_ms(10);
+  //渲染7
+  PORTB = 0x08;
+  PORTA = SEG7_num_ca[7];
+  delay_ms(10);
+}
+
+void SEG7_show_date()  //数码管显示日期
+{
+  //初始化IO
+  DDRA |= 0xff;
+  PORTA |= 0x00;
+  DDRB |= 0x0f;
+  PORTB |= 0x00;
+  //渲染0
+  PORTB = 0x01;
+  PORTA = SEG7_num_ca[0];
+  delay_ms(10);
+  //渲染2
+  PORTB = 0x02;
+  PORTA = SEG7_num_ca[2];
+  delay_ms(10);
+  //渲染0
+  PORTB = 0x04;
+  PORTA = SEG7_num_ca[0];
+  delay_ms(10);
+  //渲染3
+  PORTB = 0x08;
+  PORTA = SEG7_num_ca[3];
+  delay_ms(10);
+}
+
+void SEG7_show_time()  //数码管显示时分
+{
+  //初始化IO
+  DDRA |= 0xff;
+  PORTA |= 0x00;
+  DDRB |= 0x0f;
+  PORTB |= 0x00;
+  //渲染1
+  PORTB = 0x01;
+  PORTA = SEG7_num_ca[1];
+  delay_ms(10);
+  //渲染0
+  PORTB = 0x02;
+  PORTA = SEG7_numWithDot_ca[0];
+  delay_ms(10);
+  //渲染0
+  PORTB = 0x04;
+  PORTA = SEG7_num_ca[0];
+  delay_ms(10);
+  //渲染3
+  PORTB = 0x08;
+  PORTA = SEG7_num_ca[3];
+  delay_ms(10);
+}
+
+void main()
+{
+
+  while(1)
+  {
+    SEG7_show_time();
+  }
+}

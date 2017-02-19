@@ -1,0 +1,340 @@
+                        .module _7SEG_MPX1_CA.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile 7SEG_MPX1_CA.c
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+ 0000                   .dbfunc e delay _delay fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              x -> R16
+                        .even
+ 0000           _delay::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 5
+ 0004           ; #include <iom16v.h>
+ 0004           ; 
+ 0004           ; /*延时函数*/
+ 0004           ; void delay(unsigned char x)
+ 0004           ; {
+ 0004                   .dbline 7
+ 0004           ;   unsigned int i,j;
+ 0004           ;   for(i = 0 ; i < x ;i ++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 8
+ 000A           ;     for(j = 0 ; j < 1140; j++) ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 8
+ 0010           L7:
+ 0010                   .dbline 8
+ 0010 6F5F              subi R22,255  ; offset = 1
+ 0012 7F4F              sbci R23,255
+ 0014           L9:
+ 0014                   .dbline 8
+ 0014 6437              cpi R22,116
+ 0016 E4E0              ldi R30,4
+ 0018 7E07              cpc R23,R30
+ 001A D0F3              brlo L6
+ 001C           X0:
+ 001C           L3:
+ 001C                   .dbline 7
+ 001C 4F5F              subi R20,255  ; offset = 1
+ 001E 5F4F              sbci R21,255
+ 0020           L5:
+ 0020                   .dbline 7
+ 0020 202E              mov R2,R16
+ 0022 3324              clr R3
+ 0024 4215              cp R20,R2
+ 0026 5305              cpc R21,R3
+ 0028 80F3              brlo L2
+ 002A           X1:
+ 002A                   .dbline -2
+ 002A           L1:
+ 002A                   .dbline 0 ; func end
+ 002A 0C940000          xjmp pop_xgsetF000
+ 002E                   .dbsym r i 20 i
+ 002E                   .dbsym r j 22 i
+ 002E                   .dbsym r x 16 c
+ 002E                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+ 0000           _table::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 3F06              .byte 63,6
+                        .area data(ram, con, rel)
+ 0002                   .dbfile C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 5B4F              .byte 91,'O
+                        .area data(ram, con, rel)
+ 0004                   .dbfile C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 666D              .byte 'f,'m
+                        .area data(ram, con, rel)
+ 0006                   .dbfile C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 7D07              .byte 125,7
+                        .area data(ram, con, rel)
+ 0008                   .dbfile C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 7F6F              .byte 127,'o
+                        .area data(ram, con, rel)
+ 000A                   .dbfile C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+ 000A                   .dbsym e table _table A[10:10]c
+                        .area text(rom, con, rel)
+ 002E                   .dbfile C:\Users\z\Desktop\作业\作业1\srouce\7SEG_MPX1_CA.c
+ 002E                   .dbfunc e main _main fV
+ 002E           ; minutes_shiwei -> R14,R15
+ 002E           ;          count -> R12,R13
+ 002E           ;  minutes_gewei -> R10,R11
+ 002E           ; seconds_shiwei -> R22,R23
+ 002E           ;  seconds_gewei -> R20,R21
+                        .even
+ 002E           _main::
+ 002E                   .dbline -1
+ 002E                   .dbline 15
+ 002E           ; }
+ 002E           ; 
+ 002E           ; /*共阴数码管键码*/
+ 002E           ; const unsigned char table[]={0x3f , 0x06 , 0x5b , 0x4f , 0x66 , 0x6d , 0x7d , 0x07 , 0x7f , 0x6f};
+ 002E           ; 
+ 002E           ; void main()
+ 002E           ; {
+ 002E                   .dbline 17
+ 002E           ;   
+ 002E           ;   unsigned int seconds_gewei=0,seconds_shiwei=0,
+ 002E 4427              clr R20
+ 0030 5527              clr R21
+ 0032                   .dbline 17
+ 0032 6627              clr R22
+ 0034 7727              clr R23
+ 0036                   .dbline 18
+ 0036           ;                          minutes_gewei=0,minutes_shiwei=0,
+ 0036 AA24              clr R10
+ 0038 BB24              clr R11
+ 003A                   .dbline 18
+ 003A EE24              clr R14
+ 003C FF24              clr R15
+ 003E                   .dbline 19
+ 003E           ;                          count=1;
+ 003E 81E0              ldi R24,1
+ 0040 90E0              ldi R25,0
+ 0042 6C01              movw R12,R24
+ 0044                   .dbline 21
+ 0044           ;   
+ 0044           ;   DDRC = 0xff;
+ 0044 8FEF              ldi R24,255
+ 0046 84BB              out 0x14,R24
+ 0048                   .dbline 22
+ 0048           ;   DDRD = 0x0f;
+ 0048 8FE0              ldi R24,15
+ 004A 81BB              out 0x11,R24
+ 004C                   .dbline 23
+ 004C           ;   PORTC = 0x00;
+ 004C 2224              clr R2
+ 004E 25BA              out 0x15,R2
+ 0050                   .dbline 24
+ 0050           ;   PORTD = 0x00;
+ 0050 22BA              out 0x12,R2
+ 0052 57C0              xjmp L12
+ 0054           L11:
+ 0054                   .dbline 27
+ 0054           ;   
+ 0054           ;   while(1)
+ 0054           ;   {
+ 0054                   .dbline 29
+ 0054           ;   
+ 0054           ;       PORTD = 0xfd;
+ 0054 8DEF              ldi R24,253
+ 0056 82BB              out 0x12,R24
+ 0058                   .dbline 30
+ 0058           ;       PORTC = table[seconds_gewei];  //渲染秒的个位数
+ 0058 80E0              ldi R24,<_table
+ 005A 90E0              ldi R25,>_table
+ 005C FA01              movw R30,R20
+ 005E E80F              add R30,R24
+ 0060 F91F              adc R31,R25
+ 0062 2080              ldd R2,z+0
+ 0064 25BA              out 0x15,R2
+ 0066                   .dbline 31
+ 0066           ;       delay(10);
+ 0066 0AE0              ldi R16,10
+ 0068 CBDF              xcall _delay
+ 006A                   .dbline 33
+ 006A           ;       
+ 006A           ;       PORTD = 0xfe;
+ 006A 8EEF              ldi R24,254
+ 006C 82BB              out 0x12,R24
+ 006E                   .dbline 34
+ 006E           ;       PORTC = table[seconds_shiwei];  //渲染秒的十位数
+ 006E 80E0              ldi R24,<_table
+ 0070 90E0              ldi R25,>_table
+ 0072 FB01              movw R30,R22
+ 0074 E80F              add R30,R24
+ 0076 F91F              adc R31,R25
+ 0078 2080              ldd R2,z+0
+ 007A 25BA              out 0x15,R2
+ 007C                   .dbline 35
+ 007C           ;       delay(10);
+ 007C 0AE0              ldi R16,10
+ 007E C0DF              xcall _delay
+ 0080                   .dbline 37
+ 0080           ;       
+ 0080           ;       PORTD = 0xfb;
+ 0080 8BEF              ldi R24,251
+ 0082 82BB              out 0x12,R24
+ 0084                   .dbline 38
+ 0084           ;       PORTC = table[minutes_gewei];  //渲染分的个位数
+ 0084 80E0              ldi R24,<_table
+ 0086 90E0              ldi R25,>_table
+ 0088 F501              movw R30,R10
+ 008A E80F              add R30,R24
+ 008C F91F              adc R31,R25
+ 008E 2080              ldd R2,z+0
+ 0090 25BA              out 0x15,R2
+ 0092                   .dbline 39
+ 0092           ;       delay(10);
+ 0092 0AE0              ldi R16,10
+ 0094 B5DF              xcall _delay
+ 0096                   .dbline 41
+ 0096           ;       
+ 0096           ;       PORTD = 0xf7;
+ 0096 87EF              ldi R24,247
+ 0098 82BB              out 0x12,R24
+ 009A                   .dbline 42
+ 009A           ;       PORTC = table[minutes_shiwei];  //渲染分的十位数
+ 009A 80E0              ldi R24,<_table
+ 009C 90E0              ldi R25,>_table
+ 009E F701              movw R30,R14
+ 00A0 E80F              add R30,R24
+ 00A2 F91F              adc R31,R25
+ 00A4 2080              ldd R2,z+0
+ 00A6 25BA              out 0x15,R2
+ 00A8                   .dbline 43
+ 00A8           ;       delay(10);
+ 00A8 0AE0              ldi R16,10
+ 00AA AADF              xcall _delay
+ 00AC                   .dbline 47
+ 00AC           ;       
+ 00AC           ;       
+ 00AC           ;       
+ 00AC           ;       if(count%26==0)    //当每1000ms时，秒的个位数加一
+ 00AC 2AE1              ldi R18,26
+ 00AE 30E0              ldi R19,0
+ 00B0 8601              movw R16,R12
+ 00B2 0E940000          xcall mod16u
+ 00B6 0030              cpi R16,0
+ 00B8 0107              cpc R16,R17
+ 00BA 29F4              brne L14
+ 00BC           X2:
+ 00BC                   .dbline 48
+ 00BC           ;       {
+ 00BC                   .dbline 49
+ 00BC           ;         seconds_gewei++;
+ 00BC 4F5F              subi R20,255  ; offset = 1
+ 00BE 5F4F              sbci R21,255
+ 00C0                   .dbline 50
+ 00C0           ;         count=1;
+ 00C0 81E0              ldi R24,1
+ 00C2 90E0              ldi R25,0
+ 00C4 6C01              movw R12,R24
+ 00C6                   .dbline 51
+ 00C6           ;       }
+ 00C6           L14:
+ 00C6                   .dbline 53
+ 00C6           ;       
+ 00C6           ;       if(seconds_gewei==10)  //当秒的个位数达到10时，秒的十位数就进一位
+ 00C6 4A30              cpi R20,10
+ 00C8 E0E0              ldi R30,0
+ 00CA 5E07              cpc R21,R30
+ 00CC 21F4              brne L16
+ 00CE           X3:
+ 00CE                   .dbline 54
+ 00CE           ;       {
+ 00CE                   .dbline 55
+ 00CE           ;         seconds_shiwei++;
+ 00CE 6F5F              subi R22,255  ; offset = 1
+ 00D0 7F4F              sbci R23,255
+ 00D2                   .dbline 56
+ 00D2           ;         seconds_gewei=0;
+ 00D2 4427              clr R20
+ 00D4 5527              clr R21
+ 00D6                   .dbline 57
+ 00D6           ;       }
+ 00D6           L16:
+ 00D6                   .dbline 59
+ 00D6           ;       
+ 00D6           ;       if(seconds_shiwei==6)  //当秒的十位数达到6时，分的个位数加一，秒的十位数置零
+ 00D6 6630              cpi R22,6
+ 00D8 E0E0              ldi R30,0
+ 00DA 7E07              cpc R23,R30
+ 00DC 29F4              brne L18
+ 00DE           X4:
+ 00DE                   .dbline 60
+ 00DE           ;       {
+ 00DE                   .dbline 61
+ 00DE           ;         minutes_gewei++;
+ 00DE C501              movw R24,R10
+ 00E0 0196              adiw R24,1
+ 00E2 5C01              movw R10,R24
+ 00E4                   .dbline 62
+ 00E4           ;         seconds_shiwei=0;
+ 00E4 6627              clr R22
+ 00E6 7727              clr R23
+ 00E8                   .dbline 63
+ 00E8           ;       }
+ 00E8           L18:
+ 00E8                   .dbline 65
+ 00E8           ;       
+ 00E8           ;       if(minutes_gewei==10)  //当分的个位数达到10时，分的十位数加一，分的个位数置零
+ 00E8 C501              movw R24,R10
+ 00EA 8A30              cpi R24,10
+ 00EC E0E0              ldi R30,0
+ 00EE 9E07              cpc R25,R30
+ 00F0 29F4              brne L20
+ 00F2           X5:
+ 00F2                   .dbline 66
+ 00F2           ;       {
+ 00F2                   .dbline 67
+ 00F2           ;         minutes_shiwei++;
+ 00F2 C701              movw R24,R14
+ 00F4 0196              adiw R24,1
+ 00F6 7C01              movw R14,R24
+ 00F8                   .dbline 68
+ 00F8           ;         minutes_gewei=0;
+ 00F8 AA24              clr R10
+ 00FA BB24              clr R11
+ 00FC                   .dbline 69
+ 00FC           ;       }
+ 00FC           L20:
+ 00FC                   .dbline 70
+ 00FC           ;       count++;                                                //40ms计数一次
+ 00FC C601              movw R24,R12
+ 00FE 0196              adiw R24,1
+ 0100 6C01              movw R12,R24
+ 0102                   .dbline 71
+ 0102           ;   }
+ 0102           L12:
+ 0102                   .dbline 26
+ 0102 A8CF              xjmp L11
+ 0104           X6:
+ 0104                   .dbline -2
+ 0104           L10:
+ 0104                   .dbline 0 ; func end
+ 0104 0895              ret
+ 0106                   .dbsym r minutes_shiwei 14 i
+ 0106                   .dbsym r count 12 i
+ 0106                   .dbsym r minutes_gewei 10 i
+ 0106                   .dbsym r seconds_shiwei 22 i
+ 0106                   .dbsym r seconds_gewei 20 i
+ 0106                   .dbend
+ 0106           ; }

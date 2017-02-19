@@ -1,0 +1,37 @@
+#include<iom16v.h>
+
+void usart_init()     //配置usart寄存器
+{
+   DDRD&=~(1<<PD0);
+   PORTD|=1<<PD0; 
+   DDRD|=1<<PD1;
+   PORTD|=1<<PD1;
+   UCSRC = (1<<URSEL) | (1<<UCSZ1) | (1<<UCSZ0);        //8位字符长度
+   UBRRL = 51;                                          //9600bps(8M)
+   UCSRB = (1<<TXCIE) | (1<<RXEN) | (1<<TXEN);          //发送结束中断使能，接收使能，发送使能                                     
+} 
+
+#pragma interrupt_handler usart_sendEnd:14
+void usart_sendEnd()                    //发送结束中断函数
+{
+  unsigned char temp;
+  while ( !(UCSRA & (1<<RXC)) );     // 等待接收缓存器空(等待接收完成再读取数据)
+  temp = UDR;
+  usart_send(temp);			  		 //发送数据
+}
+
+void usart_send(unsigned char data)             //TXD发送数据
+{
+  while(!(UCSRA & (1<<UDRE)));   //等待发送缓存器空（等待前次发送完，再进行本次数据发送）
+  UDR = data;
+  while(!(UCSRA & (1<<TXC)));    //等待发送结束
+}
+
+void main()
+{
+  SREG |= 1<<7;  //全局中断使能
+  usart_init();
+  usart_sendEnd();
+  
+  while(1);
+}

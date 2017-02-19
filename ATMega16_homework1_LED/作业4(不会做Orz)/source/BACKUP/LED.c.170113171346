@@ -1,0 +1,93 @@
+#include <iom16v.h>
+
+void delay(int n)  //延时函数
+{
+  int i , j;
+  for (i = 0 ; i < n ; i ++)  
+    for(j = 0 ; j < 1141 ; j++)  ;
+}
+
+void LED_down_0()  //按下按键时
+{
+  while(1)
+  {
+    if((PINC & (1<<PC3)) == 0)
+    {
+      PORTA = 0x80;
+	  delay(100);
+	  PORTA = 0x08;
+	  delay(100);
+    }
+  }
+}
+
+void LED_down_1()  //按下按键时
+{
+  while(1)
+  {
+    if((PINC & (1<<PC3)) == 0)
+    {
+      PORTA = 0x40;
+	  delay(100);
+	  PORTA = 0x04;
+	  delay(100);
+    }
+  }
+}
+
+void LED_down_2()  //按下按键时
+{
+  while(1)
+  {
+    if((PINC & (1<<PC3)) == 0)
+    {
+      PORTA = 0x20;
+	  delay(100);
+	  PORTA = 0x02;
+	  delay(100);
+    }
+  }
+}
+
+void LED_down_3()  //按下按键时
+{
+  while(1)
+  {
+    if((PINC & (1<<PC3)) == 0)
+    {
+      PORTA = 0x10;
+	  delay(100);
+	  PORTA = 0x01;
+	  delay(100);
+    }
+  }
+}
+
+void LED_right()  //向右移动，初始值
+{
+  PORTA = 0x01;
+  delay(100);
+  LED_down_0();
+  PORTA = 0x02;
+  delay(100);
+  LED_down_1();
+  PORTA = 0x04;
+  delay(100);
+  LED_down_2();
+  PORTA = 0x08;
+  delay(100);
+  LED_down_3();
+}
+
+void main()
+{
+  DDRA = 0xff;
+  DDRC = 0x00;
+  PORTA = 0x00;
+  PORTC = 0x0f;
+  while(1)
+  {
+    LED_right();
+	
+  }
+}

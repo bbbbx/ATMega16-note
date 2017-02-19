@@ -1,0 +1,128 @@
+#include <iom16v.h>
+
+void delay_ms(unsigned int n)	//延时函数
+{
+  unsigned int i,j;
+  for(i = 0 ; i < n ; i ++)
+    for(j = 0 ; j <1141; j ++) ;
+}
+
+const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xff};  //共阳数码管键码
+
+void main()
+{
+  unsigned char numberA=0 , numberB=0 , numberC_1=0 , numberC_2=0, rule=0;//运算法则,rule=1为 + ;rule=2为 - ;rule=3为 * ;rule=4为 /;rule=5为 =
+  DDRA = 0x0f;
+  DDRC = 0xff;
+  DDRD = 0x0f;
+  
+  PORTA = 0xf0;
+  PORTC = 0x00;
+  PORTD = 0x00;
+  while(1)
+  {
+    PORTA = 0xfe;	//扫描第一列
+	switch(PINA&(0xf0))
+	{
+	  case 0xe0: numberA=0 ; 
+	  	   		 break;
+	  case 0xd0: numberA=4 ; 
+	  	   		 break;
+	  case 0xb0: numberB=3 ; 
+	  	   		 break;
+	  case 0x70: rule=2 ;
+	  	   		 break;
+	}
+	
+	PORTD = 0x01;
+	PORTC = table_ca[numberA];
+	delay_ms(10);
+	
+	PORTA = 0xfd;	//扫描第二列
+	switch(PINA&(0xf0))
+	{
+	  case 0xe0: numberA=1 ;
+	  	   		 break;
+	  case 0xd0: numberA=5 ;
+	  	   		 break;
+	  case 0xb0: numberB=4 ;
+	  	   		 break;
+	  case 0x70: rule = 3 ;
+	  	   		 break;
+	}
+	
+	PORTD = 0x01;
+	PORTC = table_ca[numberA];
+	delay_ms(5);
+	
+	PORTD = 0x02;
+	PORTC = table_ca[numberB];
+	delay_ms(5);
+	
+	PORTA = 0xfb;	//扫描第三列
+	switch(PINA&(0xf0))
+	{
+	  case 0xe0: numberA=2 ;
+	  	   		 break;
+	  case 0xd0: numberB=1 ;
+	  	   		 break;
+	  case 0xb0: numberB=5 ;
+	  	   		 break;
+	  case 0x70: rule=4 ;
+	  	   		 break;
+	}
+	
+	PORTD = 0x01;
+	PORTC = table_ca[numberA];
+	delay_ms(5);
+	
+	PORTD = 0x02;
+	PORTC = table_ca[numberB];
+	delay_ms(5);
+	
+	PORTA = 0xf7;	//扫描第四列
+	switch(PINA&(0xf0))
+	{
+	  case 0xe0: numberA=3 ;
+	  	   		 break;
+	  case 0xd0: numberB=2 ; 
+	  	   		 break;
+	  case 0xb0: rule=1 ; 
+	  	   		 break;
+	  case 0x70: rule=5 ; 
+	  	   		 break;
+	}
+	
+	PORTD = 0x01;
+	PORTC = table_ca[numberA];
+	delay_ms(5);
+	
+	PORTD = 0x02;
+	PORTC = table_ca[numberB];
+	delay_ms(5);
+	
+	switch(rule)
+	{
+	  case 1: numberC_2 = (numberA+numberB)%10;		  			       //获得和的个位数
+	  	   	  numberC_1 = ((numberA+numberB-numberC_2)/10)%10;		   //获得和的十位数
+			  break; 
+	  case 2: numberC_2 = (numberA-numberB)%10;		  			       //获得差的个位数
+	  	   	  numberC_1 = ((numberA-numberB-numberC_2)/10)%10;		   //获得差的十位数
+			  break; 
+	  case 3: numberC_2 = (numberA*numberB)%10;		  			       //获得积的个位数
+	  	   	  numberC_1 = ((numberA*numberB-numberC_2)/10)%10;		   //获得积的十位数
+			  break; 
+	  case 4: numberC_2 = (numberA/numberB)%10;		  			       //获得商的个位数
+	  	   	  numberC_1 = ((numberA/numberB-numberC_2)/10)%10;		   //获得商的十位数
+			  break; 
+	  case 5: PORTD = 0x04;
+	  	   	  PORTC = table_ca[numberC_1];
+			  delay_ms(10);
+			  
+			  PORTD = 0x08;
+			  PORTC = table_ca[numberC_2];
+			  delay_ms(10);
+			  break; 
+	}
+  }
+}

@@ -1,0 +1,385 @@
+Interrupt Vectors
+    00000 940C 002F JMP	__start|__text_start
+
+Program Code (text area)
+__start|__text_start:
+    0002F E5CF      LDI	R28,0x5F
+    00030 E0D4      LDI	R29,4
+    00031 BFCD      OUT	0x3D,R28
+    00032 BFDE      OUT	0x3E,R29
+    00033 51CE      SUBI	R28,0x1E
+    00034 40D0      SBCI	R29,0
+    00035 EA0A      LDI	R16,0xAA
+    00036 8308      ST	Y,R16
+    00037 2400      CLR	R0
+    00038 E6EA      LDI	R30,0x6A
+    00039 E0F0      LDI	R31,0
+    0003A E010      LDI	R17,0
+    0003B 36EA      CPI	R30,0x6A
+    0003C 07F1      CPC	R31,R17
+    0003D F011      BEQ	0x0040
+    0003E 9201      ST	Z+,R0
+    0003F CFFB      RJMP	0x003B
+    00040 8300      ST	Z,R16
+    00041 E5E4      LDI	R30,0x54
+    00042 E0F0      LDI	R31,0
+    00043 E6A0      LDI	R26,0x60
+    00044 E0B0      LDI	R27,0
+    00045 E010      LDI	R17,0
+    00046 E000      LDI	R16,0
+    00047 BF0B      OUT	0x3B,R16
+    00048 35EE      CPI	R30,0x5E
+    00049 07F1      CPC	R31,R17
+    0004A F021      BEQ	0x004F
+    0004B 95C8      LPM
+    0004C 9631      ADIW	R30,1
+    0004D 920D      ST	X+,R0
+    0004E CFF9      RJMP	0x0048
+    0004F 940E 0067 CALL	_main
+_exit:
+    00051 CFFF      RJMP	_exit
+_delay_ms:
+  i                    --> R20
+  j                    --> R22
+  x                    --> R16
+    00052 940E 0127 CALL	push_xgsetF000
+FILE: C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+(0001) #include <iom16v.h>
+(0002) 
+(0003) void delay_ms(unsigned int x)  //延时函数
+(0004) {
+(0005)   unsigned int i,j;
+(0006)   for(i = 0 ; i < x ; i ++)
+    00054 2744      CLR	R20
+    00055 2755      CLR	R21
+    00056 C00B      RJMP	0x0062
+(0007)     for(j = 0 ; j <1141 ; j ++)  ;
+    00057 2766      CLR	R22
+    00058 2777      CLR	R23
+    00059 C002      RJMP	0x005C
+    0005A 5F6F      SUBI	R22,0xFF
+    0005B 4F7F      SBCI	R23,0xFF
+    0005C 3765      CPI	R22,0x75
+    0005D E0E4      LDI	R30,4
+    0005E 077E      CPC	R23,R30
+    0005F F3D0      BCS	0x005A
+    00060 5F4F      SUBI	R20,0xFF
+    00061 4F5F      SBCI	R21,0xFF
+    00062 1740      CP	R20,R16
+    00063 0751      CPC	R21,R17
+    00064 F390      BCS	0x0057
+    00065 940C 012C JMP	pop_xgsetF000
+_main:
+  daoshu_gewei         --> R10
+  gewei                --> Y,+1
+  count                --> R20
+  flag                 --> R14
+  daoshu_shiwei        --> R12
+  shiwei               --> Y,+0
+    00067 9722      SBIW	R28,2
+(0008) }
+(0009) 
+(0010) const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};  //共阳数码管键码
+(0011) 
+(0012) void main()
+(0013) {
+(0014)   char gewei=0 , shiwei=0 ,daoshu_gewei=9 , daoshu_shiwei=9;
+    00068 2400      CLR	R0
+    00069 8209      STD	Y+1,R0
+    0006A 8208      ST	Y,R0
+    0006B E089      LDI	R24,0x9
+    0006C 2EA8      MOV	R10,R24
+    0006D 2EC8      MOV	R12,R24
+(0015)   int count=1 , flag=0;
+    0006E E041      LDI	R20,1
+    0006F E050      LDI	R21,0
+    00070 24EE      CLR	R14
+    00071 24FF      CLR	R15
+(0016)   
+(0017)   DDRA = 0x00;
+    00072 2422      CLR	R2
+    00073 BA2A      OUT	0x1A,R2
+(0018)   DDRC = 0xff;
+    00074 EF8F      LDI	R24,0xFF
+    00075 BB84      OUT	0x14,R24
+(0019)   DDRD = 0x03;
+    00076 E083      LDI	R24,3
+    00077 BB81      OUT	0x11,R24
+(0020)   
+(0021)   PORTA = 0xff;
+    00078 EF8F      LDI	R24,0xFF
+    00079 BB8B      OUT	0x1B,R24
+(0022)   PORTC = 0x00;
+    0007A BA25      OUT	0x15,R2
+(0023)   PORTD = 0x00;
+    0007B BA22      OUT	0x12,R2
+    0007C C0A7      RJMP	0x0124
+(0024)   
+(0025)   while(1)
+(0026)   {
+(0027)     if((PINA&(1<<PA0))==0)  //判断按键PA0是否被按下
+    0007D 99C8      SBIC	0x19,0
+    0007E C003      RJMP	0x0082
+(0028) 	{
+(0029)       flag=1;
+    0007F E081      LDI	R24,1
+    00080 E090      LDI	R25,0
+    00081 017C      MOVW	R14,R24
+(0030) 	}
+(0031) 	
+(0032) 	if((PINA&(1<<PA1))==0)  //判断按键PA1是否被按下
+    00082 99C9      SBIC	0x19,1
+    00083 C003      RJMP	0x0087
+(0033) 	{
+(0034) 	  flag=2;
+    00084 E082      LDI	R24,2
+    00085 E090      LDI	R25,0
+    00086 017C      MOVW	R14,R24
+(0035) 	}
+(0036) 	
+(0037) 	if((PINA&(1<<PA2))==0)  //判断按键PA2是否被按下
+    00087 99CA      SBIC	0x19,2
+    00088 C003      RJMP	0x008C
+(0038) 	{
+(0039) 	  flag=3;
+    00089 E083      LDI	R24,3
+    0008A E090      LDI	R25,0
+    0008B 017C      MOVW	R14,R24
+(0040) 	}
+(0041) 	
+(0042) 	if(flag==1)				//正数
+    0008C 01C7      MOVW	R24,R14
+    0008D 3081      CPI	R24,1
+    0008E E0E0      LDI	R30,0
+    0008F 079E      CPC	R25,R30
+    00090 F529      BNE	0x00B6
+(0043) 	{
+(0044) 	  PORTD = 0x02;
+    00091 E082      LDI	R24,2
+    00092 BB82      OUT	0x12,R24
+(0045) 	  PORTC = table_ca[gewei];
+    00093 E680      LDI	R24,0x60
+    00094 E090      LDI	R25,0
+    00095 81E9      LDD	R30,Y+1
+    00096 27FF      CLR	R31
+    00097 0FE8      ADD	R30,R24
+    00098 1FF9      ADC	R31,R25
+    00099 8020      LD	R2,Z
+    0009A BA25      OUT	0x15,R2
+(0046) 	  delay_ms(20);
+    0009B E104      LDI	R16,0x14
+    0009C E010      LDI	R17,0
+    0009D DFB4      RCALL	_delay_ms
+(0047) 	  
+(0048) 	  PORTD = 0x01;
+    0009E E081      LDI	R24,1
+    0009F BB82      OUT	0x12,R24
+(0049) 	  PORTC = table_ca[shiwei];
+    000A0 E680      LDI	R24,0x60
+    000A1 E090      LDI	R25,0
+    000A2 81E8      LD	R30,Y
+    000A3 27FF      CLR	R31
+    000A4 0FE8      ADD	R30,R24
+    000A5 1FF9      ADC	R31,R25
+    000A6 8020      LD	R2,Z
+    000A7 BA25      OUT	0x15,R2
+(0050) 	  delay_ms(20);
+    000A8 E104      LDI	R16,0x14
+    000A9 E010      LDI	R17,0
+    000AA DFA7      RCALL	_delay_ms
+(0051) 	  
+(0052) 	  count++;
+    000AB 5F4F      SUBI	R20,0xFF
+    000AC 4F5F      SBCI	R21,0xFF
+(0053) 	  if(count==25)
+    000AD 3149      CPI	R20,0x19
+    000AE E0E0      LDI	R30,0
+    000AF 075E      CPC	R21,R30
+    000B0 F429      BNE	0x00B6
+(0054) 	  {
+(0055) 	    gewei++;
+    000B1 8009      LDD	R0,Y+1
+    000B2 9403      INC	R0
+    000B3 8209      STD	Y+1,R0
+(0056) 	    count=0;
+    000B4 2744      CLR	R20
+    000B5 2755      CLR	R21
+(0057) 	  }
+(0058) 	}
+(0059) 	
+(0060) 	if(flag==2)	   			//倒数
+    000B6 01C7      MOVW	R24,R14
+    000B7 3082      CPI	R24,2
+    000B8 E0E0      LDI	R30,0
+    000B9 079E      CPC	R25,R30
+    000BA F519      BNE	0x00DE
+(0061) 	{
+(0062) 	  PORTD = 0x02;
+    000BB E082      LDI	R24,2
+    000BC BB82      OUT	0x12,R24
+(0063) 	  PORTC = table_ca[daoshu_gewei];
+    000BD E680      LDI	R24,0x60
+    000BE E090      LDI	R25,0
+    000BF 2DEA      MOV	R30,R10
+    000C0 27FF      CLR	R31
+    000C1 0FE8      ADD	R30,R24
+    000C2 1FF9      ADC	R31,R25
+    000C3 8020      LD	R2,Z
+    000C4 BA25      OUT	0x15,R2
+(0064) 	  delay_ms(20);
+    000C5 E104      LDI	R16,0x14
+    000C6 E010      LDI	R17,0
+    000C7 DF8A      RCALL	_delay_ms
+(0065) 	  
+(0066) 	  PORTD = 0x01;
+    000C8 E081      LDI	R24,1
+    000C9 BB82      OUT	0x12,R24
+(0067) 	  PORTC = table_ca[daoshu_shiwei];
+    000CA E680      LDI	R24,0x60
+    000CB E090      LDI	R25,0
+    000CC 2DEC      MOV	R30,R12
+    000CD 27FF      CLR	R31
+    000CE 0FE8      ADD	R30,R24
+    000CF 1FF9      ADC	R31,R25
+    000D0 8020      LD	R2,Z
+    000D1 BA25      OUT	0x15,R2
+(0068) 	  delay_ms(20);
+    000D2 E104      LDI	R16,0x14
+    000D3 E010      LDI	R17,0
+    000D4 DF7D      RCALL	_delay_ms
+(0069) 	  
+(0070) 	  count++;
+    000D5 5F4F      SUBI	R20,0xFF
+    000D6 4F5F      SBCI	R21,0xFF
+(0071) 	  if(count==25)
+    000D7 3149      CPI	R20,0x19
+    000D8 E0E0      LDI	R30,0
+    000D9 075E      CPC	R21,R30
+    000DA F419      BNE	0x00DE
+(0072) 	  {
+(0073) 	    daoshu_gewei--;
+    000DB 94AA      DEC	R10
+(0074) 		count=0;
+    000DC 2744      CLR	R20
+    000DD 2755      CLR	R21
+(0075) 	  }
+(0076) 	}
+(0077) 	
+(0078) 	if(flag==3)	   	 	    //置零
+    000DE 01C7      MOVW	R24,R14
+    000DF 3083      CPI	R24,3
+    000E0 E0E0      LDI	R30,0
+    000E1 079E      CPC	R25,R30
+    000E2 F511      BNE	0x0105
+(0079) 	{
+(0080) 	  PORTD = 0x02;
+    000E3 E082      LDI	R24,2
+    000E4 BB82      OUT	0x12,R24
+(0081) 	  PORTC = table_ca[0];
+    000E5 9020 0060 LDS	R2,table_ca
+    000E7 BA25      OUT	0x15,R2
+(0082) 	  gewei=0;
+    000E8 2400      CLR	R0
+    000E9 8209      STD	Y+1,R0
+(0083) 	  delay_ms(20);
+    000EA E104      LDI	R16,0x14
+    000EB E010      LDI	R17,0
+    000EC DF65      RCALL	_delay_ms
+(0084) 	  
+(0085) 	  PORTD = 0x01;
+    000ED E081      LDI	R24,1
+    000EE BB82      OUT	0x12,R24
+(0086) 	  PORTC = table_ca[0];
+    000EF 9020 0060 LDS	R2,table_ca
+    000F1 BA25      OUT	0x15,R2
+(0087) 	  shiwei=0;
+    000F2 2400      CLR	R0
+    000F3 8208      ST	Y,R0
+(0088) 	  delay_ms(20);
+    000F4 E104      LDI	R16,0x14
+    000F5 E010      LDI	R17,0
+    000F6 DF5B      RCALL	_delay_ms
+(0089) 	  
+(0090) 	  gewei=0 , shiwei=0 ,daoshu_gewei=9 , daoshu_shiwei=9;  //初始化各值
+    000F7 2400      CLR	R0
+    000F8 8209      STD	Y+1,R0
+    000F9 8208      ST	Y,R0
+    000FA E089      LDI	R24,0x9
+    000FB 2EA8      MOV	R10,R24
+    000FC 2EC8      MOV	R12,R24
+(0091) 	  
+(0092) 	  count++;
+    000FD 5F4F      SUBI	R20,0xFF
+    000FE 4F5F      SBCI	R21,0xFF
+(0093) 	  if(count==25)
+    000FF 3149      CPI	R20,0x19
+    00100 E0E0      LDI	R30,0
+    00101 075E      CPC	R21,R30
+    00102 F411      BNE	0x0105
+(0094) 	  {
+(0095) 	    count=0;
+    00103 2744      CLR	R20
+    00104 2755      CLR	R21
+(0096) 	  }
+(0097) 	}
+(0098) 	
+(0099) 	if(gewei==10)
+    00105 8189      LDD	R24,Y+1
+    00106 308A      CPI	R24,0xA
+    00107 F429      BNE	0x010D
+(0100) 	{
+(0101) 	  shiwei++;
+    00108 8008      LD	R0,Y
+    00109 9403      INC	R0
+    0010A 8208      ST	Y,R0
+(0102) 	  gewei=0;
+    0010B 2400      CLR	R0
+    0010C 8209      STD	Y+1,R0
+(0103) 	}
+(0104) 	shiwei= (shiwei>=10)?0:shiwei;
+    0010D 8188      LD	R24,Y
+    0010E 308A      CPI	R24,0xA
+    0010F F018      BCS	0x0113
+    00110 2766      CLR	R22
+    00111 2777      CLR	R23
+    00112 C002      RJMP	0x0115
+    00113 8168      LD	R22,Y
+    00114 2777      CLR	R23
+    00115 8368      ST	Y,R22
+(0105) 	
+(0106) 	if(daoshu_gewei==-1)
+    00116 2D8A      MOV	R24,R10
+    00117 3F8F      CPI	R24,0xFF
+    00118 F411      BNE	0x011B
+(0107) 	{
+(0108) 	  daoshu_shiwei--;
+    00119 94CA      DEC	R12
+(0109) 	  daoshu_gewei=0;
+    0011A 24AA      CLR	R10
+(0110) 	}
+(0111) 	daoshu_shiwei= (daoshu_shiwei<0)?9:daoshu_shiwei;
+FILE: <library>
+    0011B 2D8C      MOV	R24,R12
+    0011C 3080      CPI	R24,0
+    0011D F418      BCC	0x0121
+    0011E E069      LDI	R22,0x9
+    0011F E070      LDI	R23,0
+    00120 C002      RJMP	0x0123
+    00121 2D6C      MOV	R22,R12
+    00122 2777      CLR	R23
+    00123 2EC6      MOV	R12,R22
+    00124 CF58      RJMP	0x007D
+    00125 9622      ADIW	R28,2
+    00126 9508      RET
+push_xgsetF000:
+    00127 937A      ST	-Y,R23
+    00128 936A      ST	-Y,R22
+    00129 935A      ST	-Y,R21
+    0012A 934A      ST	-Y,R20
+    0012B 9508      RET
+pop_xgsetF000:
+    0012C 9149      LD	R20,Y+
+    0012D 9159      LD	R21,Y+
+    0012E 9169      LD	R22,Y+
+    0012F 9179      LD	R23,Y+
+    00130 9508      RET

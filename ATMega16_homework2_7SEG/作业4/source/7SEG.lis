@@ -1,0 +1,806 @@
+                        .module _7SEG.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile 7SEG.c
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 0000                   .dbfunc e delay_ms _delay_ms fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              n -> R16,R17
+                        .even
+ 0000           _delay_ms::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 4
+ 0004           ; #include <iom16v.h>
+ 0004           ; 
+ 0004           ; void delay_ms(unsigned int n) //延时函数
+ 0004           ; {
+ 0004                   .dbline 6
+ 0004           ;   unsigned int i,j;
+ 0004           ;   for(i = 0 ; i < n ; i ++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 7
+ 000A           ;     for(j = 0 ; j <1141; j ++) ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 7
+ 0010           L7:
+ 0010                   .dbline 7
+ 0010 6F5F              subi R22,255  ; offset = 1
+ 0012 7F4F              sbci R23,255
+ 0014           L9:
+ 0014                   .dbline 7
+ 0014 6537              cpi R22,117
+ 0016 E4E0              ldi R30,4
+ 0018 7E07              cpc R23,R30
+ 001A D0F3              brlo L6
+ 001C           X0:
+ 001C           L3:
+ 001C                   .dbline 6
+ 001C 4F5F              subi R20,255  ; offset = 1
+ 001E 5F4F              sbci R21,255
+ 0020           L5:
+ 0020                   .dbline 6
+ 0020 4017              cp R20,R16
+ 0022 5107              cpc R21,R17
+ 0024 90F3              brlo L2
+ 0026           X1:
+ 0026                   .dbline -2
+ 0026           L1:
+ 0026                   .dbline 0 ; func end
+ 0026 0C940000          xjmp pop_xgsetF000
+ 002A                   .dbsym r i 20 i
+ 002A                   .dbsym r j 22 i
+ 002A                   .dbsym r n 16 i
+ 002A                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 0000           _table_ca::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 C0F9              .byte 192,249
+                        .area data(ram, con, rel)
+ 0002                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 A4B0              .byte 164,176
+                        .area data(ram, con, rel)
+ 0004                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 9992              .byte 153,146
+                        .area data(ram, con, rel)
+ 0006                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 82F8              .byte 130,248
+                        .area data(ram, con, rel)
+ 0008                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 8090              .byte 128,144
+                        .area data(ram, con, rel)
+ 000A                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 000A                   .blkb 1
+                        .area idata
+ 000A FF                .byte 255
+                        .area data(ram, con, rel)
+ 000B                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 000B                   .dbsym e table_ca _table_ca A[11:11]c
+                        .area text(rom, con, rel)
+ 002A                   .dbfile C:\Users\z\Desktop\作业\作业4\source\7SEG.c
+ 002A                   .dbfunc e main _main fV
+ 002A           ;      numberC_1 -> R14
+ 002A           ;      numberC_2 -> R10
+ 002A           ;           rule -> R12
+ 002A           ;        numberB -> R22
+ 002A           ;        numberA -> y+0
+                        .even
+ 002A           _main::
+ 002A 2197              sbiw R28,1
+ 002C                   .dbline -1
+ 002C                   .dbline 13
+ 002C           ; }
+ 002C           ; 
+ 002C           ; const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xff};  //共阳数码管键码
+ 002C           ; 
+ 002C           ; void main()
+ 002C           ; {
+ 002C                   .dbline 14
+ 002C           ;   unsigned char numberA=0 , numberB=0 , numberC_1=0 , numberC_2=0, rule=0;//运算法则,rule=1为 + ;rule=2为 - ;rule=3为 * ;rule=4为 /;rule=5为 =
+ 002C 0024              clr R0
+ 002E 0882              std y+0,R0
+ 0030                   .dbline 14
+ 0030 6627              clr R22
+ 0032                   .dbline 14
+ 0032 EE24              clr R14
+ 0034                   .dbline 14
+ 0034 AA24              clr R10
+ 0036                   .dbline 14
+ 0036 CC24              clr R12
+ 0038                   .dbline 15
+ 0038           ;   DDRA = 0x0f;
+ 0038 8FE0              ldi R24,15
+ 003A 8ABB              out 0x1a,R24
+ 003C                   .dbline 16
+ 003C           ;   DDRC = 0xff;
+ 003C 8FEF              ldi R24,255
+ 003E 84BB              out 0x14,R24
+ 0040                   .dbline 17
+ 0040           ;   DDRD = 0x0f;
+ 0040 8FE0              ldi R24,15
+ 0042 81BB              out 0x11,R24
+ 0044                   .dbline 19
+ 0044           ;   
+ 0044           ;   PORTA = 0xf0;
+ 0044 80EF              ldi R24,240
+ 0046 8BBB              out 0x1b,R24
+ 0048                   .dbline 20
+ 0048           ;   PORTC = 0x00;
+ 0048 2224              clr R2
+ 004A 25BA              out 0x15,R2
+ 004C                   .dbline 21
+ 004C           ;   PORTD = 0x00;
+ 004C 22BA              out 0x12,R2
+ 004E 86C1              xjmp L12
+ 0050           L11:
+ 0050                   .dbline 23
+ 0050           ;   while(1)
+ 0050           ;   {
+ 0050                   .dbline 24
+ 0050           ;     PORTA = 0xfe;     //扫描第一列
+ 0050 8EEF              ldi R24,254
+ 0052 8BBB              out 0x1b,R24
+ 0054                   .dbline 25
+ 0054           ;       switch(PINA&(0xf0))
+ 0054 49B3              in R20,0x19
+ 0056 5527              clr R21
+ 0058 407F              andi R20,240
+ 005A 5070              andi R21,0
+ 005C 403B              cpi R20,176
+ 005E E0E0              ldi R30,0
+ 0060 5E07              cpc R21,R30
+ 0062 E9F0              breq L19
+ 0064           X2:
+ 0064 80EB              ldi R24,176
+ 0066 90E0              ldi R25,0
+ 0068 8417              cp R24,R20
+ 006A 9507              cpc R25,R21
+ 006C 2CF0              brlt L22
+ 006E           X3:
+ 006E           L21:
+ 006E 4037              cpi R20,112
+ 0070 E0E0              ldi R30,0
+ 0072 5E07              cpc R21,R30
+ 0074 B1F0              breq L20
+ 0076           X4:
+ 0076 17C0              xjmp L14
+ 0078           L22:
+ 0078 403D              cpi R20,208
+ 007A E0E0              ldi R30,0
+ 007C 5E07              cpc R21,R30
+ 007E 61F0              breq L18
+ 0080           X5:
+ 0080 403D              cpi R20,208
+ 0082 E0E0              ldi R30,0
+ 0084 5E07              cpc R21,R30
+ 0086 7CF0              brlt L14
+ 0088           X6:
+ 0088           L23:
+ 0088 403E              cpi R20,224
+ 008A E0E0              ldi R30,0
+ 008C 5E07              cpc R21,R30
+ 008E 09F0              breq L17
+ 0090           X7:
+ 0090 0AC0              xjmp L14
+ 0092           L17:
+ 0092                   .dbline 27
+ 0092           ;       {
+ 0092           ;         case 0xe0: numberA=0 ; 
+ 0092 0024              clr R0
+ 0094 0882              std y+0,R0
+ 0096                   .dbline 28
+ 0096           ;                                break;
+ 0096 07C0              xjmp L15
+ 0098           L18:
+ 0098                   .dbline 29
+ 0098           ;         case 0xd0: numberA=4 ; 
+ 0098 84E0              ldi R24,4
+ 009A 8883              std y+0,R24
+ 009C                   .dbline 30
+ 009C           ;                                break;
+ 009C 04C0              xjmp L15
+ 009E           L19:
+ 009E                   .dbline 31
+ 009E           ;         case 0xb0: numberB=3 ; 
+ 009E 63E0              ldi R22,3
+ 00A0                   .dbline 32
+ 00A0           ;                                break;
+ 00A0 02C0              xjmp L15
+ 00A2           L20:
+ 00A2                   .dbline 33
+ 00A2           ;         case 0x70: rule=2 ;
+ 00A2 82E0              ldi R24,2
+ 00A4 C82E              mov R12,R24
+ 00A6                   .dbline 34
+ 00A6           ;                                break;
+ 00A6           L14:
+ 00A6           L15:
+ 00A6                   .dbline 37
+ 00A6           ;       }
+ 00A6           ;       
+ 00A6           ;       PORTD = 0x01;
+ 00A6 81E0              ldi R24,1
+ 00A8 82BB              out 0x12,R24
+ 00AA                   .dbline 38
+ 00AA           ;       PORTC = table_ca[numberA];  //因第一列只可以设置numberA，所以渲染numberA
+ 00AA 80E0              ldi R24,<_table_ca
+ 00AC 90E0              ldi R25,>_table_ca
+ 00AE E881              ldd R30,y+0
+ 00B0 FF27              clr R31
+ 00B2 E80F              add R30,R24
+ 00B4 F91F              adc R31,R25
+ 00B6 2080              ldd R2,z+0
+ 00B8 25BA              out 0x15,R2
+ 00BA                   .dbline 39
+ 00BA           ;       delay_ms(10);
+ 00BA 0AE0              ldi R16,10
+ 00BC 10E0              ldi R17,0
+ 00BE A0DF              xcall _delay_ms
+ 00C0                   .dbline 41
+ 00C0           ;       
+ 00C0           ;       PORTA = 0xfd;   //扫描第二列
+ 00C0 8DEF              ldi R24,253
+ 00C2 8BBB              out 0x1b,R24
+ 00C4                   .dbline 42
+ 00C4           ;       switch(PINA&(0xf0))
+ 00C4 49B3              in R20,0x19
+ 00C6 5527              clr R21
+ 00C8 407F              andi R20,240
+ 00CA 5070              andi R21,0
+ 00CC 403B              cpi R20,176
+ 00CE E0E0              ldi R30,0
+ 00D0 5E07              cpc R21,R30
+ 00D2 F1F0              breq L29
+ 00D4           X8:
+ 00D4 80EB              ldi R24,176
+ 00D6 90E0              ldi R25,0
+ 00D8 8417              cp R24,R20
+ 00DA 9507              cpc R25,R21
+ 00DC 2CF0              brlt L32
+ 00DE           X9:
+ 00DE           L31:
+ 00DE 4037              cpi R20,112
+ 00E0 E0E0              ldi R30,0
+ 00E2 5E07              cpc R21,R30
+ 00E4 B9F0              breq L30
+ 00E6           X10:
+ 00E6 18C0              xjmp L24
+ 00E8           L32:
+ 00E8 403D              cpi R20,208
+ 00EA E0E0              ldi R30,0
+ 00EC 5E07              cpc R21,R30
+ 00EE 69F0              breq L28
+ 00F0           X11:
+ 00F0 403D              cpi R20,208
+ 00F2 E0E0              ldi R30,0
+ 00F4 5E07              cpc R21,R30
+ 00F6 84F0              brlt L24
+ 00F8           X12:
+ 00F8           L33:
+ 00F8 403E              cpi R20,224
+ 00FA E0E0              ldi R30,0
+ 00FC 5E07              cpc R21,R30
+ 00FE 09F0              breq L27
+ 0100           X13:
+ 0100 0BC0              xjmp L24
+ 0102           L27:
+ 0102                   .dbline 44
+ 0102           ;       {
+ 0102           ;         case 0xe0: numberA=1 ;
+ 0102 0024              clr R0
+ 0104 0394              inc R0
+ 0106 0882              std y+0,R0
+ 0108                   .dbline 45
+ 0108           ;                                break;
+ 0108 07C0              xjmp L25
+ 010A           L28:
+ 010A                   .dbline 46
+ 010A           ;         case 0xd0: numberA=5 ;
+ 010A 85E0              ldi R24,5
+ 010C 8883              std y+0,R24
+ 010E                   .dbline 47
+ 010E           ;                                break;
+ 010E 04C0              xjmp L25
+ 0110           L29:
+ 0110                   .dbline 48
+ 0110           ;         case 0xb0: numberB=4 ;
+ 0110 64E0              ldi R22,4
+ 0112                   .dbline 49
+ 0112           ;                                break;
+ 0112 02C0              xjmp L25
+ 0114           L30:
+ 0114                   .dbline 50
+ 0114           ;         case 0x70: rule = 3 ;
+ 0114 83E0              ldi R24,3
+ 0116 C82E              mov R12,R24
+ 0118                   .dbline 51
+ 0118           ;                                break;
+ 0118           L24:
+ 0118           L25:
+ 0118                   .dbline 54
+ 0118           ;       }
+ 0118           ;       
+ 0118           ;       PORTD = 0x01;
+ 0118 81E0              ldi R24,1
+ 011A 82BB              out 0x12,R24
+ 011C                   .dbline 55
+ 011C           ;       PORTC = table_ca[numberA];    //渲染numberA
+ 011C 80E0              ldi R24,<_table_ca
+ 011E 90E0              ldi R25,>_table_ca
+ 0120 E881              ldd R30,y+0
+ 0122 FF27              clr R31
+ 0124 E80F              add R30,R24
+ 0126 F91F              adc R31,R25
+ 0128 2080              ldd R2,z+0
+ 012A 25BA              out 0x15,R2
+ 012C                   .dbline 56
+ 012C           ;       delay_ms(5);
+ 012C 05E0              ldi R16,5
+ 012E 10E0              ldi R17,0
+ 0130 67DF              xcall _delay_ms
+ 0132                   .dbline 58
+ 0132           ;       
+ 0132           ;       PORTD = 0x02;
+ 0132 82E0              ldi R24,2
+ 0134 82BB              out 0x12,R24
+ 0136                   .dbline 59
+ 0136           ;       PORTC = table_ca[numberB];    //渲染numberB
+ 0136 80E0              ldi R24,<_table_ca
+ 0138 90E0              ldi R25,>_table_ca
+ 013A E62F              mov R30,R22
+ 013C FF27              clr R31
+ 013E E80F              add R30,R24
+ 0140 F91F              adc R31,R25
+ 0142 2080              ldd R2,z+0
+ 0144 25BA              out 0x15,R2
+ 0146                   .dbline 60
+ 0146           ;       delay_ms(5);
+ 0146 05E0              ldi R16,5
+ 0148 10E0              ldi R17,0
+ 014A 5ADF              xcall _delay_ms
+ 014C                   .dbline 62
+ 014C           ;       
+ 014C           ;       PORTA = 0xfb;   //扫描第三列
+ 014C 8BEF              ldi R24,251
+ 014E 8BBB              out 0x1b,R24
+ 0150                   .dbline 63
+ 0150           ;       switch(PINA&(0xf0))
+ 0150 49B3              in R20,0x19
+ 0152 5527              clr R21
+ 0154 407F              andi R20,240
+ 0156 5070              andi R21,0
+ 0158 403B              cpi R20,176
+ 015A E0E0              ldi R30,0
+ 015C 5E07              cpc R21,R30
+ 015E E1F0              breq L39
+ 0160           X14:
+ 0160 80EB              ldi R24,176
+ 0162 90E0              ldi R25,0
+ 0164 8417              cp R24,R20
+ 0166 9507              cpc R25,R21
+ 0168 2CF0              brlt L42
+ 016A           X15:
+ 016A           L41:
+ 016A 4037              cpi R20,112
+ 016C E0E0              ldi R30,0
+ 016E 5E07              cpc R21,R30
+ 0170 A9F0              breq L40
+ 0172           X16:
+ 0172 16C0              xjmp L34
+ 0174           L42:
+ 0174 403D              cpi R20,208
+ 0176 E0E0              ldi R30,0
+ 0178 5E07              cpc R21,R30
+ 017A 61F0              breq L38
+ 017C           X17:
+ 017C 403D              cpi R20,208
+ 017E E0E0              ldi R30,0
+ 0180 5E07              cpc R21,R30
+ 0182 74F0              brlt L34
+ 0184           X18:
+ 0184           L43:
+ 0184 403E              cpi R20,224
+ 0186 E0E0              ldi R30,0
+ 0188 5E07              cpc R21,R30
+ 018A 09F0              breq L37
+ 018C           X19:
+ 018C 09C0              xjmp L34
+ 018E           L37:
+ 018E                   .dbline 65
+ 018E           ;       {
+ 018E           ;         case 0xe0: numberA=2 ;
+ 018E 82E0              ldi R24,2
+ 0190 8883              std y+0,R24
+ 0192                   .dbline 66
+ 0192           ;                                break;
+ 0192 06C0              xjmp L35
+ 0194           L38:
+ 0194                   .dbline 67
+ 0194           ;         case 0xd0: numberB=1 ;
+ 0194 61E0              ldi R22,1
+ 0196                   .dbline 68
+ 0196           ;                                break;
+ 0196 04C0              xjmp L35
+ 0198           L39:
+ 0198                   .dbline 69
+ 0198           ;         case 0xb0: numberB=5 ;
+ 0198 65E0              ldi R22,5
+ 019A                   .dbline 70
+ 019A           ;                                break;
+ 019A 02C0              xjmp L35
+ 019C           L40:
+ 019C                   .dbline 71
+ 019C           ;         case 0x70: rule=4 ;
+ 019C 84E0              ldi R24,4
+ 019E C82E              mov R12,R24
+ 01A0                   .dbline 72
+ 01A0           ;                                break;
+ 01A0           L34:
+ 01A0           L35:
+ 01A0                   .dbline 75
+ 01A0           ;       }
+ 01A0           ;       
+ 01A0           ;       PORTD = 0x01;
+ 01A0 81E0              ldi R24,1
+ 01A2 82BB              out 0x12,R24
+ 01A4                   .dbline 76
+ 01A4           ;       PORTC = table_ca[numberA];    //渲染numberA
+ 01A4 80E0              ldi R24,<_table_ca
+ 01A6 90E0              ldi R25,>_table_ca
+ 01A8 E881              ldd R30,y+0
+ 01AA FF27              clr R31
+ 01AC E80F              add R30,R24
+ 01AE F91F              adc R31,R25
+ 01B0 2080              ldd R2,z+0
+ 01B2 25BA              out 0x15,R2
+ 01B4                   .dbline 77
+ 01B4           ;       delay_ms(5);
+ 01B4 05E0              ldi R16,5
+ 01B6 10E0              ldi R17,0
+ 01B8 23DF              xcall _delay_ms
+ 01BA                   .dbline 79
+ 01BA           ;       
+ 01BA           ;       PORTD = 0x02;
+ 01BA 82E0              ldi R24,2
+ 01BC 82BB              out 0x12,R24
+ 01BE                   .dbline 80
+ 01BE           ;       PORTC = table_ca[numberB];    //渲染numberB
+ 01BE 80E0              ldi R24,<_table_ca
+ 01C0 90E0              ldi R25,>_table_ca
+ 01C2 E62F              mov R30,R22
+ 01C4 FF27              clr R31
+ 01C6 E80F              add R30,R24
+ 01C8 F91F              adc R31,R25
+ 01CA 2080              ldd R2,z+0
+ 01CC 25BA              out 0x15,R2
+ 01CE                   .dbline 81
+ 01CE           ;       delay_ms(5);
+ 01CE 05E0              ldi R16,5
+ 01D0 10E0              ldi R17,0
+ 01D2 16DF              xcall _delay_ms
+ 01D4                   .dbline 83
+ 01D4           ;       
+ 01D4           ;       PORTA = 0xf7;   //扫描第四列
+ 01D4 87EF              ldi R24,247
+ 01D6 8BBB              out 0x1b,R24
+ 01D8                   .dbline 84
+ 01D8           ;       switch(PINA&(0xf0))
+ 01D8 49B3              in R20,0x19
+ 01DA 5527              clr R21
+ 01DC 407F              andi R20,240
+ 01DE 5070              andi R21,0
+ 01E0 403B              cpi R20,176
+ 01E2 E0E0              ldi R30,0
+ 01E4 5E07              cpc R21,R30
+ 01E6 E1F0              breq L49
+ 01E8           X20:
+ 01E8 80EB              ldi R24,176
+ 01EA 90E0              ldi R25,0
+ 01EC 8417              cp R24,R20
+ 01EE 9507              cpc R25,R21
+ 01F0 2CF0              brlt L52
+ 01F2           X21:
+ 01F2           L51:
+ 01F2 4037              cpi R20,112
+ 01F4 E0E0              ldi R30,0
+ 01F6 5E07              cpc R21,R30
+ 01F8 B1F0              breq L50
+ 01FA           X22:
+ 01FA 17C0              xjmp L44
+ 01FC           L52:
+ 01FC 403D              cpi R20,208
+ 01FE E0E0              ldi R30,0
+ 0200 5E07              cpc R21,R30
+ 0202 61F0              breq L48
+ 0204           X23:
+ 0204 403D              cpi R20,208
+ 0206 E0E0              ldi R30,0
+ 0208 5E07              cpc R21,R30
+ 020A 7CF0              brlt L44
+ 020C           X24:
+ 020C           L53:
+ 020C 403E              cpi R20,224
+ 020E E0E0              ldi R30,0
+ 0210 5E07              cpc R21,R30
+ 0212 09F0              breq L47
+ 0214           X25:
+ 0214 0AC0              xjmp L44
+ 0216           L47:
+ 0216                   .dbline 86
+ 0216           ;       {
+ 0216           ;         case 0xe0: numberA=3 ;
+ 0216 83E0              ldi R24,3
+ 0218 8883              std y+0,R24
+ 021A                   .dbline 87
+ 021A           ;                                break;
+ 021A 07C0              xjmp L45
+ 021C           L48:
+ 021C                   .dbline 88
+ 021C           ;         case 0xd0: numberB=2 ; 
+ 021C 62E0              ldi R22,2
+ 021E                   .dbline 89
+ 021E           ;                                break;
+ 021E 05C0              xjmp L45
+ 0220           L49:
+ 0220                   .dbline 90
+ 0220           ;         case 0xb0: rule=1 ; 
+ 0220 CC24              clr R12
+ 0222 C394              inc R12
+ 0224                   .dbline 91
+ 0224           ;                                break;
+ 0224 02C0              xjmp L45
+ 0226           L50:
+ 0226                   .dbline 92
+ 0226           ;         case 0x70: rule=5 ; 
+ 0226 85E0              ldi R24,5
+ 0228 C82E              mov R12,R24
+ 022A                   .dbline 93
+ 022A           ;                                break;
+ 022A           L44:
+ 022A           L45:
+ 022A                   .dbline 96
+ 022A           ;       }
+ 022A           ;       
+ 022A           ;       PORTD = 0x01;
+ 022A 81E0              ldi R24,1
+ 022C 82BB              out 0x12,R24
+ 022E                   .dbline 97
+ 022E           ;       PORTC = table_ca[numberA];    //渲染numberA
+ 022E 80E0              ldi R24,<_table_ca
+ 0230 90E0              ldi R25,>_table_ca
+ 0232 E881              ldd R30,y+0
+ 0234 FF27              clr R31
+ 0236 E80F              add R30,R24
+ 0238 F91F              adc R31,R25
+ 023A 2080              ldd R2,z+0
+ 023C 25BA              out 0x15,R2
+ 023E                   .dbline 98
+ 023E           ;       delay_ms(5);
+ 023E 05E0              ldi R16,5
+ 0240 10E0              ldi R17,0
+ 0242 DEDE              xcall _delay_ms
+ 0244                   .dbline 100
+ 0244           ;       
+ 0244           ;       PORTD = 0x02;
+ 0244 82E0              ldi R24,2
+ 0246 82BB              out 0x12,R24
+ 0248                   .dbline 101
+ 0248           ;       PORTC = table_ca[numberB];    //渲染numberB
+ 0248 80E0              ldi R24,<_table_ca
+ 024A 90E0              ldi R25,>_table_ca
+ 024C E62F              mov R30,R22
+ 024E FF27              clr R31
+ 0250 E80F              add R30,R24
+ 0252 F91F              adc R31,R25
+ 0254 2080              ldd R2,z+0
+ 0256 25BA              out 0x15,R2
+ 0258                   .dbline 102
+ 0258           ;       delay_ms(5);
+ 0258 05E0              ldi R16,5
+ 025A 10E0              ldi R17,0
+ 025C D1DE              xcall _delay_ms
+ 025E                   .dbline 104
+ 025E           ;       
+ 025E           ;       switch(rule)
+ 025E 4C2D              mov R20,R12
+ 0260 5527              clr R21
+ 0262 4130              cpi R20,1
+ 0264 E0E0              ldi R30,0
+ 0266 5E07              cpc R21,R30
+ 0268 99F0              breq L57
+ 026A           X26:
+ 026A 4230              cpi R20,2
+ 026C E0E0              ldi R30,0
+ 026E 5E07              cpc R21,R30
+ 0270 01F1              breq L58
+ 0272           X27:
+ 0272 4330              cpi R20,3
+ 0274 E0E0              ldi R30,0
+ 0276 5E07              cpc R21,R30
+ 0278 69F1              breq L59
+ 027A           X28:
+ 027A 4430              cpi R20,4
+ 027C E0E0              ldi R30,0
+ 027E 5E07              cpc R21,R30
+ 0280 09F4              brne X32
+ 0282 3BC0              xjmp L60
+ 0284           X32:
+ 0284           X29:
+ 0284 4530              cpi R20,5
+ 0286 E0E0              ldi R30,0
+ 0288 5E07              cpc R21,R30
+ 028A 09F4              brne X33
+ 028C 4DC0              xjmp L61
+ 028E           X33:
+ 028E           X30:
+ 028E 66C0              xjmp L54
+ 0290           L57:
+ 0290                   .dbline 106
+ 0290           ;       {
+ 0290           ;         case 1: numberC_2 = (numberA+numberB)%10;                                            //获得和的个位数
+ 0290 0881              ldd R16,y+0
+ 0292 060F              add R16,R22
+ 0294 1AE0              ldi R17,10
+ 0296 0E940000          xcall mod8u
+ 029A A02E              mov R10,R16
+ 029C                   .dbline 107
+ 029C           ;                         numberC_1 = ((numberA+numberB-numberC_2)/10)%10;                 //获得和的十位数
+ 029C 0881              ldd R16,y+0
+ 029E 060F              add R16,R22
+ 02A0 0A19              sub R16,R10
+ 02A2 1AE0              ldi R17,10
+ 02A4 0E940000          xcall div8u
+ 02A8 1AE0              ldi R17,10
+ 02AA 0E940000          xcall mod8u
+ 02AE E02E              mov R14,R16
+ 02B0                   .dbline 108
+ 02B0           ;                         break; 
+ 02B0 55C0              xjmp L55
+ 02B2           L58:
+ 02B2                   .dbline 109
+ 02B2           ;         case 2: numberC_2 = (numberA-numberB)%10;                                            //获得差的个位数
+ 02B2 0881              ldd R16,y+0
+ 02B4 061B              sub R16,R22
+ 02B6 1AE0              ldi R17,10
+ 02B8 0E940000          xcall mod8u
+ 02BC A02E              mov R10,R16
+ 02BE                   .dbline 110
+ 02BE           ;                         numberC_1 = ((numberA-numberB-numberC_2)/10)%10;                 //获得差的十位数
+ 02BE 0881              ldd R16,y+0
+ 02C0 061B              sub R16,R22
+ 02C2 0A19              sub R16,R10
+ 02C4 1AE0              ldi R17,10
+ 02C6 0E940000          xcall div8u
+ 02CA 1AE0              ldi R17,10
+ 02CC 0E940000          xcall mod8u
+ 02D0 E02E              mov R14,R16
+ 02D2                   .dbline 111
+ 02D2           ;                         break; 
+ 02D2 44C0              xjmp L55
+ 02D4           L59:
+ 02D4                   .dbline 112
+ 02D4           ;         case 3: numberC_2 = (numberA*numberB)%10;                                            //获得积的个位数
+ 02D4 0880              ldd R0,y+0
+ 02D6 069E              mul R0,R22
+ 02D8 1AE0              ldi R17,10
+ 02DA 002D              mov R16,R0
+ 02DC 0E940000          xcall mod8u
+ 02E0 A02E              mov R10,R16
+ 02E2                   .dbline 113
+ 02E2           ;                         numberC_1 = ((numberA*numberB-numberC_2)/10)%10;                 //获得积的十位数
+ 02E2 0880              ldd R0,y+0
+ 02E4 069E              mul R0,R22
+ 02E6 002D              mov R16,R0
+ 02E8 0A19              sub R16,R10
+ 02EA 1AE0              ldi R17,10
+ 02EC 0E940000          xcall div8u
+ 02F0 1AE0              ldi R17,10
+ 02F2 0E940000          xcall mod8u
+ 02F6 E02E              mov R14,R16
+ 02F8                   .dbline 114
+ 02F8           ;                         break; 
+ 02F8 31C0              xjmp L55
+ 02FA           L60:
+ 02FA                   .dbline 115
+ 02FA           ;         case 4: numberC_2 = (numberA/numberB)%10;                                            //获得商的个位数
+ 02FA 162F              mov R17,R22
+ 02FC 0881              ldd R16,y+0
+ 02FE 0E940000          xcall div8u
+ 0302 1AE0              ldi R17,10
+ 0304 0E940000          xcall mod8u
+ 0308 A02E              mov R10,R16
+ 030A                   .dbline 116
+ 030A           ;                         numberC_1 = ((numberA/numberB-numberC_2)/10)%10;                 //获得商的十位数
+ 030A 162F              mov R17,R22
+ 030C 0881              ldd R16,y+0
+ 030E 0E940000          xcall div8u
+ 0312 202E              mov R2,R16
+ 0314 2A18              sub R2,R10
+ 0316 1AE0              ldi R17,10
+ 0318 022D              mov R16,R2
+ 031A 0E940000          xcall div8u
+ 031E 1AE0              ldi R17,10
+ 0320 0E940000          xcall mod8u
+ 0324 E02E              mov R14,R16
+ 0326                   .dbline 117
+ 0326           ;                         break; 
+ 0326 1AC0              xjmp L55
+ 0328           L61:
+ 0328                   .dbline 118
+ 0328           ;         case 5: PORTD = 0x04;
+ 0328 84E0              ldi R24,4
+ 032A 82BB              out 0x12,R24
+ 032C                   .dbline 119
+ 032C           ;                         PORTC = table_ca[numberC_1];    //渲染numberC的十位数
+ 032C 80E0              ldi R24,<_table_ca
+ 032E 90E0              ldi R25,>_table_ca
+ 0330 EE2D              mov R30,R14
+ 0332 FF27              clr R31
+ 0334 E80F              add R30,R24
+ 0336 F91F              adc R31,R25
+ 0338 2080              ldd R2,z+0
+ 033A 25BA              out 0x15,R2
+ 033C                   .dbline 120
+ 033C           ;                         delay_ms(10);
+ 033C 0AE0              ldi R16,10
+ 033E 10E0              ldi R17,0
+ 0340 5FDE              xcall _delay_ms
+ 0342                   .dbline 122
+ 0342           ;                         
+ 0342           ;                         PORTD = 0x08;
+ 0342 88E0              ldi R24,8
+ 0344 82BB              out 0x12,R24
+ 0346                   .dbline 123
+ 0346           ;                         PORTC = table_ca[numberC_2];    //渲染numberC的个位数
+ 0346 80E0              ldi R24,<_table_ca
+ 0348 90E0              ldi R25,>_table_ca
+ 034A EA2D              mov R30,R10
+ 034C FF27              clr R31
+ 034E E80F              add R30,R24
+ 0350 F91F              adc R31,R25
+ 0352 2080              ldd R2,z+0
+ 0354 25BA              out 0x15,R2
+ 0356                   .dbline 124
+ 0356           ;                         delay_ms(10);
+ 0356 0AE0              ldi R16,10
+ 0358 10E0              ldi R17,0
+ 035A 52DE              xcall _delay_ms
+ 035C                   .dbline 125
+ 035C           ;                         break; 
+ 035C           L54:
+ 035C           L55:
+ 035C                   .dbline 127
+ 035C           ;       }
+ 035C           ;   }
+ 035C           L12:
+ 035C                   .dbline 22
+ 035C 79CE              xjmp L11
+ 035E           X31:
+ 035E                   .dbline -2
+ 035E           L10:
+ 035E                   .dbline 0 ; func end
+ 035E 2196              adiw R28,1
+ 0360 0895              ret
+ 0362                   .dbsym r numberC_1 14 c
+ 0362                   .dbsym r numberC_2 10 c
+ 0362                   .dbsym r rule 12 c
+ 0362                   .dbsym r numberB 22 c
+ 0362                   .dbsym l numberA 0 c
+ 0362                   .dbend
+ 0362           ; }

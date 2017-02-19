@@ -1,0 +1,194 @@
+                        .module usart.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile usart.c
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业2\source\usart.c
+ 0000                   .dbfunc e usart_init _usart_init fV
+                        .even
+ 0000           _usart_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 4
+ 0000           ; #include<iom16v.h>
+ 0000           ; 
+ 0000           ; void usart_init()     //配置usart寄存器
+ 0000           ; {
+ 0000                   .dbline 5
+ 0000           ;    DDRD&=~(1<<PD0);
+ 0000 8898              cbi 0x11,0
+ 0002                   .dbline 6
+ 0002           ;    PORTD|=1<<PD0; 
+ 0002 909A              sbi 0x12,0
+ 0004                   .dbline 7
+ 0004           ;    DDRD|=1<<PD1;
+ 0004 899A              sbi 0x11,1
+ 0006                   .dbline 8
+ 0006           ;    PORTD|=1<<PD1;
+ 0006 919A              sbi 0x12,1
+ 0008                   .dbline 9
+ 0008           ;    UCSRC = (1<<URSEL) | (1<<UCSZ1) | (1<<UCSZ0);        //8位字符长度
+ 0008 86E8              ldi R24,134
+ 000A 80BD              out 0x20,R24
+ 000C                   .dbline 10
+ 000C           ;    UBRRL = 51;                                          //9600bps(8M)
+ 000C 83E3              ldi R24,51
+ 000E 89B9              out 0x9,R24
+ 0010                   .dbline 11
+ 0010           ;    UCSRB = (1<<TXCIE) | (1<<RXEN) | (1<<TXEN);          //发送结束中断使能，接收使能，发送使能                                     
+ 0010 88E5              ldi R24,88
+ 0012 8AB9              out 0xa,R24
+ 0014                   .dbline -2
+ 0014           L1:
+ 0014                   .dbline 0 ; func end
+ 0014 0895              ret
+ 0016                   .dbend
+                        .area vector(rom, abs)
+                        .org 52
+ 0034 0C940B00          jmp _usart_sendEnd
+                        .area text(rom, con, rel)
+ 0016                   .dbfile C:\Users\z\Desktop\作业\作业2\source\usart.c
+ 0016                   .dbfunc e usart_sendEnd _usart_sendEnd fV
+ 0016           ;           temp -> R10
+                        .even
+ 0016           _usart_sendEnd::
+ 0016 0A92              st -y,R0
+ 0018 1A92              st -y,R1
+ 001A 2A92              st -y,R2
+ 001C 3A92              st -y,R3
+ 001E 4A92              st -y,R4
+ 0020 5A92              st -y,R5
+ 0022 6A92              st -y,R6
+ 0024 7A92              st -y,R7
+ 0026 8A92              st -y,R8
+ 0028 9A92              st -y,R9
+ 002A 0A93              st -y,R16
+ 002C 1A93              st -y,R17
+ 002E 2A93              st -y,R18
+ 0030 3A93              st -y,R19
+ 0032 8A93              st -y,R24
+ 0034 9A93              st -y,R25
+ 0036 AA93              st -y,R26
+ 0038 BA93              st -y,R27
+ 003A EA93              st -y,R30
+ 003C FA93              st -y,R31
+ 003E 0FB6              IN R0,63
+ 0040 0A92              st -y,R0
+ 0042 AA92              st -y,R10
+ 0044                   .dbline -1
+ 0044                   .dbline 16
+ 0044           ; } 
+ 0044           ; 
+ 0044           ; #pragma interrupt_handler usart_sendEnd:14
+ 0044           ; void usart_sendEnd()                    //发送结束中断函数
+ 0044           ; {
+ 0044           L3:
+ 0044                   .dbline 18
+ 0044           ;   unsigned char temp;
+ 0044           ;   while ( !(UCSRA & (1<<RXC)) );     // 等待接收缓存器空(等待接收完成再读取数据)
+ 0044           L4:
+ 0044                   .dbline 18
+ 0044 5F9B              sbis 0xb,7
+ 0046 FECF              rjmp L3
+ 0048           X0:
+ 0048                   .dbline 19
+ 0048           ;   temp = UDR;
+ 0048 ACB0              in R10,0xc
+ 004A                   .dbline 20
+ 004A           ;   usart_send(temp);                                    //发送数据
+ 004A 0A2D              mov R16,R10
+ 004C 1127              clr R17
+ 004E 18D0              xcall _usart_send
+ 0050                   .dbline -2
+ 0050           L2:
+ 0050                   .dbline 0 ; func end
+ 0050 A990              ld R10,y+
+ 0052 0990              ld R0,y+
+ 0054 0FBE              OUT 63,R0
+ 0056 F991              ld R31,y+
+ 0058 E991              ld R30,y+
+ 005A B991              ld R27,y+
+ 005C A991              ld R26,y+
+ 005E 9991              ld R25,y+
+ 0060 8991              ld R24,y+
+ 0062 3991              ld R19,y+
+ 0064 2991              ld R18,y+
+ 0066 1991              ld R17,y+
+ 0068 0991              ld R16,y+
+ 006A 9990              ld R9,y+
+ 006C 8990              ld R8,y+
+ 006E 7990              ld R7,y+
+ 0070 6990              ld R6,y+
+ 0072 5990              ld R5,y+
+ 0074 4990              ld R4,y+
+ 0076 3990              ld R3,y+
+ 0078 2990              ld R2,y+
+ 007A 1990              ld R1,y+
+ 007C 0990              ld R0,y+
+ 007E 1895              reti
+ 0080                   .dbsym r temp 10 c
+ 0080                   .dbend
+ 0080                   .dbfunc e usart_send _usart_send fV
+ 0080           ;           data -> R16
+                        .even
+ 0080           _usart_send::
+ 0080                   .dbline -1
+ 0080                   .dbline 24
+ 0080           ; }
+ 0080           ; 
+ 0080           ; void usart_send(unsigned char data)             //TXD发送数据
+ 0080           ; {
+ 0080           L7:
+ 0080                   .dbline 25
+ 0080           ;   while(!(UCSRA & (1<<UDRE)));   //等待发送缓存器空（等待前次发送完，再进行本次数据发送）
+ 0080           L8:
+ 0080                   .dbline 25
+ 0080 5D9B              sbis 0xb,5
+ 0082 FECF              rjmp L7
+ 0084           X1:
+ 0084                   .dbline 26
+ 0084           ;   UDR = data;
+ 0084 0CB9              out 0xc,R16
+ 0086           L10:
+ 0086                   .dbline 27
+ 0086           ;   while(!(UCSRA & (1<<TXC)));    //等待发送结束
+ 0086           L11:
+ 0086                   .dbline 27
+ 0086 5E9B              sbis 0xb,6
+ 0088 FECF              rjmp L10
+ 008A           X2:
+ 008A                   .dbline -2
+ 008A           L6:
+ 008A                   .dbline 0 ; func end
+ 008A 0895              ret
+ 008C                   .dbsym r data 16 c
+ 008C                   .dbend
+ 008C                   .dbfunc e main _main fV
+                        .even
+ 008C           _main::
+ 008C                   .dbline -1
+ 008C                   .dbline 31
+ 008C           ; }
+ 008C           ; 
+ 008C           ; void main()
+ 008C           ; {
+ 008C                   .dbline 32
+ 008C           ;   SREG |= 1<<7;  //全局中断使能
+ 008C 7894              bset 7
+ 008E                   .dbline 33
+ 008E           ;   usart_init();
+ 008E B8DF              xcall _usart_init
+ 0090                   .dbline 34
+ 0090           ;   usart_sendEnd();
+ 0090 C2DF              xcall _usart_sendEnd
+ 0092           L14:
+ 0092                   .dbline 36
+ 0092           ;   
+ 0092           ;   while(1);
+ 0092           L15:
+ 0092                   .dbline 36
+ 0092 FFCF              xjmp L14
+ 0094           X3:
+ 0094                   .dbline -2
+ 0094           L13:
+ 0094                   .dbline 0 ; func end
+ 0094 0895              ret
+ 0096                   .dbend
+ 0096           ; }

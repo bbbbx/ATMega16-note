@@ -1,0 +1,485 @@
+                        .module ADC.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile ADC.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile ADC.c
+ 0000           _SEG7_table_ca::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 C000              .word 192
+                        .area data(ram, con, rel)
+ 0002                   .dbfile ADC.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 F900              .word 249
+                        .area data(ram, con, rel)
+ 0004                   .dbfile ADC.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 A400              .word 164
+                        .area data(ram, con, rel)
+ 0006                   .dbfile ADC.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 B000              .word 176
+                        .area data(ram, con, rel)
+ 0008                   .dbfile ADC.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 9900              .word 153
+                        .area data(ram, con, rel)
+ 000A                   .dbfile ADC.c
+ 000A                   .blkb 2
+                        .area idata
+ 000A 9200              .word 146
+                        .area data(ram, con, rel)
+ 000C                   .dbfile ADC.c
+ 000C                   .blkb 2
+                        .area idata
+ 000C 8200              .word 130
+                        .area data(ram, con, rel)
+ 000E                   .dbfile ADC.c
+ 000E                   .blkb 2
+                        .area idata
+ 000E F800              .word 248
+                        .area data(ram, con, rel)
+ 0010                   .dbfile ADC.c
+ 0010                   .blkb 2
+                        .area idata
+ 0010 8000              .word 128
+                        .area data(ram, con, rel)
+ 0012                   .dbfile ADC.c
+ 0012                   .blkb 2
+                        .area idata
+ 0012 9000              .word 144
+                        .area data(ram, con, rel)
+ 0014                   .dbfile ADC.c
+ 0014                   .dbfile C:\Users\z\Desktop\ADC(光电151张启明)\ADC\ADC.c
+ 0014                   .dbsym e SEG7_table_ca _SEG7_table_ca A[20:10]i
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\z\Desktop\ADC(光电151张启明)\ADC\ADC.c
+ 0000                   .dbfunc e delay_ms _delay_ms fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;             ms -> R16,R17
+                        .even
+ 0000           _delay_ms::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 6
+ 0004           ; #include <iom16v.h>
+ 0004           ; 
+ 0004           ; unsigned int SEG7_table_ca[] = { 0xC0 ,0xF9 ,0xA4 ,0xB0 ,0x99 ,0x92 ,0x82 ,0xF8 ,0x80 ,0x90 };  //共阳数码管码表0-9
+ 0004           ; 
+ 0004           ; void delay_ms(unsigned int ms)  //延时函数
+ 0004           ; {
+ 0004                   .dbline 8
+ 0004           ;   unsigned int i , j ;
+ 0004           ;   for( i = 0 ; i < ms ; i++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 9
+ 000A           ;   {
+ 000A                   .dbline 10
+ 000A           ;     for( j = 0 ; j < 1141 ; j++)
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 11
+ 0010           ;       {
+ 0010                   .dbline 12
+ 0010           ;          ;
+ 0010                   .dbline 13
+ 0010           ;       }
+ 0010           L7:
+ 0010                   .dbline 10
+ 0010 6F5F              subi R22,255  ; offset = 1
+ 0012 7F4F              sbci R23,255
+ 0014           L9:
+ 0014                   .dbline 10
+ 0014 6537              cpi R22,117
+ 0016 E4E0              ldi R30,4
+ 0018 7E07              cpc R23,R30
+ 001A D0F3              brlo L6
+ 001C           X0:
+ 001C                   .dbline 14
+ 001C           ;   }
+ 001C           L3:
+ 001C                   .dbline 8
+ 001C 4F5F              subi R20,255  ; offset = 1
+ 001E 5F4F              sbci R21,255
+ 0020           L5:
+ 0020                   .dbline 8
+ 0020 4017              cp R20,R16
+ 0022 5107              cpc R21,R17
+ 0024 90F3              brlo L2
+ 0026           X1:
+ 0026                   .dbline -2
+ 0026           L1:
+ 0026                   .dbline 0 ; func end
+ 0026 0C940000          xjmp pop_xgsetF000
+ 002A                   .dbsym r i 20 i
+ 002A                   .dbsym r j 22 i
+ 002A                   .dbsym r ms 16 i
+ 002A                   .dbend
+ 002A                   .dbfunc e ADC_init _ADC_init fV
+                        .even
+ 002A           _ADC_init::
+ 002A                   .dbline -1
+ 002A                   .dbline 18
+ 002A           ; }
+ 002A           ; 
+ 002A           ; void ADC_init()
+ 002A           ; {
+ 002A                   .dbline 19
+ 002A           ;   ADMUX = (1<<REFS0)|(1<<MUX2);                                                        //基准AVCC，通道4
+ 002A 84E4              ldi R24,68
+ 002C 87B9              out 0x7,R24
+ 002E                   .dbline 20
+ 002E           ;   ADCSRA = (1<<ADEN)|(1<<ADSC)|(1<<ADPS1)|(1<<ADPS0);          //ADC使能、ADC开始转换、8分频
+ 002E 83EC              ldi R24,195
+ 0030 86B9              out 0x6,R24
+ 0032                   .dbline -2
+ 0032           L10:
+ 0032                   .dbline 0 ; func end
+ 0032 0895              ret
+ 0034                   .dbend
+ 0034                   .dbfunc e get_AD _get_AD fi
+ 0034           ;             ad -> R16,R17
+                        .even
+ 0034           _get_AD::
+ 0034                   .dbline -1
+ 0034                   .dbline 24
+ 0034           ; }
+ 0034           ; 
+ 0034           ; unsigned int get_AD()
+ 0034           ; {
+ 0034                   .dbline 26
+ 0034           ;   unsigned int ad;
+ 0034           ;   ADCSRA |= 1<<ADSC;  //ADC开始转换
+ 0034 369A              sbi 0x6,6
+ 0036           L12:
+ 0036                   .dbline 27
+ 0036           ;   while(!(ADCSRA & (1<<ADIF))) ;  //等待采样结束
+ 0036           L13:
+ 0036                   .dbline 27
+ 0036 349B              sbis 0x6,4
+ 0038 FECF              rjmp L12
+ 003A           X2:
+ 003A                   .dbline 28
+ 003A           ;   ad = ADC;                     //读取AD结果
+ 003A 04B1              in R16,0x4
+ 003C 15B1              in R17,0x5
+ 003E                   .dbline 29
+ 003E           ;   ADCSRA &= ~(1<<ADIF);  //清ADC中断标志
+ 003E 3498              cbi 0x6,4
+ 0040                   .dbline 30
+ 0040           ;   return ad;         //返回结果
+ 0040                   .dbline -2
+ 0040           L11:
+ 0040                   .dbline 0 ; func end
+ 0040 0895              ret
+ 0042                   .dbsym r ad 16 i
+ 0042                   .dbend
+ 0042                   .dbfunc e main _main fV
+ 0042           ;          volts -> y+0
+                        .even
+ 0042           _main::
+ 0042 2497              sbiw R28,4
+ 0044                   .dbline -1
+ 0044                   .dbline 34
+ 0044           ; }
+ 0044           ; 
+ 0044           ; void main()
+ 0044           ; {
+ 0044                   .dbline 37
+ 0044           ;   unsigned long volts;
+ 0044           ;   //初始化io
+ 0044           ;   DDRC = 0xff;
+ 0044 8FEF              ldi R24,255
+ 0046 84BB              out 0x14,R24
+ 0048                   .dbline 38
+ 0048           ;   DDRD = 0x0f;
+ 0048 8FE0              ldi R24,15
+ 004A 81BB              out 0x11,R24
+ 004C                   .dbline 39
+ 004C           ;   PORTC = 0x00;
+ 004C 2224              clr R2
+ 004E 25BA              out 0x15,R2
+ 0050                   .dbline 40
+ 0050           ;   PORTD = 0x00;
+ 0050 22BA              out 0x12,R2
+ 0052                   .dbline 42
+ 0052           ;   
+ 0052           ;   ADC_init();  //初始化ADC
+ 0052 EBDF              xcall _ADC_init
+ 0054 DAC0              xjmp L17
+ 0056           L16:
+ 0056                   .dbline 45
+ 0056           ;   
+ 0056           ;   while(1)
+ 0056           ;   {
+ 0056                   .dbline 46
+ 0056           ;     volts = 1.0*get_AD()/1024*5000;  //获取电压值，单位mV
+ 0056 EEDF              xcall _get_AD
+ 0058 C801              movw R24,R16
+ 005A 00E0              ldi R16,<L19
+ 005C 10E0              ldi R17,>L19
+ 005E 0E940000          xcall lpm32
+ 0062 1801              movw R2,R16
+ 0064 2901              movw R4,R18
+ 0066 00E0              ldi R16,<L20
+ 0068 10E0              ldi R17,>L20
+ 006A 0E940000          xcall lpm32
+ 006E 3801              movw R6,R16
+ 0070 4901              movw R8,R18
+ 0072 8C01              movw R16,R24
+ 0074 0E940000          xcall uint2fp
+ 0078 3A93              st -y,R19
+ 007A 2A93              st -y,R18
+ 007C 1A93              st -y,R17
+ 007E 0A93              st -y,R16
+ 0080 8301              movw R16,R6
+ 0082 9401              movw R18,R8
+ 0084 0E940000          xcall fpmule2
+ 0088 3801              movw R6,R16
+ 008A 4901              movw R8,R18
+ 008C 00E0              ldi R16,<L21
+ 008E 10E0              ldi R17,>L21
+ 0090 0E940000          xcall lpm32
+ 0094 3A93              st -y,R19
+ 0096 2A93              st -y,R18
+ 0098 1A93              st -y,R17
+ 009A 0A93              st -y,R16
+ 009C 8301              movw R16,R6
+ 009E 9401              movw R18,R8
+ 00A0 0E940000          xcall fpdiv2x
+ 00A4 8101              movw R16,R2
+ 00A6 9201              movw R18,R4
+ 00A8 0E940000          xcall fpmule2
+ 00AC 0E940000          xcall fpint
+ 00B0 0883              std y+0,R16
+ 00B2 1983              std y+1,R17
+ 00B4 2A83              std y+2,R18
+ 00B6 3B83              std y+3,R19
+ 00B8                   .dbline 48
+ 00B8           ;       
+ 00B8           ;       PORTD = 0x08;
+ 00B8 88E0              ldi R24,8
+ 00BA 82BB              out 0x12,R24
+ 00BC                   .dbline 49
+ 00BC           ;       PORTC = SEG7_table_ca[volts % 10];  //渲染第4个数
+ 00BC 4AE0              ldi R20,10
+ 00BE 50E0              ldi R21,0
+ 00C0 60E0              ldi R22,0
+ 00C2 70E0              ldi R23,0
+ 00C4 0881              ldd R16,y+0
+ 00C6 1981              ldd R17,y+1
+ 00C8 2A81              ldd R18,y+2
+ 00CA 3B81              ldd R19,y+3
+ 00CC 7A93              st -y,R23
+ 00CE 6A93              st -y,R22
+ 00D0 5A93              st -y,R21
+ 00D2 4A93              st -y,R20
+ 00D4 0E940000          xcall mod32u
+ 00D8 1801              movw R2,R16
+ 00DA 2901              movw R4,R18
+ 00DC 220C              lsl R2
+ 00DE 331C              rol R3
+ 00E0 441C              rol R4
+ 00E2 551C              rol R5
+ 00E4 F101              movw R30,R2
+ 00E6 80E0              ldi R24,<_SEG7_table_ca
+ 00E8 90E0              ldi R25,>_SEG7_table_ca
+ 00EA E80F              add R30,R24
+ 00EC F91F              adc R31,R25
+ 00EE 2080              ldd R2,z+0
+ 00F0 3180              ldd R3,z+1
+ 00F2 25BA              out 0x15,R2
+ 00F4                   .dbline 50
+ 00F4           ;       delay_ms(10);
+ 00F4 0AE0              ldi R16,10
+ 00F6 10E0              ldi R17,0
+ 00F8 83DF              xcall _delay_ms
+ 00FA                   .dbline 52
+ 00FA           ;       
+ 00FA           ;       volts = volts/10;
+ 00FA 4AE0              ldi R20,10
+ 00FC 50E0              ldi R21,0
+ 00FE 60E0              ldi R22,0
+ 0100 70E0              ldi R23,0
+ 0102 0881              ldd R16,y+0
+ 0104 1981              ldd R17,y+1
+ 0106 2A81              ldd R18,y+2
+ 0108 3B81              ldd R19,y+3
+ 010A 7A93              st -y,R23
+ 010C 6A93              st -y,R22
+ 010E 5A93              st -y,R21
+ 0110 4A93              st -y,R20
+ 0112 0E940000          xcall div32u
+ 0116 0883              std y+0,R16
+ 0118 1983              std y+1,R17
+ 011A 2A83              std y+2,R18
+ 011C 3B83              std y+3,R19
+ 011E                   .dbline 53
+ 011E           ;       PORTD = 0x04;
+ 011E 84E0              ldi R24,4
+ 0120 82BB              out 0x12,R24
+ 0122                   .dbline 54
+ 0122           ;       PORTC = SEG7_table_ca[volts % 10];  //渲染第3个数
+ 0122 4AE0              ldi R20,10
+ 0124 50E0              ldi R21,0
+ 0126 60E0              ldi R22,0
+ 0128 70E0              ldi R23,0
+ 012A 0881              ldd R16,y+0
+ 012C 1981              ldd R17,y+1
+ 012E 2A81              ldd R18,y+2
+ 0130 3B81              ldd R19,y+3
+ 0132 7A93              st -y,R23
+ 0134 6A93              st -y,R22
+ 0136 5A93              st -y,R21
+ 0138 4A93              st -y,R20
+ 013A 0E940000          xcall mod32u
+ 013E 1801              movw R2,R16
+ 0140 2901              movw R4,R18
+ 0142 220C              lsl R2
+ 0144 331C              rol R3
+ 0146 441C              rol R4
+ 0148 551C              rol R5
+ 014A F101              movw R30,R2
+ 014C 80E0              ldi R24,<_SEG7_table_ca
+ 014E 90E0              ldi R25,>_SEG7_table_ca
+ 0150 E80F              add R30,R24
+ 0152 F91F              adc R31,R25
+ 0154 2080              ldd R2,z+0
+ 0156 3180              ldd R3,z+1
+ 0158 25BA              out 0x15,R2
+ 015A                   .dbline 55
+ 015A           ;       delay_ms(10);
+ 015A 0AE0              ldi R16,10
+ 015C 10E0              ldi R17,0
+ 015E 50DF              xcall _delay_ms
+ 0160                   .dbline 57
+ 0160           ;       
+ 0160           ;       volts = volts/10;
+ 0160 4AE0              ldi R20,10
+ 0162 50E0              ldi R21,0
+ 0164 60E0              ldi R22,0
+ 0166 70E0              ldi R23,0
+ 0168 0881              ldd R16,y+0
+ 016A 1981              ldd R17,y+1
+ 016C 2A81              ldd R18,y+2
+ 016E 3B81              ldd R19,y+3
+ 0170 7A93              st -y,R23
+ 0172 6A93              st -y,R22
+ 0174 5A93              st -y,R21
+ 0176 4A93              st -y,R20
+ 0178 0E940000          xcall div32u
+ 017C 0883              std y+0,R16
+ 017E 1983              std y+1,R17
+ 0180 2A83              std y+2,R18
+ 0182 3B83              std y+3,R19
+ 0184                   .dbline 58
+ 0184           ;       PORTD = 0x02;
+ 0184 82E0              ldi R24,2
+ 0186 82BB              out 0x12,R24
+ 0188                   .dbline 59
+ 0188           ;       PORTC = SEG7_table_ca[volts % 10];  //渲染第2个数
+ 0188 4AE0              ldi R20,10
+ 018A 50E0              ldi R21,0
+ 018C 60E0              ldi R22,0
+ 018E 70E0              ldi R23,0
+ 0190 0881              ldd R16,y+0
+ 0192 1981              ldd R17,y+1
+ 0194 2A81              ldd R18,y+2
+ 0196 3B81              ldd R19,y+3
+ 0198 7A93              st -y,R23
+ 019A 6A93              st -y,R22
+ 019C 5A93              st -y,R21
+ 019E 4A93              st -y,R20
+ 01A0 0E940000          xcall mod32u
+ 01A4 1801              movw R2,R16
+ 01A6 2901              movw R4,R18
+ 01A8 220C              lsl R2
+ 01AA 331C              rol R3
+ 01AC 441C              rol R4
+ 01AE 551C              rol R5
+ 01B0 F101              movw R30,R2
+ 01B2 80E0              ldi R24,<_SEG7_table_ca
+ 01B4 90E0              ldi R25,>_SEG7_table_ca
+ 01B6 E80F              add R30,R24
+ 01B8 F91F              adc R31,R25
+ 01BA 2080              ldd R2,z+0
+ 01BC 3180              ldd R3,z+1
+ 01BE 25BA              out 0x15,R2
+ 01C0                   .dbline 60
+ 01C0           ;       delay_ms(10);
+ 01C0 0AE0              ldi R16,10
+ 01C2 10E0              ldi R17,0
+ 01C4 1DDF              xcall _delay_ms
+ 01C6                   .dbline 62
+ 01C6           ;       
+ 01C6           ;       PORTD = 0x01;
+ 01C6 81E0              ldi R24,1
+ 01C8 82BB              out 0x12,R24
+ 01CA                   .dbline 63
+ 01CA           ;       PORTC = SEG7_table_ca[volts / 10];  //渲染第1个数
+ 01CA 4AE0              ldi R20,10
+ 01CC 50E0              ldi R21,0
+ 01CE 60E0              ldi R22,0
+ 01D0 70E0              ldi R23,0
+ 01D2 0881              ldd R16,y+0
+ 01D4 1981              ldd R17,y+1
+ 01D6 2A81              ldd R18,y+2
+ 01D8 3B81              ldd R19,y+3
+ 01DA 7A93              st -y,R23
+ 01DC 6A93              st -y,R22
+ 01DE 5A93              st -y,R21
+ 01E0 4A93              st -y,R20
+ 01E2 0E940000          xcall div32u
+ 01E6 1801              movw R2,R16
+ 01E8 2901              movw R4,R18
+ 01EA 220C              lsl R2
+ 01EC 331C              rol R3
+ 01EE 441C              rol R4
+ 01F0 551C              rol R5
+ 01F2 F101              movw R30,R2
+ 01F4 80E0              ldi R24,<_SEG7_table_ca
+ 01F6 90E0              ldi R25,>_SEG7_table_ca
+ 01F8 E80F              add R30,R24
+ 01FA F91F              adc R31,R25
+ 01FC 2080              ldd R2,z+0
+ 01FE 3180              ldd R3,z+1
+ 0200 25BA              out 0x15,R2
+ 0202                   .dbline 64
+ 0202           ;       PORTC &= ~0x80;                          //加上小数点
+ 0202 AF98              cbi 0x15,7
+ 0204                   .dbline 65
+ 0204           ;       delay_ms(10);
+ 0204 0AE0              ldi R16,10
+ 0206 10E0              ldi R17,0
+ 0208 FBDE              xcall _delay_ms
+ 020A                   .dbline 66
+ 020A           ;   }
+ 020A           L17:
+ 020A                   .dbline 44
+ 020A 25CF              xjmp L16
+ 020C           X3:
+ 020C                   .dbline -2
+ 020C           L15:
+ 020C                   .dbline 0 ; func end
+ 020C 2496              adiw R28,4
+ 020E 0895              ret
+ 0210                   .dbsym l volts 0 l
+ 0210                   .dbend
+                        .area lit(rom, con, rel)
+ 0000           L21:
+ 0000 00008044          .word 0x0,0x4480
+ 0004           L20:
+ 0004 0000803F          .word 0x0,0x3f80
+ 0008           L19:
+ 0008 00409C45          .word 0x4000,0x459c
+ 000C           ; }

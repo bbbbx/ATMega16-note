@@ -1,0 +1,693 @@
+                        .module _7SEG.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile 7SEG.c
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 0000                   .dbfunc e delay_ms _delay_ms fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              n -> R16,R17
+                        .even
+ 0000           _delay_ms::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 4
+ 0004           ; #include <iom16v.h>
+ 0004           ; 
+ 0004           ; void delay_ms(unsigned int n) //延时函数
+ 0004           ; {
+ 0004                   .dbline 6
+ 0004           ;   unsigned int i,j;
+ 0004           ;   for(i = 0 ; i < n ; i ++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 7
+ 000A           ;     for(j = 0 ; j <1141; j ++) ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 7
+ 0010           L7:
+ 0010                   .dbline 7
+ 0010 6F5F              subi R22,255  ; offset = 1
+ 0012 7F4F              sbci R23,255
+ 0014           L9:
+ 0014                   .dbline 7
+ 0014 6537              cpi R22,117
+ 0016 E4E0              ldi R30,4
+ 0018 7E07              cpc R23,R30
+ 001A D0F3              brlo L6
+ 001C           X0:
+ 001C           L3:
+ 001C                   .dbline 6
+ 001C 4F5F              subi R20,255  ; offset = 1
+ 001E 5F4F              sbci R21,255
+ 0020           L5:
+ 0020                   .dbline 6
+ 0020 4017              cp R20,R16
+ 0022 5107              cpc R21,R17
+ 0024 90F3              brlo L2
+ 0026           X1:
+ 0026                   .dbline -2
+ 0026           L1:
+ 0026                   .dbline 0 ; func end
+ 0026 0C940000          xjmp pop_xgsetF000
+ 002A                   .dbsym r i 20 i
+ 002A                   .dbsym r j 22 i
+ 002A                   .dbsym r n 16 i
+ 002A                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 0000           _table_ca::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 C0F9              .byte 192,249
+                        .area data(ram, con, rel)
+ 0002                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 A4B0              .byte 164,176
+                        .area data(ram, con, rel)
+ 0004                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 9992              .byte 153,146
+                        .area data(ram, con, rel)
+ 0006                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 82F8              .byte 130,248
+                        .area data(ram, con, rel)
+ 0008                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 8090              .byte 128,144
+                        .area data(ram, con, rel)
+ 000A                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 000A                   .blkb 1
+                        .area idata
+ 000A FF                .byte 255
+                        .area data(ram, con, rel)
+ 000B                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 000B                   .dbsym e table_ca _table_ca A[11:11]c
+                        .area text(rom, con, rel)
+ 002A                   .dbfile C:\Users\z\Desktop\作业\作业3\source\7SEG.c
+ 002A                   .dbfunc e main _main fV
+ 002A           ;          key_1 -> R22
+ 002A           ;          key_2 -> R20
+                        .even
+ 002A           _main::
+ 002A                   .dbline -1
+ 002A                   .dbline 13
+ 002A           ; }
+ 002A           ; 
+ 002A           ; const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xff};  //共阳数码管键码
+ 002A           ; 
+ 002A           ; void main()
+ 002A           ; {
+ 002A                   .dbline 14
+ 002A           ;   unsigned char key_2=10 , key_1=10;
+ 002A 4AE0              ldi R20,10
+ 002C                   .dbline 14
+ 002C 6AE0              ldi R22,10
+ 002E                   .dbline 15
+ 002E           ;   DDRA = 0x0f;
+ 002E 8FE0              ldi R24,15
+ 0030 8ABB              out 0x1a,R24
+ 0032                   .dbline 16
+ 0032           ;   DDRC = 0xff;
+ 0032 8FEF              ldi R24,255
+ 0034 84BB              out 0x14,R24
+ 0036                   .dbline 17
+ 0036           ;   DDRD = 0x03;
+ 0036 83E0              ldi R24,3
+ 0038 81BB              out 0x11,R24
+ 003A                   .dbline 19
+ 003A           ;   
+ 003A           ;   PORTA = 0xf0;
+ 003A 80EF              ldi R24,240
+ 003C 8BBB              out 0x1b,R24
+ 003E                   .dbline 20
+ 003E           ;   PORTC = 0x00;
+ 003E 2224              clr R2
+ 0040 25BA              out 0x15,R2
+ 0042                   .dbline 21
+ 0042           ;   PORTD = 0x00;
+ 0042 22BA              out 0x12,R2
+ 0044 28C1              xjmp L12
+ 0046           L11:
+ 0046                   .dbline 23
+ 0046           ;   while(1)
+ 0046           ;   {
+ 0046                   .dbline 24
+ 0046           ;     PORTA = 0xfe;     //扫描第一列
+ 0046 8EEF              ldi R24,254
+ 0048 8BBB              out 0x1b,R24
+ 004A                   .dbline 25
+ 004A           ;       switch(PINA&(0xf0))
+ 004A 89B3              in R24,0x19
+ 004C 9927              clr R25
+ 004E 807F              andi R24,240
+ 0050 9070              andi R25,0
+ 0052 5C01              movw R10,R24
+ 0054 803B              cpi R24,176
+ 0056 E0E0              ldi R30,0
+ 0058 9E07              cpc R25,R30
+ 005A 01F1              breq L19
+ 005C           X2:
+ 005C 80EB              ldi R24,176
+ 005E 90E0              ldi R25,0
+ 0060 8A15              cp R24,R10
+ 0062 9B05              cpc R25,R11
+ 0064 34F0              brlt L22
+ 0066           X3:
+ 0066           L21:
+ 0066 C501              movw R24,R10
+ 0068 8037              cpi R24,112
+ 006A E0E0              ldi R30,0
+ 006C 9E07              cpc R25,R30
+ 006E C9F0              breq L20
+ 0070           X4:
+ 0070 1AC0              xjmp L14
+ 0072           L22:
+ 0072 C501              movw R24,R10
+ 0074 803D              cpi R24,208
+ 0076 E0E0              ldi R30,0
+ 0078 9E07              cpc R25,R30
+ 007A 69F0              breq L18
+ 007C           X5:
+ 007C 803D              cpi R24,208
+ 007E E0E0              ldi R30,0
+ 0080 9E07              cpc R25,R30
+ 0082 8CF0              brlt L14
+ 0084           X6:
+ 0084           L23:
+ 0084 C501              movw R24,R10
+ 0086 803E              cpi R24,224
+ 0088 E0E0              ldi R30,0
+ 008A 9E07              cpc R25,R30
+ 008C 09F0              breq L17
+ 008E           X7:
+ 008E 0BC0              xjmp L14
+ 0090           L17:
+ 0090                   .dbline 27
+ 0090           ;       {
+ 0090           ;         case 0xe0: key_2=0 ; 
+ 0090 4427              clr R20
+ 0092                   .dbline 28
+ 0092           ;                                key_1=0 ;
+ 0092 6627              clr R22
+ 0094                   .dbline 29
+ 0094           ;                                break;
+ 0094 08C0              xjmp L15
+ 0096           L18:
+ 0096                   .dbline 30
+ 0096           ;         case 0xd0: key_2=4 ; 
+ 0096 44E0              ldi R20,4
+ 0098                   .dbline 31
+ 0098           ;                                key_1=0 ;
+ 0098 6627              clr R22
+ 009A                   .dbline 32
+ 009A           ;                                break;
+ 009A 05C0              xjmp L15
+ 009C           L19:
+ 009C                   .dbline 33
+ 009C           ;         case 0xb0: key_2=8 ; 
+ 009C 48E0              ldi R20,8
+ 009E                   .dbline 34
+ 009E           ;                                key_1=0 ;
+ 009E 6627              clr R22
+ 00A0                   .dbline 35
+ 00A0           ;                                break;
+ 00A0 02C0              xjmp L15
+ 00A2           L20:
+ 00A2                   .dbline 36
+ 00A2           ;         case 0x70: key_2=2 ; 
+ 00A2 42E0              ldi R20,2
+ 00A4                   .dbline 37
+ 00A4           ;                                key_1=1 ;
+ 00A4 61E0              ldi R22,1
+ 00A6                   .dbline 38
+ 00A6           ;                                break;
+ 00A6           L14:
+ 00A6           L15:
+ 00A6                   .dbline 41
+ 00A6           ;       }
+ 00A6           ;       
+ 00A6           ;       PORTD = 0x02;
+ 00A6 82E0              ldi R24,2
+ 00A8 82BB              out 0x12,R24
+ 00AA                   .dbline 42
+ 00AA           ;       PORTC = table_ca[key_2];
+ 00AA 80E0              ldi R24,<_table_ca
+ 00AC 90E0              ldi R25,>_table_ca
+ 00AE E42F              mov R30,R20
+ 00B0 FF27              clr R31
+ 00B2 E80F              add R30,R24
+ 00B4 F91F              adc R31,R25
+ 00B6 2080              ldd R2,z+0
+ 00B8 25BA              out 0x15,R2
+ 00BA                   .dbline 43
+ 00BA           ;       delay_ms(25);
+ 00BA 09E1              ldi R16,25
+ 00BC 10E0              ldi R17,0
+ 00BE A0DF              xcall _delay_ms
+ 00C0                   .dbline 45
+ 00C0           ;       
+ 00C0           ;       PORTD = 0x01;
+ 00C0 81E0              ldi R24,1
+ 00C2 82BB              out 0x12,R24
+ 00C4                   .dbline 46
+ 00C4           ;       PORTC = table_ca[key_1];
+ 00C4 80E0              ldi R24,<_table_ca
+ 00C6 90E0              ldi R25,>_table_ca
+ 00C8 E62F              mov R30,R22
+ 00CA FF27              clr R31
+ 00CC E80F              add R30,R24
+ 00CE F91F              adc R31,R25
+ 00D0 2080              ldd R2,z+0
+ 00D2 25BA              out 0x15,R2
+ 00D4                   .dbline 47
+ 00D4           ;       delay_ms(25);
+ 00D4 09E1              ldi R16,25
+ 00D6 10E0              ldi R17,0
+ 00D8 93DF              xcall _delay_ms
+ 00DA                   .dbline 49
+ 00DA           ;       
+ 00DA           ;       PORTA = 0xfd;   //扫描第二列
+ 00DA 8DEF              ldi R24,253
+ 00DC 8BBB              out 0x1b,R24
+ 00DE                   .dbline 50
+ 00DE           ;       switch(PINA&(0xf0))
+ 00DE 89B3              in R24,0x19
+ 00E0 9927              clr R25
+ 00E2 807F              andi R24,240
+ 00E4 9070              andi R25,0
+ 00E6 5C01              movw R10,R24
+ 00E8 803B              cpi R24,176
+ 00EA E0E0              ldi R30,0
+ 00EC 9E07              cpc R25,R30
+ 00EE 01F1              breq L29
+ 00F0           X8:
+ 00F0 80EB              ldi R24,176
+ 00F2 90E0              ldi R25,0
+ 00F4 8A15              cp R24,R10
+ 00F6 9B05              cpc R25,R11
+ 00F8 34F0              brlt L32
+ 00FA           X9:
+ 00FA           L31:
+ 00FA C501              movw R24,R10
+ 00FC 8037              cpi R24,112
+ 00FE E0E0              ldi R30,0
+ 0100 9E07              cpc R25,R30
+ 0102 C9F0              breq L30
+ 0104           X10:
+ 0104 1AC0              xjmp L24
+ 0106           L32:
+ 0106 C501              movw R24,R10
+ 0108 803D              cpi R24,208
+ 010A E0E0              ldi R30,0
+ 010C 9E07              cpc R25,R30
+ 010E 69F0              breq L28
+ 0110           X11:
+ 0110 803D              cpi R24,208
+ 0112 E0E0              ldi R30,0
+ 0114 9E07              cpc R25,R30
+ 0116 8CF0              brlt L24
+ 0118           X12:
+ 0118           L33:
+ 0118 C501              movw R24,R10
+ 011A 803E              cpi R24,224
+ 011C E0E0              ldi R30,0
+ 011E 9E07              cpc R25,R30
+ 0120 09F0              breq L27
+ 0122           X13:
+ 0122 0BC0              xjmp L24
+ 0124           L27:
+ 0124                   .dbline 52
+ 0124           ;       {
+ 0124           ;         case 0xe0: key_2=1 ; 
+ 0124 41E0              ldi R20,1
+ 0126                   .dbline 53
+ 0126           ;                                key_1=0 ;
+ 0126 6627              clr R22
+ 0128                   .dbline 54
+ 0128           ;                                break;
+ 0128 08C0              xjmp L25
+ 012A           L28:
+ 012A                   .dbline 55
+ 012A           ;         case 0xd0: key_2=5 ; 
+ 012A 45E0              ldi R20,5
+ 012C                   .dbline 56
+ 012C           ;                                key_1=0 ;
+ 012C 6627              clr R22
+ 012E                   .dbline 57
+ 012E           ;                                break;
+ 012E 05C0              xjmp L25
+ 0130           L29:
+ 0130                   .dbline 58
+ 0130           ;         case 0xb0: key_2=9 ; 
+ 0130 49E0              ldi R20,9
+ 0132                   .dbline 59
+ 0132           ;                                key_1=0 ;
+ 0132 6627              clr R22
+ 0134                   .dbline 60
+ 0134           ;                                break;
+ 0134 02C0              xjmp L25
+ 0136           L30:
+ 0136                   .dbline 61
+ 0136           ;         case 0x70: key_2=3 ; 
+ 0136 43E0              ldi R20,3
+ 0138                   .dbline 62
+ 0138           ;                                key_1=1 ;
+ 0138 61E0              ldi R22,1
+ 013A                   .dbline 63
+ 013A           ;                                break;
+ 013A           L24:
+ 013A           L25:
+ 013A                   .dbline 66
+ 013A           ;       }
+ 013A           ;       
+ 013A           ;       PORTD = 0x02;
+ 013A 82E0              ldi R24,2
+ 013C 82BB              out 0x12,R24
+ 013E                   .dbline 67
+ 013E           ;       PORTC = table_ca[key_2];
+ 013E 80E0              ldi R24,<_table_ca
+ 0140 90E0              ldi R25,>_table_ca
+ 0142 E42F              mov R30,R20
+ 0144 FF27              clr R31
+ 0146 E80F              add R30,R24
+ 0148 F91F              adc R31,R25
+ 014A 2080              ldd R2,z+0
+ 014C 25BA              out 0x15,R2
+ 014E                   .dbline 68
+ 014E           ;       delay_ms(25);
+ 014E 09E1              ldi R16,25
+ 0150 10E0              ldi R17,0
+ 0152 56DF              xcall _delay_ms
+ 0154                   .dbline 70
+ 0154           ;       
+ 0154           ;       PORTD = 0x01;
+ 0154 81E0              ldi R24,1
+ 0156 82BB              out 0x12,R24
+ 0158                   .dbline 71
+ 0158           ;       PORTC = table_ca[key_1];
+ 0158 80E0              ldi R24,<_table_ca
+ 015A 90E0              ldi R25,>_table_ca
+ 015C E62F              mov R30,R22
+ 015E FF27              clr R31
+ 0160 E80F              add R30,R24
+ 0162 F91F              adc R31,R25
+ 0164 2080              ldd R2,z+0
+ 0166 25BA              out 0x15,R2
+ 0168                   .dbline 72
+ 0168           ;       delay_ms(25);
+ 0168 09E1              ldi R16,25
+ 016A 10E0              ldi R17,0
+ 016C 49DF              xcall _delay_ms
+ 016E                   .dbline 74
+ 016E           ;       
+ 016E           ;       PORTA = 0xfb;   //扫描第三列
+ 016E 8BEF              ldi R24,251
+ 0170 8BBB              out 0x1b,R24
+ 0172                   .dbline 75
+ 0172           ;       switch(PINA&(0xf0))
+ 0172 89B3              in R24,0x19
+ 0174 9927              clr R25
+ 0176 807F              andi R24,240
+ 0178 9070              andi R25,0
+ 017A 5C01              movw R10,R24
+ 017C 803B              cpi R24,176
+ 017E E0E0              ldi R30,0
+ 0180 9E07              cpc R25,R30
+ 0182 01F1              breq L39
+ 0184           X14:
+ 0184 80EB              ldi R24,176
+ 0186 90E0              ldi R25,0
+ 0188 8A15              cp R24,R10
+ 018A 9B05              cpc R25,R11
+ 018C 34F0              brlt L42
+ 018E           X15:
+ 018E           L41:
+ 018E C501              movw R24,R10
+ 0190 8037              cpi R24,112
+ 0192 E0E0              ldi R30,0
+ 0194 9E07              cpc R25,R30
+ 0196 C9F0              breq L40
+ 0198           X16:
+ 0198 1AC0              xjmp L34
+ 019A           L42:
+ 019A C501              movw R24,R10
+ 019C 803D              cpi R24,208
+ 019E E0E0              ldi R30,0
+ 01A0 9E07              cpc R25,R30
+ 01A2 69F0              breq L38
+ 01A4           X17:
+ 01A4 803D              cpi R24,208
+ 01A6 E0E0              ldi R30,0
+ 01A8 9E07              cpc R25,R30
+ 01AA 8CF0              brlt L34
+ 01AC           X18:
+ 01AC           L43:
+ 01AC C501              movw R24,R10
+ 01AE 803E              cpi R24,224
+ 01B0 E0E0              ldi R30,0
+ 01B2 9E07              cpc R25,R30
+ 01B4 09F0              breq L37
+ 01B6           X19:
+ 01B6 0BC0              xjmp L34
+ 01B8           L37:
+ 01B8                   .dbline 77
+ 01B8           ;       {
+ 01B8           ;         case 0xe0: key_2=2 ; 
+ 01B8 42E0              ldi R20,2
+ 01BA                   .dbline 78
+ 01BA           ;                                key_1=0 ;
+ 01BA 6627              clr R22
+ 01BC                   .dbline 79
+ 01BC           ;                                break;
+ 01BC 08C0              xjmp L35
+ 01BE           L38:
+ 01BE                   .dbline 80
+ 01BE           ;         case 0xd0: key_2=6 ; 
+ 01BE 46E0              ldi R20,6
+ 01C0                   .dbline 81
+ 01C0           ;                                key_1=0 ;
+ 01C0 6627              clr R22
+ 01C2                   .dbline 82
+ 01C2           ;                                break;
+ 01C2 05C0              xjmp L35
+ 01C4           L39:
+ 01C4                   .dbline 83
+ 01C4           ;         case 0xb0: key_2=0 ; 
+ 01C4 4427              clr R20
+ 01C6                   .dbline 84
+ 01C6           ;                                key_1=1 ;
+ 01C6 61E0              ldi R22,1
+ 01C8                   .dbline 85
+ 01C8           ;                                break;
+ 01C8 02C0              xjmp L35
+ 01CA           L40:
+ 01CA                   .dbline 86
+ 01CA           ;         case 0x70: key_2=4 ; 
+ 01CA 44E0              ldi R20,4
+ 01CC                   .dbline 87
+ 01CC           ;                                key_1=1 ;
+ 01CC 61E0              ldi R22,1
+ 01CE                   .dbline 88
+ 01CE           ;                                break;
+ 01CE           L34:
+ 01CE           L35:
+ 01CE                   .dbline 91
+ 01CE           ;       }
+ 01CE           ;       
+ 01CE           ;       PORTD = 0x02;
+ 01CE 82E0              ldi R24,2
+ 01D0 82BB              out 0x12,R24
+ 01D2                   .dbline 92
+ 01D2           ;       PORTC = table_ca[key_2];
+ 01D2 80E0              ldi R24,<_table_ca
+ 01D4 90E0              ldi R25,>_table_ca
+ 01D6 E42F              mov R30,R20
+ 01D8 FF27              clr R31
+ 01DA E80F              add R30,R24
+ 01DC F91F              adc R31,R25
+ 01DE 2080              ldd R2,z+0
+ 01E0 25BA              out 0x15,R2
+ 01E2                   .dbline 93
+ 01E2           ;       delay_ms(25);
+ 01E2 09E1              ldi R16,25
+ 01E4 10E0              ldi R17,0
+ 01E6 0CDF              xcall _delay_ms
+ 01E8                   .dbline 95
+ 01E8           ;       
+ 01E8           ;       PORTD = 0x01;
+ 01E8 81E0              ldi R24,1
+ 01EA 82BB              out 0x12,R24
+ 01EC                   .dbline 96
+ 01EC           ;       PORTC = table_ca[key_1];
+ 01EC 80E0              ldi R24,<_table_ca
+ 01EE 90E0              ldi R25,>_table_ca
+ 01F0 E62F              mov R30,R22
+ 01F2 FF27              clr R31
+ 01F4 E80F              add R30,R24
+ 01F6 F91F              adc R31,R25
+ 01F8 2080              ldd R2,z+0
+ 01FA 25BA              out 0x15,R2
+ 01FC                   .dbline 97
+ 01FC           ;       delay_ms(25);
+ 01FC 09E1              ldi R16,25
+ 01FE 10E0              ldi R17,0
+ 0200 FFDE              xcall _delay_ms
+ 0202                   .dbline 99
+ 0202           ;       
+ 0202           ;       PORTA = 0xf7;   //扫描第四列
+ 0202 87EF              ldi R24,247
+ 0204 8BBB              out 0x1b,R24
+ 0206                   .dbline 100
+ 0206           ;       switch(PINA&(0xf0))
+ 0206 89B3              in R24,0x19
+ 0208 9927              clr R25
+ 020A 807F              andi R24,240
+ 020C 9070              andi R25,0
+ 020E 5C01              movw R10,R24
+ 0210 803B              cpi R24,176
+ 0212 E0E0              ldi R30,0
+ 0214 9E07              cpc R25,R30
+ 0216 01F1              breq L49
+ 0218           X20:
+ 0218 80EB              ldi R24,176
+ 021A 90E0              ldi R25,0
+ 021C 8A15              cp R24,R10
+ 021E 9B05              cpc R25,R11
+ 0220 34F0              brlt L52
+ 0222           X21:
+ 0222           L51:
+ 0222 C501              movw R24,R10
+ 0224 8037              cpi R24,112
+ 0226 E0E0              ldi R30,0
+ 0228 9E07              cpc R25,R30
+ 022A C9F0              breq L50
+ 022C           X22:
+ 022C 1AC0              xjmp L44
+ 022E           L52:
+ 022E C501              movw R24,R10
+ 0230 803D              cpi R24,208
+ 0232 E0E0              ldi R30,0
+ 0234 9E07              cpc R25,R30
+ 0236 69F0              breq L48
+ 0238           X23:
+ 0238 803D              cpi R24,208
+ 023A E0E0              ldi R30,0
+ 023C 9E07              cpc R25,R30
+ 023E 8CF0              brlt L44
+ 0240           X24:
+ 0240           L53:
+ 0240 C501              movw R24,R10
+ 0242 803E              cpi R24,224
+ 0244 E0E0              ldi R30,0
+ 0246 9E07              cpc R25,R30
+ 0248 09F0              breq L47
+ 024A           X25:
+ 024A 0BC0              xjmp L44
+ 024C           L47:
+ 024C                   .dbline 102
+ 024C           ;       {
+ 024C           ;         case 0xe0: key_2=3 ; 
+ 024C 43E0              ldi R20,3
+ 024E                   .dbline 103
+ 024E           ;                                key_1=0 ;
+ 024E 6627              clr R22
+ 0250                   .dbline 104
+ 0250           ;                                break;
+ 0250 08C0              xjmp L45
+ 0252           L48:
+ 0252                   .dbline 105
+ 0252           ;         case 0xd0: key_2=7 ; 
+ 0252 47E0              ldi R20,7
+ 0254                   .dbline 106
+ 0254           ;                                key_1=0 ;
+ 0254 6627              clr R22
+ 0256                   .dbline 107
+ 0256           ;                                break;
+ 0256 05C0              xjmp L45
+ 0258           L49:
+ 0258                   .dbline 108
+ 0258           ;         case 0xb0: key_2=1 ; 
+ 0258 41E0              ldi R20,1
+ 025A                   .dbline 109
+ 025A           ;                                key_1=1 ;
+ 025A 61E0              ldi R22,1
+ 025C                   .dbline 110
+ 025C           ;                                break;
+ 025C 02C0              xjmp L45
+ 025E           L50:
+ 025E                   .dbline 111
+ 025E           ;         case 0x70: key_2=5 ; 
+ 025E 45E0              ldi R20,5
+ 0260                   .dbline 112
+ 0260           ;                                key_1=1 ;
+ 0260 61E0              ldi R22,1
+ 0262                   .dbline 113
+ 0262           ;                                break;
+ 0262           L44:
+ 0262           L45:
+ 0262                   .dbline 116
+ 0262           ;       }
+ 0262           ;       
+ 0262           ;       PORTD = 0x02;
+ 0262 82E0              ldi R24,2
+ 0264 82BB              out 0x12,R24
+ 0266                   .dbline 117
+ 0266           ;       PORTC = table_ca[key_2];
+ 0266 80E0              ldi R24,<_table_ca
+ 0268 90E0              ldi R25,>_table_ca
+ 026A E42F              mov R30,R20
+ 026C FF27              clr R31
+ 026E E80F              add R30,R24
+ 0270 F91F              adc R31,R25
+ 0272 2080              ldd R2,z+0
+ 0274 25BA              out 0x15,R2
+ 0276                   .dbline 118
+ 0276           ;       delay_ms(25);
+ 0276 09E1              ldi R16,25
+ 0278 10E0              ldi R17,0
+ 027A C2DE              xcall _delay_ms
+ 027C                   .dbline 120
+ 027C           ;       
+ 027C           ;       PORTD = 0x01;
+ 027C 81E0              ldi R24,1
+ 027E 82BB              out 0x12,R24
+ 0280                   .dbline 121
+ 0280           ;       PORTC = table_ca[key_1];
+ 0280 80E0              ldi R24,<_table_ca
+ 0282 90E0              ldi R25,>_table_ca
+ 0284 E62F              mov R30,R22
+ 0286 FF27              clr R31
+ 0288 E80F              add R30,R24
+ 028A F91F              adc R31,R25
+ 028C 2080              ldd R2,z+0
+ 028E 25BA              out 0x15,R2
+ 0290                   .dbline 122
+ 0290           ;       delay_ms(25);
+ 0290 09E1              ldi R16,25
+ 0292 10E0              ldi R17,0
+ 0294 B5DE              xcall _delay_ms
+ 0296                   .dbline 124
+ 0296           ;       
+ 0296           ;   }
+ 0296           L12:
+ 0296                   .dbline 22
+ 0296 D7CE              xjmp L11
+ 0298           X26:
+ 0298                   .dbline -2
+ 0298           L10:
+ 0298                   .dbline 0 ; func end
+ 0298 0895              ret
+ 029A                   .dbsym r key_1 22 c
+ 029A                   .dbsym r key_2 20 c
+ 029A                   .dbend
+ 029A           ; }

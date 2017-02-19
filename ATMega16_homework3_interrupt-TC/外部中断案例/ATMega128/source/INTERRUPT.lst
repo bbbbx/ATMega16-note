@@ -1,0 +1,129 @@
+Interrupt Vectors
+    00000 940C 0046 JMP	__start|__text_start
+    00002 940C 0069 JMP	_seriver0
+    00004 940C 0083 JMP	_seriver1
+
+Program Code (text area)
+__start|__text_start:
+    00046 EFCF      LDI	R28,0xFF
+    00047 E1D0      LDI	R29,0x10
+    00048 BFCD      OUT	0x3D,R28
+    00049 BFDE      OUT	0x3E,R29
+    0004A 51CE      SUBI	R28,0x1E
+    0004B 40D0      SBCI	R29,0
+    0004C EA0A      LDI	R16,0xAA
+    0004D 8308      ST	Y,R16
+    0004E 2400      CLR	R0
+    0004F E0E0      LDI	R30,0
+    00050 E0F1      LDI	R31,1
+    00051 E011      LDI	R17,1
+    00052 30E2      CPI	R30,2
+    00053 07F1      CPC	R31,R17
+    00054 F011      BEQ	0x0057
+    00055 9201      ST	Z+,R0
+    00056 CFFB      RJMP	0x0052
+    00057 8300      ST	Z,R16
+    00058 E8EC      LDI	R30,0x8C
+    00059 E0F0      LDI	R31,0
+    0005A E0A0      LDI	R26,0
+    0005B E0B1      LDI	R27,1
+    0005C E010      LDI	R17,0
+    0005D E000      LDI	R16,0
+    0005E BF0B      OUT	0x3B,R16
+    0005F 38EC      CPI	R30,0x8C
+    00060 07F1      CPC	R31,R17
+    00061 F021      BEQ	0x0066
+    00062 95C8      LPM
+    00063 9631      ADIW	R30,1
+    00064 920D      ST	X+,R0
+    00065 CFF9      RJMP	0x005F
+    00066 940E 009D CALL	_main
+_exit:
+    00068 CFFF      RJMP	_exit
+_seriver0:
+    00069 922A      ST	-Y,R2
+    0006A 923A      ST	-Y,R3
+    0006B 938A      ST	-Y,R24
+    0006C 939A      ST	-Y,R25
+    0006D B62F      IN	R2,0x3F
+    0006E 922A      ST	-Y,R2
+FILE: C:\Users\z\Desktop\作业\外部中断案例\source\interrupt.c
+(0001) #include <iom128v.h>
+(0002) 
+(0003) int COUNT;       //全局变量，计数按键数
+(0004) 
+(0005) #pragma interrupt_handler seriver0:2
+(0006) void seriver0()  //INT0中断服务程序
+(0007) {
+(0008)   COUNT++;
+    0006F 9180 0100 LDS	R24,COUNT
+    00071 9190 0101 LDS	R25,COUNT+1
+    00073 9601      ADIW	R24,1
+    00074 9390 0101 STS	COUNT+1,R25
+    00076 9380 0100 STS	COUNT,R24
+(0009)   PORTA = ~COUNT;
+    00078 011C      MOVW	R2,R24
+    00079 9420      COM	R2
+    0007A 9430      COM	R3
+    0007B BA2B      OUT	0x1B,R2
+    0007C 9029      LD	R2,Y+
+    0007D BE2F      OUT	0x3F,R2
+    0007E 9199      LD	R25,Y+
+    0007F 9189      LD	R24,Y+
+    00080 9039      LD	R3,Y+
+    00081 9029      LD	R2,Y+
+    00082 9518      RETI
+_seriver1:
+    00083 922A      ST	-Y,R2
+    00084 923A      ST	-Y,R3
+    00085 938A      ST	-Y,R24
+    00086 939A      ST	-Y,R25
+    00087 B62F      IN	R2,0x3F
+    00088 922A      ST	-Y,R2
+(0010) }
+(0011) 
+(0012) #pragma interrupt_handler seriver1:3
+(0013) void seriver1()  //INT1中断服务程序
+(0014) {
+(0015)   COUNT--;
+    00089 9180 0100 LDS	R24,COUNT
+    0008B 9190 0101 LDS	R25,COUNT+1
+    0008D 9701      SBIW	R24,1
+    0008E 9390 0101 STS	COUNT+1,R25
+    00090 9380 0100 STS	COUNT,R24
+(0016)   PORTA = ~COUNT;
+    00092 011C      MOVW	R2,R24
+    00093 9420      COM	R2
+    00094 9430      COM	R3
+    00095 BA2B      OUT	0x1B,R2
+    00096 9029      LD	R2,Y+
+    00097 BE2F      OUT	0x3F,R2
+    00098 9199      LD	R25,Y+
+    00099 9189      LD	R24,Y+
+    0009A 9039      LD	R3,Y+
+    0009B 9029      LD	R2,Y+
+    0009C 9518      RETI
+(0017) }
+(0018) 
+(0019) void main()
+(0020) {
+(0021)   DDRA = 0xff;	 //PA口设置为输出
+_main:
+    0009D EF8F      LDI	R24,0xFF
+    0009E BB8A      OUT	0x1A,R24
+(0022)   PORTA = 0xff;  //PA口初始化为高电平，灯全灭
+    0009F BB8B      OUT	0x1B,R24
+(0023) 
+(0024)   EICRA = 0x0a;  //INT0，INT1设置为下降沿
+    000A0 E08A      LDI	R24,0xA
+    000A1 9380 006A STS	0x6A,R24
+(0025)   EIMSK |= 0x03; //INT0，INT1中断使能
+    000A3 B789      IN	R24,0x39
+    000A4 6083      ORI	R24,3
+    000A5 BF89      OUT	0x39,R24
+(0026)   SREG |= 0x80;  //开放全局中断
+    000A6 9478      BSET	7
+(0027)   while(1) {  }  //死循环
+FILE: <library>
+    000A7 CFFF      RJMP	0x00A7
+    000A8 9508      RET

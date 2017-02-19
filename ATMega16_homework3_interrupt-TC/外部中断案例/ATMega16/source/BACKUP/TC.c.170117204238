@@ -1,0 +1,44 @@
+#include <iom128v.h>
+
+
+
+
+void delay_ms(unsigned int n)
+{
+  unsigned int i , j;
+  for(i = 0 ; i < n ; n++)
+    for(j = 0 ; j < 1141 ; j ++) ;
+}
+
+#pragma interrupt_handler seriver0:2
+void seriver0()
+{
+  int count;
+  delay_ms(20);
+  
+    count++;
+	PORTA = 0x01;
+  
+}
+
+#pragma interrupt_handler seriver1:3
+void seriver1()
+{
+  int count;
+  
+    count--;
+	PORTA = ~count;
+  
+}
+
+void main()
+{
+
+  DDRA = 0xff;
+  PORTA = 0xff;
+
+  EICRA = 0x0a;
+  EIMSK |= 0x03;
+  SREG |= 0x80;
+  while(1) { }
+}

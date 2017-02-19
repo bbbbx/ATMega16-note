@@ -1,0 +1,199 @@
+XL
+H 3 areas 5 global symbols
+M _7SEG.c
+S push_xgsetF000 Ref0000
+S pop_xgsetF000 Ref0000
+A text size 1AA flags 0
+dbfile 7SEG.c
+dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+dbfunc e delay_ms 0 fV
+dbsym r i 14 i
+dbsym r j 16 i
+dbsym r x 10 i
+dbline FFFFFFFF 4
+dbline 4 4
+dbline 6 4
+dbline 7 A
+dbline 7 10
+dbline 7 10
+dbline 7 14
+dbline 6 1C
+dbline 6 20
+dbline FFFFFFFE 26
+dbline 0 26
+dbfunc e main 2A fV
+dbsym r daoshu_gewei A c
+dbsym l gewei 1 c
+dbsym r count 14 I
+dbsym r flag E I
+dbsym r daoshu_shiwei C c
+dbsym l shiwei 0 c
+dbline FFFFFFFF 2C
+dbline D 2C
+dbline E 2C
+dbline E 30
+dbline E 32
+dbline E 36
+dbline F 38
+dbline F 3C
+dbline 11 40
+dbline 12 44
+dbline 13 48
+dbline 15 4C
+dbline 16 50
+dbline 17 52
+dbline 1A 56
+dbline 1B 56
+dbline 1C 5A
+dbline 1D 5A
+dbline 1E 60
+dbline 20 60
+dbline 21 64
+dbline 22 64
+dbline 23 6A
+dbline 25 6A
+dbline 26 6E
+dbline 27 6E
+dbline 28 74
+dbline 2A 74
+dbline 2B 7E
+dbline 2C 7E
+dbline 2D 82
+dbline 2E 92
+dbline 30 98
+dbline 31 9C
+dbline 32 AC
+dbline 34 B2
+dbline 35 B6
+dbline 36 BE
+dbline 37 BE
+dbline 38 C4
+dbline 39 C8
+dbline 3A C8
+dbline 3C C8
+dbline 3D D2
+dbline 3E D2
+dbline 3F D6
+dbline 40 E6
+dbline 42 EC
+dbline 43 F0
+dbline 44 100
+dbline 46 106
+dbline 47 10A
+dbline 48 112
+dbline 49 112
+dbline 4A 114
+dbline 4B 118
+dbline 4C 118
+dbline 4E 118
+dbline 4F 122
+dbline 50 122
+dbline 51 126
+dbline 52 12C
+dbline 53 130
+dbline 55 136
+dbline 56 13A
+dbline 57 140
+dbline 58 144
+dbline 5A 14A
+dbline 5C 156
+dbline 5D 15A
+dbline 5E 162
+dbline 5F 162
+dbline 60 166
+dbline 61 166
+dbline 63 166
+dbline 64 16C
+dbline 65 16C
+dbline 66 172
+dbline 67 176
+dbline 68 176
+dbline 6A 188
+dbline 6B 18E
+dbline 6C 18E
+dbline 6D 190
+dbline 6E 192
+dbline 6F 192
+dbline 70 1A4
+dbline 19 1A4
+dbline FFFFFFFE 1A6
+dbline 0 1A6
+S _main Def002A
+S _delay_ms Def0000
+A data size A flags 20
+dbfile C:\Users\z\Desktop\作业\作业2\source\7SEG.c
+dbsym e table_ca 0 A[10:10]c
+S _table_ca Def0000
+A idata size A flags 0
+T 00 00 0E 94 00 00 44 27 55 27 0B C0 66 27 77 27
+R 00 00 00 00 12 04 00 00
+T 0E 00 02 C0 6F 5F 7F 4F 65 37 E4 E0 7E 07 D0 F3
+R 00 00 00 00
+T 1C 00 4F 5F 5F 4F 40 17 51 07 90 F3 0C 94 00 00
+R 00 00 00 00 12 0E 01 00
+T 00 00 C0 F9
+R 00 00 02 00
+T 02 00 A4 B0
+R 00 00 02 00
+T 04 00 99 92
+R 00 00 02 00
+T 06 00 82 F8
+R 00 00 02 00
+T 08 00 80 90
+R 00 00 02 00
+T 2A 00 22 97 00 24 09 82 08 82 89 E0 A8 2E C8 2E
+R 00 00 00 00
+T 38 00 41 E0 50 E0 EE 24 FF 24 22 24 2A BA 8F EF
+R 00 00 00 00
+T 46 00 84 BB 83 E0 81 BB 8F EF 8B BB 25 BA 22 BA
+R 00 00 00 00
+T 54 00 A7 C0 C8 99 03 C0 81 E0 90 E0 7C 01 C9 99
+R 00 00 00 00
+T 62 00 03 C0 82 E0 90 E0 7C 01 CA 99 03 C0 83 E0
+R 00 00 00 00
+T 70 00 90 E0 7C 01 C7 01 81 30 E0 E0 9E 07 29 F5
+R 00 00 00 00
+T 7E 00 82 E0 82 BB 80 E0 90 E0 E9 81 FF 27 E8 0F
+R 00 00 00 00 20 06 01 00 00 00 40 08 01 00 00 00
+T 8C 00 F9 1F 20 80 25 BA 04 E1 10 E0 B4 DF 81 E0
+R 00 00 00 00
+T 9A 00 82 BB 80 E0 90 E0 E8 81 FF 27 E8 0F F9 1F
+R 00 00 00 00 20 04 01 00 00 00 40 06 01 00 00 00
+T A8 00 20 80 25 BA 04 E1 10 E0 A7 DF 4F 5F 5F 4F
+R 00 00 00 00
+T B6 00 49 31 E0 E0 5E 07 29 F4 09 80 03 94 09 82
+R 00 00 00 00
+T C4 00 44 27 55 27 C7 01 82 30 E0 E0 9E 07 19 F5
+R 00 00 00 00
+T D2 00 82 E0 82 BB 80 E0 90 E0 EA 2D FF 27 E8 0F
+R 00 00 00 00 20 06 01 00 00 00 40 08 01 00 00 00
+T E0 00 F9 1F 20 80 25 BA 04 E1 10 E0 8A DF 81 E0
+R 00 00 00 00
+T EE 00 82 BB 80 E0 90 E0 EC 2D FF 27 E8 0F F9 1F
+R 00 00 00 00 20 04 01 00 00 00 40 06 01 00 00 00
+T FC 00 20 80 25 BA 04 E1 10 E0 7D DF 4F 5F 5F 4F
+R 00 00 00 00
+T 0A 01 49 31 E0 E0 5E 07 19 F4 AA 94 44 27 55 27
+R 00 00 00 00
+T 18 01 C7 01 83 30 E0 E0 9E 07 11 F5 82 E0 82 BB
+R 00 00 00 00
+T 26 01 20 90 00 00 25 BA 00 24 09 82 04 E1 10 E0
+R 00 00 00 00 00 04 01 00
+T 34 01 65 DF 81 E0 82 BB 20 90 00 00 25 BA 00 24
+R 00 00 00 00 00 0A 01 00
+T 42 01 08 82 04 E1 10 E0 5B DF 00 24 09 82 08 82
+R 00 00 00 00
+T 50 01 89 E0 A8 2E C8 2E 4F 5F 5F 4F 49 31 E0 E0
+R 00 00 00 00
+T 5E 01 5E 07 11 F4 44 27 55 27 89 81 8A 30 29 F4
+R 00 00 00 00
+T 6C 01 08 80 03 94 08 82 00 24 09 82 88 81 8A 30
+R 00 00 00 00
+T 7A 01 18 F0 66 27 77 27 02 C0 68 81 77 27 68 83
+R 00 00 00 00
+T 88 01 8A 2D 8F 3F 11 F4 CA 94 AA 24 8C 2D 80 30
+R 00 00 00 00
+T 96 01 18 F4 69 E0 70 E0 02 C0 6C 2D 77 27 C6 2E
+R 00 00 00 00
+T A4 01 58 CF 22 96 08 95
+R 00 00 00 00

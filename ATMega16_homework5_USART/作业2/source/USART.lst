@@ -1,0 +1,160 @@
+Interrupt Vectors
+    00000 940C 002A JMP	__text_start|__start
+    0001A 940C 0058 JMP	_usart_sendEnd
+
+Program Code (text area)
+__text_start|__start:
+    0002A E5CF      LDI	R28,0x5F
+    0002B E0D4      LDI	R29,4
+    0002C BFCD      OUT	0x3D,R28
+    0002D BFDE      OUT	0x3E,R29
+    0002E 51CE      SUBI	R28,0x1E
+    0002F 40D0      SBCI	R29,0
+    00030 EA0A      LDI	R16,0xAA
+    00031 8308      ST	Y,R16
+    00032 2400      CLR	R0
+    00033 E6E0      LDI	R30,0x60
+    00034 E0F0      LDI	R31,0
+    00035 E010      LDI	R17,0
+    00036 36E0      CPI	R30,0x60
+    00037 07F1      CPC	R31,R17
+    00038 F011      BEQ	0x003B
+    00039 9201      ST	Z+,R0
+    0003A CFFB      RJMP	0x0036
+    0003B 8300      ST	Z,R16
+    0003C E5E4      LDI	R30,0x54
+    0003D E0F0      LDI	R31,0
+    0003E E6A0      LDI	R26,0x60
+    0003F E0B0      LDI	R27,0
+    00040 E010      LDI	R17,0
+    00041 E000      LDI	R16,0
+    00042 BF0B      OUT	0x3B,R16
+    00043 35E4      CPI	R30,0x54
+    00044 07F1      CPC	R31,R17
+    00045 F021      BEQ	0x004A
+    00046 95C8      LPM
+    00047 9631      ADIW	R30,1
+    00048 920D      ST	X+,R0
+    00049 CFF9      RJMP	0x0043
+    0004A 940E 0093 CALL	_main
+_exit:
+    0004C CFFF      RJMP	_exit
+FILE: C:\Users\z\Desktop\作业\作业2\source\usart.c
+(0001) #include<iom16v.h>
+(0002) 
+(0003) void usart_init()     //配置usart寄存器
+(0004) {
+(0005)    DDRD&=~(1<<PD0);
+_usart_init:
+    0004D 9888      CBI	0x11,0
+(0006)    PORTD|=1<<PD0; 
+    0004E 9A90      SBI	0x12,0
+(0007)    DDRD|=1<<PD1;
+    0004F 9A89      SBI	0x11,1
+(0008)    PORTD|=1<<PD1;
+    00050 9A91      SBI	0x12,1
+(0009)    UCSRC = (1<<URSEL) | (1<<UCSZ1) | (1<<UCSZ0);        //8位字符长度
+    00051 E886      LDI	R24,0x86
+    00052 BD80      OUT	0x20,R24
+(0010)    UBRRL = 51;                                          //9600bps(8M)
+    00053 E383      LDI	R24,0x33
+    00054 B989      OUT	0x09,R24
+(0011)    UCSRB = (1<<TXCIE) | (1<<RXEN) | (1<<TXEN);          //发送结束中断使能，接收使能，发送使能                                     
+    00055 E588      LDI	R24,0x58
+    00056 B98A      OUT	0x0A,R24
+    00057 9508      RET
+_usart_sendEnd:
+  temp                 --> R10
+    00058 920A      ST	-Y,R0
+    00059 921A      ST	-Y,R1
+    0005A 922A      ST	-Y,R2
+    0005B 923A      ST	-Y,R3
+    0005C 924A      ST	-Y,R4
+    0005D 925A      ST	-Y,R5
+    0005E 926A      ST	-Y,R6
+    0005F 927A      ST	-Y,R7
+    00060 928A      ST	-Y,R8
+    00061 929A      ST	-Y,R9
+    00062 930A      ST	-Y,R16
+    00063 931A      ST	-Y,R17
+    00064 932A      ST	-Y,R18
+    00065 933A      ST	-Y,R19
+    00066 938A      ST	-Y,R24
+    00067 939A      ST	-Y,R25
+    00068 93AA      ST	-Y,R26
+    00069 93BA      ST	-Y,R27
+    0006A 93EA      ST	-Y,R30
+    0006B 93FA      ST	-Y,R31
+    0006C B60F      IN	R0,0x3F
+    0006D 920A      ST	-Y,R0
+    0006E 92AA      ST	-Y,R10
+(0012) } 
+(0013) 
+(0014) #pragma interrupt_handler usart_sendEnd:14
+(0015) void usart_sendEnd()                    //发送结束中断函数
+(0016) {
+(0017)   unsigned char temp;
+(0018)   while ( !(UCSRA & (1<<RXC)) );     // 等待接收缓存器空(等待接收完成再读取数据)
+    0006F 9B5F      SBIS	0x0B,7
+    00070 CFFE      RJMP	0x006F
+(0019)   temp = UDR;
+    00071 B0AC      IN	R10,0x0C
+(0020)   usart_send(temp);			  		 //发送数据
+    00072 2D0A      MOV	R16,R10
+    00073 2711      CLR	R17
+    00074 D018      RCALL	_usart_send
+    00075 90A9      LD	R10,Y+
+    00076 9009      LD	R0,Y+
+    00077 BE0F      OUT	0x3F,R0
+    00078 91F9      LD	R31,Y+
+    00079 91E9      LD	R30,Y+
+    0007A 91B9      LD	R27,Y+
+    0007B 91A9      LD	R26,Y+
+    0007C 9199      LD	R25,Y+
+    0007D 9189      LD	R24,Y+
+    0007E 9139      LD	R19,Y+
+    0007F 9129      LD	R18,Y+
+    00080 9119      LD	R17,Y+
+    00081 9109      LD	R16,Y+
+    00082 9099      LD	R9,Y+
+    00083 9089      LD	R8,Y+
+    00084 9079      LD	R7,Y+
+    00085 9069      LD	R6,Y+
+    00086 9059      LD	R5,Y+
+    00087 9049      LD	R4,Y+
+    00088 9039      LD	R3,Y+
+    00089 9029      LD	R2,Y+
+    0008A 9019      LD	R1,Y+
+    0008B 9009      LD	R0,Y+
+    0008C 9518      RETI
+(0021) }
+(0022) 
+(0023) void usart_send(unsigned char data)             //TXD发送数据
+(0024) {
+(0025)   while(!(UCSRA & (1<<UDRE)));   //等待发送缓存器空（等待前次发送完，再进行本次数据发送）
+_usart_send:
+  data                 --> R16
+    0008D 9B5D      SBIS	0x0B,5
+    0008E CFFE      RJMP	_usart_send
+(0026)   UDR = data;
+    0008F B90C      OUT	0x0C,R16
+(0027)   while(!(UCSRA & (1<<TXC)));    //等待发送结束
+    00090 9B5E      SBIS	0x0B,6
+    00091 CFFE      RJMP	0x0090
+    00092 9508      RET
+(0028) }
+(0029) 
+(0030) void main()
+(0031) {
+(0032)   SREG |= 1<<7;  //全局中断使能
+_main:
+    00093 9478      BSET	7
+(0033)   usart_init();
+    00094 DFB8      RCALL	_usart_init
+(0034)   usart_sendEnd();
+    00095 DFC2      RCALL	_usart_sendEnd
+(0035)   
+(0036)   while(1);
+FILE: <library>
+    00096 CFFF      RJMP	0x0096
+    00097 9508      RET

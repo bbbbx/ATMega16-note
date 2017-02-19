@@ -1,0 +1,22 @@
+#include <iom16v.h>
+
+#pragma interrupt_handler TC1:9
+void TC1()
+{
+  PORTA ^= 0x01;
+  TCNT1H = 0x85;
+  TCNT1L = 0xee;
+}
+
+void main()
+{
+  DDRA = 0x01;
+  PORTA = 0x01;
+  
+  TCCR1B = 0x04;
+  TCNT1H = 0x85;
+  TCNT1L = 0xee;
+  TIMSK = (1<<2);
+  SREG |= 0x80;
+  while(1) { }
+}

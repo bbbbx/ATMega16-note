@@ -1,0 +1,849 @@
+                        .module PWM.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile PWM.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile PWM.c
+ 0000           _MUSIC_F::
+ 0000                   .blkb 2
+                        .area idata
+ 0000 4B02              .word 587
+                        .area data(ram, con, rel)
+ 0002                   .dbfile PWM.c
+ 0002                   .blkb 2
+                        .area idata
+ 0002 BA02              .word 698
+                        .area data(ram, con, rel)
+ 0004                   .dbfile PWM.c
+ 0004                   .blkb 2
+                        .area idata
+ 0004 D201              .word 466
+                        .area data(ram, con, rel)
+ 0006                   .dbfile PWM.c
+ 0006                   .blkb 2
+                        .area idata
+ 0006 0B02              .word 523
+                        .area data(ram, con, rel)
+ 0008                   .dbfile PWM.c
+ 0008                   .blkb 2
+                        .area idata
+ 0008 4B02              .word 587
+                        .area data(ram, con, rel)
+ 000A                   .dbfile PWM.c
+ 000A                   .blkb 2
+                        .area idata
+ 000A 5D01              .word 349
+                        .area data(ram, con, rel)
+ 000C                   .dbfile PWM.c
+ 000C                   .blkb 2
+                        .area idata
+ 000C D201              .word 466
+                        .area data(ram, con, rel)
+ 000E                   .dbfile PWM.c
+ 000E                   .blkb 2
+                        .area idata
+ 000E 0B02              .word 523
+                        .area data(ram, con, rel)
+ 0010                   .dbfile PWM.c
+ 0010                   .blkb 2
+                        .area idata
+ 0010 4B02              .word 587
+                        .area data(ram, con, rel)
+ 0012                   .dbfile PWM.c
+ 0012                   .blkb 2
+                        .area idata
+ 0012 BA02              .word 698
+                        .area data(ram, con, rel)
+ 0014                   .dbfile PWM.c
+ 0014                   .blkb 2
+                        .area idata
+ 0014 0B02              .word 523
+                        .area data(ram, con, rel)
+ 0016                   .dbfile PWM.c
+ 0016                   .blkb 2
+                        .area idata
+ 0016 4B02              .word 587
+                        .area data(ram, con, rel)
+ 0018                   .dbfile PWM.c
+ 0018                   .blkb 2
+                        .area idata
+ 0018 BA02              .word 698
+                        .area data(ram, con, rel)
+ 001A                   .dbfile PWM.c
+ 001A                   .blkb 2
+                        .area idata
+ 001A D201              .word 466
+                        .area data(ram, con, rel)
+ 001C                   .dbfile PWM.c
+ 001C                   .blkb 2
+                        .area idata
+ 001C 0B02              .word 523
+                        .area data(ram, con, rel)
+ 001E                   .dbfile PWM.c
+ 001E                   .blkb 2
+                        .area idata
+ 001E 4B02              .word 587
+                        .area data(ram, con, rel)
+ 0020                   .dbfile PWM.c
+ 0020                   .blkb 2
+                        .area idata
+ 0020 8801              .word 392
+                        .area data(ram, con, rel)
+ 0022                   .dbfile PWM.c
+ 0022                   .blkb 2
+                        .area idata
+ 0022 0B02              .word 523
+                        .area data(ram, con, rel)
+ 0024                   .dbfile PWM.c
+ 0024                   .blkb 2
+                        .area idata
+ 0024 5D01              .word 349
+                        .area data(ram, con, rel)
+ 0026                   .dbfile PWM.c
+ 0026                   .blkb 2
+                        .area idata
+ 0026 0B02              .word 523
+                        .area data(ram, con, rel)
+ 0028                   .dbfile PWM.c
+ 0028                   .blkb 2
+                        .area idata
+ 0028 4B02              .word 587
+                        .area data(ram, con, rel)
+ 002A                   .dbfile PWM.c
+ 002A                   .blkb 2
+                        .area idata
+ 002A D201              .word 466
+                        .area data(ram, con, rel)
+ 002C                   .dbfile PWM.c
+ 002C                   .blkb 2
+                        .area idata
+ 002C 1003              .word 784
+                        .area data(ram, con, rel)
+ 002E                   .dbfile PWM.c
+ 002E                   .blkb 2
+                        .area idata
+ 002E BA02              .word 698
+                        .area data(ram, con, rel)
+ 0030                   .dbfile PWM.c
+ 0030                   .blkb 2
+                        .area idata
+ 0030 1003              .word 784
+                        .area data(ram, con, rel)
+ 0032                   .dbfile PWM.c
+ 0032                   .blkb 2
+                        .area idata
+ 0032 D201              .word 466
+                        .area data(ram, con, rel)
+ 0034                   .dbfile PWM.c
+ 0034                   .blkb 2
+                        .area idata
+ 0034 4B02              .word 587
+                        .area data(ram, con, rel)
+ 0036                   .dbfile PWM.c
+ 0036                   .blkb 2
+                        .area idata
+ 0036 8801              .word 392
+                        .area data(ram, con, rel)
+ 0038                   .dbfile PWM.c
+ 0038                   .blkb 2
+                        .area idata
+ 0038 4B02              .word 587
+                        .area data(ram, con, rel)
+ 003A                   .dbfile PWM.c
+ 003A                   .blkb 2
+                        .area idata
+ 003A BA02              .word 698
+                        .area data(ram, con, rel)
+ 003C                   .dbfile PWM.c
+ 003C                   .blkb 2
+                        .area idata
+ 003C 0B02              .word 523
+                        .area data(ram, con, rel)
+ 003E                   .dbfile PWM.c
+ 003E                   .blkb 2
+                        .area idata
+ 003E 4B02              .word 587
+                        .area data(ram, con, rel)
+ 0040                   .dbfile PWM.c
+ 0040                   .blkb 2
+                        .area idata
+ 0040 BA02              .word 698
+                        .area data(ram, con, rel)
+ 0042                   .dbfile PWM.c
+ 0042                   .blkb 2
+                        .area idata
+ 0042 D201              .word 466
+                        .area data(ram, con, rel)
+ 0044                   .dbfile PWM.c
+ 0044                   .blkb 2
+                        .area idata
+ 0044 0B02              .word 523
+                        .area data(ram, con, rel)
+ 0046                   .dbfile PWM.c
+ 0046                   .blkb 2
+                        .area idata
+ 0046 4B02              .word 587
+                        .area data(ram, con, rel)
+ 0048                   .dbfile PWM.c
+ 0048                   .blkb 2
+                        .area idata
+ 0048 8801              .word 392
+                        .area data(ram, con, rel)
+ 004A                   .dbfile PWM.c
+ 004A                   .blkb 2
+                        .area idata
+ 004A 0B02              .word 523
+                        .area data(ram, con, rel)
+ 004C                   .dbfile PWM.c
+ 004C                   .blkb 2
+                        .area idata
+ 004C 5D01              .word 349
+                        .area data(ram, con, rel)
+ 004E                   .dbfile PWM.c
+ 004E                   .blkb 2
+                        .area idata
+ 004E 0B02              .word 523
+                        .area data(ram, con, rel)
+ 0050                   .dbfile PWM.c
+ 0050                   .blkb 2
+                        .area idata
+ 0050 4B02              .word 587
+                        .area data(ram, con, rel)
+ 0052                   .dbfile PWM.c
+ 0052                   .blkb 2
+                        .area idata
+ 0052 D201              .word 466
+                        .area data(ram, con, rel)
+ 0054                   .dbfile PWM.c
+ 0054                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0054                   .dbsym e MUSIC_F _MUSIC_F A[84:42]I
+ 0054           _MUSIC_time::
+ 0054                   .blkb 2
+                        .area idata
+ 0054 2003              .word 800
+                        .area data(ram, con, rel)
+ 0056                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0056                   .blkb 2
+                        .area idata
+ 0056 2003              .word 800
+                        .area data(ram, con, rel)
+ 0058                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0058                   .blkb 2
+                        .area idata
+ 0058 4006              .word 1600
+                        .area data(ram, con, rel)
+ 005A                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 005A                   .blkb 2
+                        .area idata
+ 005A 2003              .word 800
+                        .area data(ram, con, rel)
+ 005C                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 005C                   .blkb 2
+                        .area idata
+ 005C 2003              .word 800
+                        .area data(ram, con, rel)
+ 005E                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 005E                   .blkb 2
+                        .area idata
+ 005E 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0060                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0060                   .blkb 2
+                        .area idata
+ 0060 2003              .word 800
+                        .area data(ram, con, rel)
+ 0062                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0062                   .blkb 2
+                        .area idata
+ 0062 2003              .word 800
+                        .area data(ram, con, rel)
+ 0064                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0064                   .blkb 2
+                        .area idata
+ 0064 2003              .word 800
+                        .area data(ram, con, rel)
+ 0066                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0066                   .blkb 2
+                        .area idata
+ 0066 2003              .word 800
+                        .area data(ram, con, rel)
+ 0068                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0068                   .blkb 2
+                        .area idata
+ 0068 800C              .word 3200
+                        .area data(ram, con, rel)
+ 006A                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 006A                   .blkb 2
+                        .area idata
+ 006A 2003              .word 800
+                        .area data(ram, con, rel)
+ 006C                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 006C                   .blkb 2
+                        .area idata
+ 006C 2003              .word 800
+                        .area data(ram, con, rel)
+ 006E                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 006E                   .blkb 2
+                        .area idata
+ 006E 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0070                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0070                   .blkb 2
+                        .area idata
+ 0070 2003              .word 800
+                        .area data(ram, con, rel)
+ 0072                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0072                   .blkb 2
+                        .area idata
+ 0072 2003              .word 800
+                        .area data(ram, con, rel)
+ 0074                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0074                   .blkb 2
+                        .area idata
+ 0074 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0076                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0076                   .blkb 2
+                        .area idata
+ 0076 2003              .word 800
+                        .area data(ram, con, rel)
+ 0078                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0078                   .blkb 2
+                        .area idata
+ 0078 2003              .word 800
+                        .area data(ram, con, rel)
+ 007A                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 007A                   .blkb 2
+                        .area idata
+ 007A 2003              .word 800
+                        .area data(ram, con, rel)
+ 007C                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 007C                   .blkb 2
+                        .area idata
+ 007C 2003              .word 800
+                        .area data(ram, con, rel)
+ 007E                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 007E                   .blkb 2
+                        .area idata
+ 007E 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0080                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0080                   .blkb 2
+                        .area idata
+ 0080 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0082                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0082                   .blkb 2
+                        .area idata
+ 0082 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0084                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0084                   .blkb 2
+                        .area idata
+ 0084 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0086                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0086                   .blkb 2
+                        .area idata
+ 0086 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0088                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0088                   .blkb 2
+                        .area idata
+ 0088 2003              .word 800
+                        .area data(ram, con, rel)
+ 008A                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 008A                   .blkb 2
+                        .area idata
+ 008A 2003              .word 800
+                        .area data(ram, con, rel)
+ 008C                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 008C                   .blkb 2
+                        .area idata
+ 008C B004              .word 1200
+                        .area data(ram, con, rel)
+ 008E                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 008E                   .blkb 2
+                        .area idata
+ 008E 9001              .word 400
+                        .area data(ram, con, rel)
+ 0090                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0090                   .blkb 2
+                        .area idata
+ 0090 800C              .word 3200
+                        .area data(ram, con, rel)
+ 0092                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0092                   .blkb 2
+                        .area idata
+ 0092 2003              .word 800
+                        .area data(ram, con, rel)
+ 0094                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0094                   .blkb 2
+                        .area idata
+ 0094 2003              .word 800
+                        .area data(ram, con, rel)
+ 0096                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0096                   .blkb 2
+                        .area idata
+ 0096 4006              .word 1600
+                        .area data(ram, con, rel)
+ 0098                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0098                   .blkb 2
+                        .area idata
+ 0098 2003              .word 800
+                        .area data(ram, con, rel)
+ 009A                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 009A                   .blkb 2
+                        .area idata
+ 009A 2003              .word 800
+                        .area data(ram, con, rel)
+ 009C                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 009C                   .blkb 2
+                        .area idata
+ 009C 4006              .word 1600
+                        .area data(ram, con, rel)
+ 009E                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 009E                   .blkb 2
+                        .area idata
+ 009E 2003              .word 800
+                        .area data(ram, con, rel)
+ 00A0                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 00A0                   .blkb 2
+                        .area idata
+ 00A0 2003              .word 800
+                        .area data(ram, con, rel)
+ 00A2                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 00A2                   .blkb 2
+                        .area idata
+ 00A2 2003              .word 800
+                        .area data(ram, con, rel)
+ 00A4                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 00A4                   .blkb 2
+                        .area idata
+ 00A4 2003              .word 800
+                        .area data(ram, con, rel)
+ 00A6                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 00A6                   .blkb 2
+                        .area idata
+ 00A6 800C              .word 3200
+                        .area data(ram, con, rel)
+ 00A8                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 00A8                   .dbsym e MUSIC_time _MUSIC_time A[84:42]I
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\z\Desktop\作业\source\PWM.c
+ 0000                   .dbfunc e delay_ms _delay_ms fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              n -> R16,R17
+                        .even
+ 0000           _delay_ms::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 24
+ 0004           ; #include <iom16v.h>
+ 0004           ; 
+ 0004           ; int MUSIC_F[]={587, 698, 466, 523, 587,
+ 0004           ;                          349, 466, 523, 587, 698,
+ 0004           ;                          523, 587, 698, 466, 523,
+ 0004           ;                          587, 392, 523, 349, 523,
+ 0004           ;                          587, 466, 784, 698, 784,
+ 0004           ;                          466, 587, 392, 587, 698,
+ 0004           ;                          523, 587, 698, 466, 523,
+ 0004           ;                          587, 392, 523, 349, 523,
+ 0004           ;                          587, 466 };  //音符频率
+ 0004           ;                          
+ 0004           ; int MUSIC_time[]={800, 800, 1600, 800, 800,
+ 0004           ;                                 1600, 800, 800, 800, 800,
+ 0004           ;                                 3200, 800, 800, 1600, 800,
+ 0004           ;                                 800, 1600, 800, 800, 800,
+ 0004           ;                                 800, 1600, 1600, 1600, 1600,
+ 0004           ;                                 1600, 800, 800, 1200, 400,
+ 0004           ;                                 3200, 800, 800, 1600, 800,
+ 0004           ;                                 800, 1600, 800, 800, 800,
+ 0004           ;                                 800, 3200 };  //音符持续时间
+ 0004           ; 
+ 0004           ; void delay_ms(unsigned int n)
+ 0004           ; {
+ 0004                   .dbline 26
+ 0004           ;   unsigned i , j;
+ 0004           ;   for(i = 0 ; i < n ; i++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 27
+ 000A           ;     for(j = 0 ; j <1141 ; j++) ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 27
+ 0010           L7:
+ 0010                   .dbline 27
+ 0010 6F5F              subi R22,255  ; offset = 1
+ 0012 7F4F              sbci R23,255
+ 0014           L9:
+ 0014                   .dbline 27
+ 0014 6537              cpi R22,117
+ 0016 E4E0              ldi R30,4
+ 0018 7E07              cpc R23,R30
+ 001A D0F3              brlo L6
+ 001C           X0:
+ 001C           L3:
+ 001C                   .dbline 26
+ 001C 4F5F              subi R20,255  ; offset = 1
+ 001E 5F4F              sbci R21,255
+ 0020           L5:
+ 0020                   .dbline 26
+ 0020 4017              cp R20,R16
+ 0022 5107              cpc R21,R17
+ 0024 90F3              brlo L2
+ 0026           X1:
+ 0026                   .dbline -2
+ 0026           L1:
+ 0026                   .dbline 0 ; func end
+ 0026 0C940000          xjmp pop_xgsetF000
+ 002A                   .dbsym r i 20 i
+ 002A                   .dbsym r j 22 i
+ 002A                   .dbsym r n 16 i
+ 002A                   .dbend
+ 002A                   .dbfunc e PWM_OC2_init _PWM_OC2_init fV
+                        .even
+ 002A           _PWM_OC2_init::
+ 002A                   .dbline -1
+ 002A                   .dbline 31
+ 002A           ; }
+ 002A           ; 
+ 002A           ; void PWM_OC2_init()
+ 002A           ; {
+ 002A                   .dbline 32
+ 002A           ;   DDRD = 0x80;          //设置OC2为输出；
+ 002A 80E8              ldi R24,128
+ 002C 81BB              out 0x11,R24
+ 002E                   .dbline 33
+ 002E           ;   PORTD = 0x80;         //输出高电平
+ 002E 82BB              out 0x12,R24
+ 0030                   .dbline 35
+ 0030           ;   
+ 0030           ;   TCCR2 = (1<<WGM21)|(1<<WGM20);   //设置T/C工作模式为快速PWM，TOP值为0xff
+ 0030 88E4              ldi R24,72
+ 0032 85BD              out 0x25,R24
+ 0034                   .dbline 36
+ 0034           ;   TCCR2 |= (1<<COM21)|(0<<COM20);  //设置比较匹配发生时OC2清零，计数到TOP时OC2置位
+ 0034 85B5              in R24,0x25
+ 0036 8062              ori R24,32
+ 0038 85BD              out 0x25,R24
+ 003A                   .dbline 37
+ 003A           ;   TCCR2 |= (1<<CS22)|(0<<CS21)|(1<<CS20);     //设置分频为128，f=8000000/(128*256)=244，输出频率为244Hz
+ 003A 85B5              in R24,0x25
+ 003C 8560              ori R24,5
+ 003E 85BD              out 0x25,R24
+ 0040                   .dbline 39
+ 0040           ;   
+ 0040           ;   OCR2 = 0x33;    //占空比初始化为20%，0xff*20%=0x33
+ 0040 83E3              ldi R24,51
+ 0042 83BD              out 0x23,R24
+ 0044                   .dbline -2
+ 0044           L10:
+ 0044                   .dbline 0 ; func end
+ 0044 0895              ret
+ 0046                   .dbend
+ 0046                   .dbfunc e PWM_OC0_init _PWM_OC0_init fV
+                        .even
+ 0046           _PWM_OC0_init::
+ 0046                   .dbline -1
+ 0046                   .dbline 43
+ 0046           ; }
+ 0046           ; 
+ 0046           ; void PWM_OC0_init()
+ 0046           ; {
+ 0046                   .dbline 44
+ 0046           ;   DDRB = 0x08;           //设置OC0为输出；
+ 0046 88E0              ldi R24,8
+ 0048 87BB              out 0x17,R24
+ 004A                   .dbline 45
+ 004A           ;   PORTB = 0x08;          //输出高电平
+ 004A 88BB              out 0x18,R24
+ 004C                   .dbline 47
+ 004C           ;   
+ 004C           ;   TCCR0 = (1<<WGM01)|(1<<WGM00);   //设置T/C工作模式为快速PWM，TOP值为0xff
+ 004C 88E4              ldi R24,72
+ 004E 83BF              out 0x33,R24
+ 0050                   .dbline 48
+ 0050           ;   TCCR0 |= (1<<COM01)|(0<<COM00);  //设置比较匹配发生时OC0清零，计数到TOP时OC0置位
+ 0050 83B7              in R24,0x33
+ 0052 8062              ori R24,32
+ 0054 83BF              out 0x33,R24
+ 0056                   .dbline 49
+ 0056           ;   TCCR0 |= (1<<CS02)|(0<<CS01)|(0<<CS00);     //设置分频为256，f=8000000/(256*256)=122，输出频率为122Hz
+ 0056 83B7              in R24,0x33
+ 0058 8460              ori R24,4
+ 005A 83BF              out 0x33,R24
+ 005C                   .dbline 51
+ 005C           ;   
+ 005C           ;   OCR0 = 0x00;    //占空比初始化为0
+ 005C 2224              clr R2
+ 005E 2CBE              out 0x3c,R2
+ 0060                   .dbline -2
+ 0060           L11:
+ 0060                   .dbline 0 ; func end
+ 0060 0895              ret
+ 0062                   .dbend
+ 0062                   .dbfunc e PWM_OC1A_init _PWM_OC1A_init fV
+                        .even
+ 0062           _PWM_OC1A_init::
+ 0062                   .dbline -1
+ 0062                   .dbline 55
+ 0062           ; }
+ 0062           ; 
+ 0062           ; void PWM_OC1A_init()
+ 0062           ; {
+ 0062                   .dbline 56
+ 0062           ;   DDRD |=0x20;          //设置OC1A为输出；
+ 0062 8D9A              sbi 0x11,5
+ 0064                   .dbline 57
+ 0064           ;   PORTD |=0x20;         //输出高电平
+ 0064 959A              sbi 0x12,5
+ 0066                   .dbline 59
+ 0066           ; 
+ 0066           ;   TCCR1A = (1<<COM1A1)|(0<<COM1A0)|(1<<WGM11)|(0<<WGM10);  //设置T/C工作模式为快速PWM，TOP值为ICR1，设置比较匹配发生时OC0清零，计数到TOP时OC0置位，分频为8
+ 0066 82E8              ldi R24,130
+ 0068 8FBD              out 0x2f,R24
+ 006A                   .dbline 60
+ 006A           ;   TCCR1B = (1<<WGM13)|(1<<WGM12)|(1<<CS11);                              //设置T/C工作模式为快速PWM，TOP值为ICR1，设置比较匹配发生时OC0清零，计数到TOP时OC0置位，分频为8
+ 006A 8AE1              ldi R24,26
+ 006C 8EBD              out 0x2e,R24
+ 006E                   .dbline -2
+ 006E           L12:
+ 006E                   .dbline 0 ; func end
+ 006E 0895              ret
+ 0070                   .dbend
+ 0070                   .dbfunc e main _main fV
+ 0070           ;   music_switch -> R22
+ 0070           ;    music_count -> R10
+ 0070           ;            key -> R20
+                        .even
+ 0070           _main::
+ 0070                   .dbline -1
+ 0070                   .dbline 64
+ 0070           ; }
+ 0070           ; 
+ 0070           ; void main()
+ 0070           ; { 
+ 0070                   .dbline 65
+ 0070           ;   char key=0 , music_count=0; //计数音符
+ 0070 4427              clr R20
+ 0072                   .dbline 65
+ 0072 AA24              clr R10
+ 0074                   .dbline 66
+ 0074           ;   char music_switch=0;  //音乐开关
+ 0074 6627              clr R22
+ 0076                   .dbline 67
+ 0076           ;   DDRC = 0x10;
+ 0076 80E1              ldi R24,16
+ 0078 84BB              out 0x14,R24
+ 007A                   .dbline 68
+ 007A           ;   PORTC = 0x07;
+ 007A 87E0              ldi R24,7
+ 007C 85BB              out 0x15,R24
+ 007E                   .dbline 70
+ 007E           ;   
+ 007E           ;   PWM_OC2_init();     //初始化OC2引脚
+ 007E D5DF              xcall _PWM_OC2_init
+ 0080                   .dbline 71
+ 0080           ;   PWM_OC0_init();     //初始化OC0引脚
+ 0080 E2DF              xcall _PWM_OC0_init
+ 0082                   .dbline 72
+ 0082           ;   PWM_OC1A_init();    //初始化OC1A引脚
+ 0082 EFDF              xcall _PWM_OC1A_init
+ 0084 5BC0              xjmp L15
+ 0086           L14:
+ 0086                   .dbline 75
+ 0086           ;  
+ 0086           ;   while(1)
+ 0086           ;   { 
+ 0086                   .dbline 76
+ 0086           ;       if((PINC&(1<<PC0))==0)  //判断是非按下按键1
+ 0086 9899              sbic 0x13,0
+ 0088 01C0              rjmp L17
+ 008A           X2:
+ 008A                   .dbline 77
+ 008A           ;       {
+ 008A                   .dbline 78
+ 008A           ;         key=1;
+ 008A 41E0              ldi R20,1
+ 008C                   .dbline 79
+ 008C           ;       }
+ 008C           L17:
+ 008C                   .dbline 81
+ 008C           ;       
+ 008C           ;       if((PINC&(1<<PC1))==0)  //判断是非按下按键2
+ 008C 9999              sbic 0x13,1
+ 008E 01C0              rjmp L19
+ 0090           X3:
+ 0090                   .dbline 82
+ 0090           ;       {
+ 0090                   .dbline 83
+ 0090           ;         key=0;
+ 0090 4427              clr R20
+ 0092                   .dbline 84
+ 0092           ;       }
+ 0092           L19:
+ 0092                   .dbline 86
+ 0092           ;       
+ 0092           ;       if(key==1)  //key==1时，占空比变化
+ 0092 4130              cpi R20,1
+ 0094 19F4              brne L21
+ 0096           X4:
+ 0096                   .dbline 87
+ 0096           ;       {
+ 0096                   .dbline 88
+ 0096           ;         OCR0 += 0x33;    //OCR0比较值每次增加0xff*0.2=0x33，占空比每次增加20%
+ 0096 8CB7              in R24,0x3c
+ 0098 8D5C              subi R24,205    ; addi 51
+ 009A 8CBF              out 0x3c,R24
+ 009C                   .dbline 89
+ 009C           ;       }
+ 009C           L21:
+ 009C                   .dbline 91
+ 009C           ;       
+ 009C           ;       if(key==0)  //key==0时，占空比固定
+ 009C 4423              tst R20
+ 009E 11F4              brne L23
+ 00A0           X5:
+ 00A0                   .dbline 92
+ 00A0           ;       {
+ 00A0                   .dbline 93
+ 00A0           ;         OCR0 = OCR0;
+ 00A0 2CB6              in R2,0x3c
+ 00A2 2CBE              out 0x3c,R2
+ 00A4                   .dbline 94
+ 00A4           ;       }
+ 00A4           L23:
+ 00A4                   .dbline 96
+ 00A4           ;       
+ 00A4           ;       if((PINC&(1<<PC2))==0)  //判断是非按下按键3
+ 00A4 9A99              sbic 0x13,2
+ 00A6 01C0              rjmp L25
+ 00A8           X6:
+ 00A8                   .dbline 97
+ 00A8           ;       {
+ 00A8                   .dbline 98
+ 00A8           ;         music_switch=1;  //音乐开启
+ 00A8 61E0              ldi R22,1
+ 00AA                   .dbline 99
+ 00AA           ;       }
+ 00AA           L25:
+ 00AA                   .dbline 101
+ 00AA           ;       
+ 00AA           ;       if(music_switch==1)
+ 00AA 6130              cpi R22,1
+ 00AC 09F0              breq X10
+ 00AE 46C0              xjmp L27
+ 00B0           X10:
+ 00B0           X7:
+ 00B0                   .dbline 102
+ 00B0           ;       {
+ 00B0                   .dbline 103
+ 00B0           ;         ICR1 = 1000000.0/MUSIC_F[music_count]-1;  //TOP值
+ 00B0 00E0              ldi R16,<L29
+ 00B2 10E0              ldi R17,>L29
+ 00B4 0E940000          xcall lpm32
+ 00B8 1801              movw R2,R16
+ 00BA 2901              movw R4,R18
+ 00BC 80E0              ldi R24,<_MUSIC_F
+ 00BE 90E0              ldi R25,>_MUSIC_F
+ 00C0 EA2D              mov R30,R10
+ 00C2 FF27              clr R31
+ 00C4 EE0F              lsl R30
+ 00C6 FF1F              rol R31
+ 00C8 E80F              add R30,R24
+ 00CA F91F              adc R31,R25
+ 00CC 0081              ldd R16,z+0
+ 00CE 1181              ldd R17,z+1
+ 00D0 0E940000          xcall int2fp
+ 00D4 3A93              st -y,R19
+ 00D6 2A93              st -y,R18
+ 00D8 1A93              st -y,R17
+ 00DA 0A93              st -y,R16
+ 00DC 8101              movw R16,R2
+ 00DE 9201              movw R18,R4
+ 00E0 0E940000          xcall fpdiv2
+ 00E4 1801              movw R2,R16
+ 00E6 2901              movw R4,R18
+ 00E8 00E0              ldi R16,<L30
+ 00EA 10E0              ldi R17,>L30
+ 00EC 0E940000          xcall lpm32
+ 00F0 3A93              st -y,R19
+ 00F2 2A93              st -y,R18
+ 00F4 1A93              st -y,R17
+ 00F6 0A93              st -y,R16
+ 00F8 8101              movw R16,R2
+ 00FA 9201              movw R18,R4
+ 00FC 0E940000          xcall fpsub2
+ 0100 0E940000          xcall fpint
+ 0104 17BD              out 0x27,R17
+ 0106 06BD              out 0x26,R16
+ 0108                   .dbline 104
+ 0108           ;         OCR1A = ICR1/2;                       //占空比50%
+ 0108 26B4              in R2,0x26
+ 010A 37B4              in R3,0x27
+ 010C 3694              lsr R3
+ 010E 2794              ror R2
+ 0110 3BBC              out 0x2b,R3
+ 0112 2ABC              out 0x2a,R2
+ 0114                   .dbline 105
+ 0114           ;         delay_ms(MUSIC_time[music_count]/3);  //音符持续时间
+ 0114 80E0              ldi R24,<_MUSIC_time
+ 0116 90E0              ldi R25,>_MUSIC_time
+ 0118 EA2D              mov R30,R10
+ 011A FF27              clr R31
+ 011C EE0F              lsl R30
+ 011E FF1F              rol R31
+ 0120 E80F              add R30,R24
+ 0122 F91F              adc R31,R25
+ 0124 0081              ldd R16,z+0
+ 0126 1181              ldd R17,z+1
+ 0128 23E0              ldi R18,3
+ 012A 30E0              ldi R19,0
+ 012C 0E940000          xcall div16s
+ 0130 67DF              xcall _delay_ms
+ 0132                   .dbline 106
+ 0132           ;         music_count++;
+ 0132 A394              inc R10
+ 0134                   .dbline 107
+ 0134           ;         if(music_count>41)    //42个音符，大于则循环
+ 0134 89E2              ldi R24,41
+ 0136 8A15              cp R24,R10
+ 0138 08F4              brsh L31
+ 013A           X8:
+ 013A                   .dbline 108
+ 013A           ;         {
+ 013A                   .dbline 109
+ 013A           ;           music_count=0;
+ 013A AA24              clr R10
+ 013C                   .dbline 110
+ 013C           ;         }
+ 013C           L31:
+ 013C                   .dbline 111
+ 013C           ;       }
+ 013C           L27:
+ 013C                   .dbline 112
+ 013C           ;   }
+ 013C           L15:
+ 013C                   .dbline 74
+ 013C A4CF              xjmp L14
+ 013E           X9:
+ 013E                   .dbline -2
+ 013E           L13:
+ 013E                   .dbline 0 ; func end
+ 013E 0895              ret
+ 0140                   .dbsym r music_switch 22 c
+ 0140                   .dbsym r music_count 10 c
+ 0140                   .dbsym r key 20 c
+ 0140                   .dbend
+                        .area lit(rom, con, rel)
+ 0000           L30:
+ 0000 0000803F          .word 0x0,0x3f80
+ 0004           L29:
+ 0004 00247449          .word 0x2400,0x4974
+ 0008           ; }

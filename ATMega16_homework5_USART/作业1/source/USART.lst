@@ -1,0 +1,141 @@
+Interrupt Vectors
+    00000 940C 002A JMP	__start|__text_start
+
+Program Code (text area)
+__start|__text_start:
+    0002A E5CF      LDI	R28,0x5F
+    0002B E0D4      LDI	R29,4
+    0002C BFCD      OUT	0x3D,R28
+    0002D BFDE      OUT	0x3E,R29
+    0002E 51CE      SUBI	R28,0x1E
+    0002F 40D0      SBCI	R29,0
+    00030 EA0A      LDI	R16,0xAA
+    00031 8308      ST	Y,R16
+    00032 2400      CLR	R0
+    00033 E6E0      LDI	R30,0x60
+    00034 E0F0      LDI	R31,0
+    00035 E010      LDI	R17,0
+    00036 36E0      CPI	R30,0x60
+    00037 07F1      CPC	R31,R17
+    00038 F011      BEQ	0x003B
+    00039 9201      ST	Z+,R0
+    0003A CFFB      RJMP	0x0036
+    0003B 8300      ST	Z,R16
+    0003C E5E4      LDI	R30,0x54
+    0003D E0F0      LDI	R31,0
+    0003E E6A0      LDI	R26,0x60
+    0003F E0B0      LDI	R27,0
+    00040 E010      LDI	R17,0
+    00041 E000      LDI	R16,0
+    00042 BF0B      OUT	0x3B,R16
+    00043 35E4      CPI	R30,0x54
+    00044 07F1      CPC	R31,R17
+    00045 F021      BEQ	0x004A
+    00046 95C8      LPM
+    00047 9631      ADIW	R30,1
+    00048 920D      ST	X+,R0
+    00049 CFF9      RJMP	0x0043
+    0004A 940E 0071 CALL	_main
+_exit:
+    0004C CFFF      RJMP	_exit
+FILE: C:\Users\z\Desktop\作业\作业1\source\usart.c
+(0001) #include <iom16v.h>
+(0002) 
+(0003) void USART_Init()
+(0004) {
+(0005)   DDRD |= 1<<PD1;
+_USART_Init:
+    0004D 9A89      SBI	0x11,1
+(0006)   PORTD |= 1<<PD1;
+    0004E 9A91      SBI	0x12,1
+(0007)   UCSRB |= 1<<TXEN;   //发送使能
+    0004F 9A53      SBI	0x0A,3
+(0008)   UCSRC |= (1<<URSEL)|(1<<UCSZ1)|(1<<UCSZ0);  //设置8位字符长度
+    00050 B580      IN	R24,0x20
+    00051 6886      ORI	R24,0x86
+    00052 BD80      OUT	0x20,R24
+(0009)   UBRRL = 51;    //9600bps
+    00053 E383      LDI	R24,0x33
+    00054 B989      OUT	0x09,R24
+    00055 9508      RET
+(0010) }
+(0011) 
+(0012) void USART_Send(unsigned char data)
+(0013) {
+(0014)   while( ! (UCSRA& (1<<UDRE) ) ) ;  //等待数据寄存器UDR为空
+_USART_Send:
+  data                 --> R16
+    00056 9B5D      SBIS	0x0B,5
+    00057 CFFE      RJMP	_USART_Send
+(0015)   UDR = data;
+    00058 B90C      OUT	0x0C,R16
+(0016)   while(! (UCSRA & (1<<TXC)) ) ;    //等待发送结束
+    00059 9B5E      SBIS	0x0B,6
+    0005A CFFE      RJMP	0x0059
+    0005B 9508      RET
+_delay_ms:
+  i                    --> R20
+  j                    --> R22
+  ms                   --> R16
+    0005C 940E 007B CALL	push_xgsetF000
+(0017)   
+(0018) }
+(0019) 
+(0020) void delay_ms(unsigned int ms) 
+(0021) {
+(0022)   unsigned int i , j;
+(0023)   for(i = 0 ; i < ms ; i++)
+    0005E 2744      CLR	R20
+    0005F 2755      CLR	R21
+    00060 C00B      RJMP	0x006C
+(0024)     for(j = 0 ; j < 1141 ; j++) ;
+    00061 2766      CLR	R22
+    00062 2777      CLR	R23
+    00063 C002      RJMP	0x0066
+    00064 5F6F      SUBI	R22,0xFF
+    00065 4F7F      SBCI	R23,0xFF
+    00066 3765      CPI	R22,0x75
+    00067 E0E4      LDI	R30,4
+    00068 077E      CPC	R23,R30
+    00069 F3D0      BCS	0x0064
+    0006A 5F4F      SUBI	R20,0xFF
+    0006B 4F5F      SBCI	R21,0xFF
+    0006C 1740      CP	R20,R16
+    0006D 0751      CPC	R21,R17
+    0006E F390      BCS	0x0061
+    0006F 940C 0080 JMP	pop_xgsetF000
+(0025) }
+(0026) 
+(0027) void main()
+(0028) {
+(0029)   SREG |= 1<<7;
+_main:
+    00071 9478      BSET	7
+(0030)   USART_Init();
+    00072 DFDA      RCALL	_USART_Init
+    00073 C005      RJMP	0x0079
+(0031)   
+(0032)   while(1)
+(0033)   {
+(0034)     USART_Send('A'); //发送字符'A'
+    00074 E401      LDI	R16,0x41
+    00075 DFE0      RCALL	_USART_Send
+(0035) 	delay_ms(1000);  //延时1000ms
+FILE: <library>
+    00076 EE08      LDI	R16,0xE8
+    00077 E013      LDI	R17,3
+    00078 DFE3      RCALL	_delay_ms
+    00079 CFFA      RJMP	0x0074
+    0007A 9508      RET
+push_xgsetF000:
+    0007B 937A      ST	-Y,R23
+    0007C 936A      ST	-Y,R22
+    0007D 935A      ST	-Y,R21
+    0007E 934A      ST	-Y,R20
+    0007F 9508      RET
+pop_xgsetF000:
+    00080 9149      LD	R20,Y+
+    00081 9159      LD	R21,Y+
+    00082 9169      LD	R22,Y+
+    00083 9179      LD	R23,Y+
+    00084 9508      RET

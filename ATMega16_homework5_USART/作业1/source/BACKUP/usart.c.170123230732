@@ -1,0 +1,35 @@
+#include <iom16v.h>
+
+void USART_Init()
+{
+  DDRD |= 1<<PD1;
+  PORTD |= 1<<PD1;
+  UCSRB |= (1<<TXEN)|(1<<TXCIE)|(0<<UCSZ2);   //发送使能，发送结束中断使能
+  UCSRC |= (1<<UCSZ1)|(1<<UCSZ0);  //设置8位字符长度
+  UBRRL = 51;    				   //9600bps
+}
+
+void USART_Send(unsigned char data)
+{
+  while( ! (UCSRA& (1<<UDRE) ) ) ;  //等待数据寄存器UDR为空
+  UDR = data;
+  while(! (UCSRA & (1<<TXC)) ) ;    //等待发送结束
+  
+}
+
+#pragma interrupt_handler USART_Send_Wait():14
+void USART_Send_Wait()     //发送结束中断函数，延时1000ms
+{
+  int i , j;
+  for(i = 0 ; i < 1000 ; i++)
+    for(j = 0 ; j < 1141 ; j++) ;
+}
+
+void main()
+{
+  USART_Init();
+  while(1)
+  {
+    USART_Send('a');
+  }
+}

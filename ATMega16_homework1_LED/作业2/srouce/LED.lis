@@ -1,0 +1,320 @@
+                        .module LED.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile LED.c
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业2\srouce\LED.c
+ 0000                   .dbfunc e delay _delay fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              n -> R16,R17
+                        .even
+ 0000           _delay::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 4
+ 0004           ; #include <iom16v.h> 
+ 0004           ; 
+ 0004           ; void delay (int n)
+ 0004           ; {
+ 0004                   .dbline 6
+ 0004           ;   int i , j;
+ 0004           ;   for (i = 0 ; i < n ; i ++)  
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0AC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 7
+ 000A           ;     for(j = 0 ; j < 1141 ; j++)  ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E           L6:
+ 000E                   .dbline 7
+ 000E           L7:
+ 000E                   .dbline 7
+ 000E 6F5F              subi R22,255  ; offset = 1
+ 0010 7F4F              sbci R23,255
+ 0012                   .dbline 7
+ 0012 6537              cpi R22,117
+ 0014 E4E0              ldi R30,4
+ 0016 7E07              cpc R23,R30
+ 0018 D4F3              brlt L6
+ 001A           X0:
+ 001A           L3:
+ 001A                   .dbline 6
+ 001A 4F5F              subi R20,255  ; offset = 1
+ 001C 5F4F              sbci R21,255
+ 001E           L5:
+ 001E                   .dbline 6
+ 001E 4017              cp R20,R16
+ 0020 5107              cpc R21,R17
+ 0022 9CF3              brlt L2
+ 0024           X1:
+ 0024                   .dbline -2
+ 0024           L1:
+ 0024                   .dbline 0 ; func end
+ 0024 0C940000          xjmp pop_xgsetF000
+ 0028                   .dbsym r i 20 I
+ 0028                   .dbsym r j 22 I
+ 0028                   .dbsym r n 16 I
+ 0028                   .dbend
+ 0028                   .dbfunc e main _main fV
+                        .even
+ 0028           _main::
+ 0028                   .dbline -1
+ 0028                   .dbline 11
+ 0028           ; }
+ 0028           ; 
+ 0028           ; void main()
+ 0028           ; {
+ 0028                   .dbline 12
+ 0028           ;   DDRA = 0xff;
+ 0028 8FEF              ldi R24,255
+ 002A 8ABB              out 0x1a,R24
+ 002C                   .dbline 13
+ 002C           ;   PORTA = 0x00;
+ 002C 2224              clr R2
+ 002E 2BBA              out 0x1b,R2
+ 0030                   .dbline 14
+ 0030           ;   DDRB = 0x00;
+ 0030 27BA              out 0x17,R2
+ 0032                   .dbline 15
+ 0032           ;   PORTB = 0x03;
+ 0032 83E0              ldi R24,3
+ 0034 88BB              out 0x18,R24
+ 0036 54C0              xjmp L12
+ 0038           L11:
+ 0038                   .dbline 17
+ 0038           ;   while(1)
+ 0038           ;   {
+ 0038                   .dbline 18
+ 0038           ;     if ((PINB & (1<<PB0) ) == 0)  //判断是否按下按键1
+ 0038 B099              sbic 0x16,0
+ 003A 52C0              rjmp L14
+ 003C           X2:
+ 003C                   .dbline 19
+ 003C           ;     {
+ 003C 50C0              xjmp L17
+ 003E           L16:
+ 003E                   .dbline 21
+ 003E           ;         while (1)  
+ 003E           ;         {
+ 003E                   .dbline 22
+ 003E           ;           PORTA = 0x01;
+ 003E 81E0              ldi R24,1
+ 0040 8BBB              out 0x1b,R24
+ 0042                   .dbline 23
+ 0042           ;               delay(100);
+ 0042 04E6              ldi R16,100
+ 0044 10E0              ldi R17,0
+ 0046 DCDF              xcall _delay
+ 0048                   .dbline 24
+ 0048           ;               if((PINB & (1<<PB1) ) == 0)  //判断是否按下按键2
+ 0048 B199              sbic 0x16,1
+ 004A 03C0              rjmp L19
+ 004C           X3:
+ 004C                   .dbline 25
+ 004C           ;               {
+ 004C                   .dbline 26
+ 004C           ;                 PORTA = 0x00;
+ 004C 2224              clr R2
+ 004E 2BBA              out 0x1b,R2
+ 0050                   .dbline 27
+ 0050           ;                 break;
+ 0050 47C0              xjmp L18
+ 0052           L19:
+ 0052                   .dbline 29
+ 0052           ;               }
+ 0052           ;               PORTA = 0x02;
+ 0052 82E0              ldi R24,2
+ 0054 8BBB              out 0x1b,R24
+ 0056                   .dbline 30
+ 0056           ;               delay(100);
+ 0056 04E6              ldi R16,100
+ 0058 10E0              ldi R17,0
+ 005A D2DF              xcall _delay
+ 005C                   .dbline 31
+ 005C           ;               if((PINB & (1<<PB1) ) == 0)  //判断是否按下按键2
+ 005C B199              sbic 0x16,1
+ 005E 03C0              rjmp L21
+ 0060           X4:
+ 0060                   .dbline 32
+ 0060           ;               {
+ 0060                   .dbline 33
+ 0060           ;                 PORTA = 0x00;
+ 0060 2224              clr R2
+ 0062 2BBA              out 0x1b,R2
+ 0064                   .dbline 34
+ 0064           ;                 break;
+ 0064 3DC0              xjmp L18
+ 0066           L21:
+ 0066                   .dbline 36
+ 0066           ;               }
+ 0066           ;               PORTA = 0x04;
+ 0066 84E0              ldi R24,4
+ 0068 8BBB              out 0x1b,R24
+ 006A                   .dbline 37
+ 006A           ;               delay(100);
+ 006A 04E6              ldi R16,100
+ 006C 10E0              ldi R17,0
+ 006E C8DF              xcall _delay
+ 0070                   .dbline 38
+ 0070           ;               if((PINB & (1<<PB1) ) == 0)  //判断是否按下按键2
+ 0070 B199              sbic 0x16,1
+ 0072 03C0              rjmp L23
+ 0074           X5:
+ 0074                   .dbline 39
+ 0074           ;               {
+ 0074                   .dbline 40
+ 0074           ;                 PORTA = 0x00;
+ 0074 2224              clr R2
+ 0076 2BBA              out 0x1b,R2
+ 0078                   .dbline 41
+ 0078           ;                 break;
+ 0078 33C0              xjmp L18
+ 007A           L23:
+ 007A                   .dbline 43
+ 007A           ;               }
+ 007A           ;               PORTA = 0x08;
+ 007A 88E0              ldi R24,8
+ 007C 8BBB              out 0x1b,R24
+ 007E                   .dbline 44
+ 007E           ;               delay(100);
+ 007E 04E6              ldi R16,100
+ 0080 10E0              ldi R17,0
+ 0082 BEDF              xcall _delay
+ 0084                   .dbline 45
+ 0084           ;               if((PINB & (1<<PB1) ) == 0)  //判断是否按下按键2
+ 0084 B199              sbic 0x16,1
+ 0086 03C0              rjmp L25
+ 0088           X6:
+ 0088                   .dbline 46
+ 0088           ;               {
+ 0088                   .dbline 47
+ 0088           ;                 PORTA = 0x00;
+ 0088 2224              clr R2
+ 008A 2BBA              out 0x1b,R2
+ 008C                   .dbline 48
+ 008C           ;                 break;
+ 008C 29C0              xjmp L18
+ 008E           L25:
+ 008E                   .dbline 50
+ 008E           ;               }
+ 008E           ;               PORTA = 0x10;
+ 008E 80E1              ldi R24,16
+ 0090 8BBB              out 0x1b,R24
+ 0092                   .dbline 51
+ 0092           ;               delay(100);
+ 0092 04E6              ldi R16,100
+ 0094 10E0              ldi R17,0
+ 0096 B4DF              xcall _delay
+ 0098                   .dbline 52
+ 0098           ;               if((PINB & (1<<PB1) ) == 0)  //判断是否按下按键2
+ 0098 B199              sbic 0x16,1
+ 009A 03C0              rjmp L27
+ 009C           X7:
+ 009C                   .dbline 53
+ 009C           ;               {
+ 009C                   .dbline 54
+ 009C           ;                 PORTA = 0x00;
+ 009C 2224              clr R2
+ 009E 2BBA              out 0x1b,R2
+ 00A0                   .dbline 55
+ 00A0           ;                 break;
+ 00A0 1FC0              xjmp L18
+ 00A2           L27:
+ 00A2                   .dbline 57
+ 00A2           ;               }
+ 00A2           ;               PORTA = 0x20;
+ 00A2 80E2              ldi R24,32
+ 00A4 8BBB              out 0x1b,R24
+ 00A6                   .dbline 58
+ 00A6           ;               delay(100);
+ 00A6 04E6              ldi R16,100
+ 00A8 10E0              ldi R17,0
+ 00AA AADF              xcall _delay
+ 00AC                   .dbline 59
+ 00AC           ;               if((PINB & (1<<PB1) ) == 0)  //判断是否按下按键2
+ 00AC B199              sbic 0x16,1
+ 00AE 03C0              rjmp L29
+ 00B0           X8:
+ 00B0                   .dbline 60
+ 00B0           ;               {
+ 00B0                   .dbline 61
+ 00B0           ;                 PORTA = 0x00;
+ 00B0 2224              clr R2
+ 00B2 2BBA              out 0x1b,R2
+ 00B4                   .dbline 62
+ 00B4           ;                 break;
+ 00B4 15C0              xjmp L18
+ 00B6           L29:
+ 00B6                   .dbline 64
+ 00B6           ;               }
+ 00B6           ;               PORTA = 0x40;
+ 00B6 80E4              ldi R24,64
+ 00B8 8BBB              out 0x1b,R24
+ 00BA                   .dbline 65
+ 00BA           ;               delay(100);
+ 00BA 04E6              ldi R16,100
+ 00BC 10E0              ldi R17,0
+ 00BE A0DF              xcall _delay
+ 00C0                   .dbline 66
+ 00C0           ;               if((PINB & (1<<PB1) ) == 0)  //判断是否按下按键2
+ 00C0 B199              sbic 0x16,1
+ 00C2 03C0              rjmp L31
+ 00C4           X9:
+ 00C4                   .dbline 67
+ 00C4           ;               {
+ 00C4                   .dbline 68
+ 00C4           ;                 PORTA = 0x00;
+ 00C4 2224              clr R2
+ 00C6 2BBA              out 0x1b,R2
+ 00C8                   .dbline 69
+ 00C8           ;                 break;
+ 00C8 0BC0              xjmp L18
+ 00CA           L31:
+ 00CA                   .dbline 71
+ 00CA           ;               }
+ 00CA           ;               PORTA = 0x80;
+ 00CA 80E8              ldi R24,128
+ 00CC 8BBB              out 0x1b,R24
+ 00CE                   .dbline 72
+ 00CE           ;               delay(100);
+ 00CE 04E6              ldi R16,100
+ 00D0 10E0              ldi R17,0
+ 00D2 96DF              xcall _delay
+ 00D4                   .dbline 73
+ 00D4           ;               if((PINB & (1<<PB1) ) == 0)  //判断是否按下按键2
+ 00D4 B199              sbic 0x16,1
+ 00D6 03C0              rjmp L33
+ 00D8           X10:
+ 00D8                   .dbline 74
+ 00D8           ;               {
+ 00D8                   .dbline 75
+ 00D8           ;                 PORTA = 0x00;
+ 00D8 2224              clr R2
+ 00DA 2BBA              out 0x1b,R2
+ 00DC                   .dbline 76
+ 00DC           ;                 break;
+ 00DC 01C0              xjmp L18
+ 00DE           L33:
+ 00DE                   .dbline 78
+ 00DE           ;               }
+ 00DE           ;         }
+ 00DE           L17:
+ 00DE                   .dbline 20
+ 00DE AFCF              xjmp L16
+ 00E0           L18:
+ 00E0                   .dbline 79
+ 00E0           ;     }
+ 00E0           L14:
+ 00E0                   .dbline 80
+ 00E0           ;   }
+ 00E0           L12:
+ 00E0                   .dbline 16
+ 00E0 ABCF              xjmp L11
+ 00E2           X11:
+ 00E2                   .dbline -2
+ 00E2           L10:
+ 00E2                   .dbline 0 ; func end
+ 00E2 0895              ret
+ 00E4                   .dbend
+ 00E4           ; }

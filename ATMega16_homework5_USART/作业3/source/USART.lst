@@ -1,0 +1,240 @@
+Interrupt Vectors
+    00000 940C 0032 JMP	__start|__text_start
+
+Program Code (text area)
+__start|__text_start:
+    00032 E5CF      LDI	R28,0x5F
+    00033 E0D4      LDI	R29,4
+    00034 BFCD      OUT	0x3D,R28
+    00035 BFDE      OUT	0x3E,R29
+    00036 51CE      SUBI	R28,0x1E
+    00037 40D0      SBCI	R29,0
+    00038 EA0A      LDI	R16,0xAA
+    00039 8308      ST	Y,R16
+    0003A 2400      CLR	R0
+    0003B E7E0      LDI	R30,0x70
+    0003C E0F0      LDI	R31,0
+    0003D E010      LDI	R17,0
+    0003E 37E4      CPI	R30,0x74
+    0003F 07F1      CPC	R31,R17
+    00040 F011      BEQ	0x0043
+    00041 9201      ST	Z+,R0
+    00042 CFFB      RJMP	0x003E
+    00043 8300      ST	Z,R16
+    00044 E5E4      LDI	R30,0x54
+    00045 E0F0      LDI	R31,0
+    00046 E6A0      LDI	R26,0x60
+    00047 E0B0      LDI	R27,0
+    00048 E010      LDI	R17,0
+    00049 E000      LDI	R16,0
+    0004A BF0B      OUT	0x3B,R16
+    0004B 36E4      CPI	R30,0x64
+    0004C 07F1      CPC	R31,R17
+    0004D F021      BEQ	0x0052
+    0004E 95C8      LPM
+    0004F 9631      ADIW	R30,1
+    00050 920D      ST	X+,R0
+    00051 CFF9      RJMP	0x004B
+    00052 940E 00B2 CALL	_main
+_exit:
+    00054 CFFF      RJMP	_exit
+_delay_ms:
+  i                    --> R20
+  j                    --> R22
+  ms                   --> R16
+    00055 940E 00C2 CALL	push_xgsetF000
+FILE: C:\Users\z\Desktop\作业\作业3\source\usart.c
+(0001) #include <iom16v.h>
+(0002) 
+(0003) unsigned char SEG7_CA[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0x88,0x83,0xc6,0xa1,0x86,0x8e}; //共阳数码管段码
+(0004) unsigned char DIS_CHAR[4];
+(0005) 
+(0006) void delay_ms(unsigned int ms)  //延时函数
+(0007) {
+(0008)   unsigned int i , j;
+(0009)   for(i = 0 ; i < ms ; i++)
+    00057 2744      CLR	R20
+    00058 2755      CLR	R21
+    00059 C00B      RJMP	0x0065
+(0010)     for(j = 0 ; j < 1141 ; j++) ; 
+    0005A 2766      CLR	R22
+    0005B 2777      CLR	R23
+    0005C C002      RJMP	0x005F
+    0005D 5F6F      SUBI	R22,0xFF
+    0005E 4F7F      SBCI	R23,0xFF
+    0005F 3765      CPI	R22,0x75
+    00060 E0E4      LDI	R30,4
+    00061 077E      CPC	R23,R30
+    00062 F3D0      BCS	0x005D
+    00063 5F4F      SUBI	R20,0xFF
+    00064 4F5F      SBCI	R21,0xFF
+    00065 1740      CP	R20,R16
+    00066 0751      CPC	R21,R17
+    00067 F390      BCS	0x005A
+    00068 940C 00C7 JMP	pop_xgsetF000
+(0011) }
+(0012) 
+(0013) void usart_init(void)     //配置usart寄存器
+(0014) {
+(0015)      DDRD&=~(1<<PD0);
+_usart_init:
+    0006A 9888      CBI	0x11,0
+(0016) 	 PORTD|=1<<PD0;
+    0006B 9A90      SBI	0x12,0
+(0017) 	 DDRD|=1<<PD1;
+    0006C 9A89      SBI	0x11,1
+(0018) 	 PORTD|=1<<PD1;
+    0006D 9A91      SBI	0x12,1
+(0019) 	 UCSRC = (1<<URSEL) | (1<<UCSZ1) | (1<<UCSZ0);        //8位字符长度
+    0006E E886      LDI	R24,0x86
+    0006F BD80      OUT	0x20,R24
+(0020) 	 UBRRL = 51;                                          //9600bps   8M
+    00070 E383      LDI	R24,0x33
+    00071 B989      OUT	0x09,R24
+(0021) 	 UCSRB = (1<<RXEN) | (1<<TXEN);          //接收使能，发送使能                                     
+    00072 E188      LDI	R24,0x18
+    00073 B98A      OUT	0x0A,R24
+    00074 9508      RET
+(0022) } 
+(0023) 
+(0024) void usart_send(unsigned char data)             //TXD发送数据
+(0025) {
+(0026)   while(!(UCSRA & (1<<UDRE)));   //等待发送缓存器空（等待前次发送完，再进行本次数据发送）
+_usart_send:
+  data                 --> R16
+    00075 9B5D      SBIS	0x0B,5
+    00076 CFFE      RJMP	_usart_send
+(0027)   UDR = data;
+    00077 B90C      OUT	0x0C,R16
+(0028)   while(!(UCSRA & (1<<TXC)));    //等待发送结束
+    00078 9B5E      SBIS	0x0B,6
+    00079 CFFE      RJMP	0x0078
+    0007A 9508      RET
+_usart_read:
+  buf                  --> R20
+    0007B 934A      ST	-Y,R20
+(0029) }
+(0030) 
+(0031) void usart_read() 				 	 //读取数据
+(0032) {
+(0033)   unsigned char buf;
+(0034)   while ( !(UCSRA & (1<<RXC)) );     // 等待接收缓存器空(等待接收完成再读取数据)
+    0007C 9B5F      SBIS	0x0B,7
+    0007D CFFE      RJMP	0x007C
+(0035)   buf = UDR;
+    0007E B14C      IN	R20,0x0C
+(0036)   if((buf>=48) && (buf<=57))
+    0007F 3340      CPI	R20,0x30
+    00080 F118      BCS	0x00A4
+    00081 E389      LDI	R24,0x39
+    00082 1784      CP	R24,R20
+    00083 F100      BCS	0x00A4
+(0037)   {
+(0038)     PORTD = 0x13;
+    00084 E183      LDI	R24,0x13
+    00085 BB82      OUT	0x12,R24
+(0039)     PORTC = SEG7_CA[0];
+    00086 9020 0060 LDS	R2,SEG7_CA
+    00088 BA25      OUT	0x15,R2
+(0040)     delay_ms(10);
+    00089 E00A      LDI	R16,0xA
+    0008A E010      LDI	R17,0
+    0008B DFC9      RCALL	_delay_ms
+(0041) 	
+(0042)     PORTD = 0x123;
+    0008C E283      LDI	R24,0x23
+    0008D BB82      OUT	0x12,R24
+(0043)     PORTC = SEG7_CA[1];
+    0008E 9020 0061 LDS	R2,SEG7_CA+1
+    00090 BA25      OUT	0x15,R2
+(0044)     delay_ms(10);
+    00091 E00A      LDI	R16,0xA
+    00092 E010      LDI	R17,0
+    00093 DFC1      RCALL	_delay_ms
+(0045) 	
+(0046)     PORTD = 0x43;
+    00094 E483      LDI	R24,0x43
+    00095 BB82      OUT	0x12,R24
+(0047)     PORTC = SEG7_CA[2];
+    00096 9020 0062 LDS	R2,SEG7_CA+2
+    00098 BA25      OUT	0x15,R2
+(0048)     delay_ms(10);
+    00099 E00A      LDI	R16,0xA
+    0009A E010      LDI	R17,0
+    0009B DFB9      RCALL	_delay_ms
+(0049) 	
+(0050)     PORTD = 0x83;
+    0009C E883      LDI	R24,0x83
+    0009D BB82      OUT	0x12,R24
+(0051)     PORTC = SEG7_CA[3];
+    0009E 9020 0063 LDS	R2,SEG7_CA+3
+    000A0 BA25      OUT	0x15,R2
+(0052)     delay_ms(10);
+    000A1 E00A      LDI	R16,0xA
+    000A2 E010      LDI	R17,0
+    000A3 DFB1      RCALL	_delay_ms
+(0053)   }
+(0054)   
+(0055)   if((buf>=65&&buf<=90) || (buf>=97&&buf<=122))
+    000A4 3441      CPI	R20,0x41
+    000A5 F018      BCS	0x00A9
+    000A6 E58A      LDI	R24,0x5A
+    000A7 1784      CP	R24,R20
+    000A8 F428      BCC	0x00AE
+    000A9 3641      CPI	R20,0x61
+    000AA F028      BCS	0x00B0
+    000AB E78A      LDI	R24,0x7A
+    000AC 1784      CP	R24,R20
+    000AD F010      BCS	0x00B0
+(0056)   {
+(0057)     usart_send(buf);
+    000AE 2F04      MOV	R16,R20
+    000AF DFC5      RCALL	_usart_send
+(0058)   }
+    000B0 9149      LD	R20,Y+
+    000B1 9508      RET
+(0059) }
+(0060) 
+(0061) void main()
+(0062) {
+(0063)   SREG |= 1<<7;  //全局中断使能
+_main:
+    000B2 9478      BSET	7
+(0064)   usart_init();
+    000B3 DFB6      RCALL	_usart_init
+(0065)   /*初始化数码管*/
+(0066)   DDRC |= 0xff;
+    000B4 B384      IN	R24,0x14
+    000B5 6F8F      ORI	R24,0xFF
+    000B6 BB84      OUT	0x14,R24
+(0067)   PORTC |= 0x00;
+    000B7 B225      IN	R2,0x15
+    000B8 BA25      OUT	0x15,R2
+(0068)   DDRD |= 0xf0;
+    000B9 B381      IN	R24,0x11
+    000BA 6F80      ORI	R24,0xF0
+    000BB BB81      OUT	0x11,R24
+(0069)   PORTD |= 0x00;
+    000BC B222      IN	R2,0x12
+    000BD BA22      OUT	0x12,R2
+    000BE C001      RJMP	0x00C0
+(0070)   
+(0071)   while(1)
+(0072)   {
+(0073)     usart_read();
+FILE: <library>
+    000BF DFBB      RCALL	_usart_read
+    000C0 CFFE      RJMP	0x00BF
+    000C1 9508      RET
+push_xgsetF000:
+    000C2 937A      ST	-Y,R23
+    000C3 936A      ST	-Y,R22
+    000C4 935A      ST	-Y,R21
+    000C5 934A      ST	-Y,R20
+    000C6 9508      RET
+pop_xgsetF000:
+    000C7 9149      LD	R20,Y+
+    000C8 9159      LD	R21,Y+
+    000C9 9169      LD	R22,Y+
+    000CA 9179      LD	R23,Y+
+    000CB 9508      RET

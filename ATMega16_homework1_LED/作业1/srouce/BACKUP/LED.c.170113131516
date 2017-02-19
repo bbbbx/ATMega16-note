@@ -1,0 +1,23 @@
+#include <iom16v.h> 
+const unsigned char LED[]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+void delay (unsigned char x)
+{
+  int i , j;
+  for (i = 0 ; i < x ; i ++)  
+    for(j = 0 ; j < 1141 ; j++)  ;
+}
+
+void main()
+{
+  DDRA = 0xff;
+  PORTA = 0x00;
+  unsigned char n;
+  while (1)
+  {
+    for(n = 0 ; n < 8 ; n ++)
+	{
+	  PORTA = LED[n];
+	  delay(100);
+	}
+  }
+}

@@ -1,0 +1,82 @@
+#include <iom16v.h>
+
+void delay_ms(unsigned int n)	//延时函数
+{
+  unsigned int i,j;
+  for(i = 0 ; i < n ; i ++)
+    for(j = 0 ; j <1141; j ++) ;
+}
+
+const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};  //共阳数码管键码
+
+void main()
+{
+  unsigned char button=PINA&0xf0 , key;
+  DDRA = 0x0f;
+  DDRC = 0xff;
+  DDRD = 0x03;
+  
+  PORTA = 0xf0;
+  PORTC = 0x00;
+  PORTD = 0x03;
+  while(1)
+  {
+    PORTA = 0xfe;	//扫描第一列
+	switch(button)
+	{
+	  case 0xe0: key=0 ;
+	  	   break;
+	  case 0xd0: key=4 ;
+	  	   break;
+	  case 0xeb: key=8 ;
+	  	   break;
+	  case 0xe7: key=12 ;
+	  	   break;
+	}
+	delay_ms(20);
+	
+	PORTA = 0xfd;	//扫描第二列
+	switch(button)
+	{
+	  case 0xe0: key=1 ;
+	  	   break;
+	  case 0xd0: key=5 ;
+	  	   break;
+	  case 0xeb: key=9 ;
+	  	   break;
+	  case 0xe7: key=13 ;
+	  	   break;
+	}
+	delay_ms(20);
+	
+	PORTA = 0xfb;	//扫描第三列
+	switch(button)
+	{
+	  case 0xe0: key=2 ;
+	  	   break;
+	  case 0xd0: key=6 ;
+	  	   break;
+	  case 0xeb: key=10 ;
+	  	   break;
+	  case 0xe7: key=14 ;
+	  	   break;
+	}
+	delay_ms(20);
+	
+	PORTA = 0xf7;	//扫描第四列
+	switch(button)
+	{
+	  case 0xe0: key=3 ;
+	  	   break;
+	  case 0xd0: key=7 ;
+	  	   break;
+	  case 0xeb: key=11 ;
+	  	   break;
+	  case 0xe7: key=15 ;
+	  	   break;
+	}
+	delay_ms(20);
+	
+	
+  }
+}

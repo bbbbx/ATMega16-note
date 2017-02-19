@@ -1,0 +1,56 @@
+#include <iom16v.h>
+
+unsigned char table_ca[]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90};
+int GEWEI=0,SHIWEI=0,COUNT=0;
+
+void delay_ms(unsigned int n)
+{
+  unsigned int i,j;
+  for(i = 0 ; i < n ; i++)
+    for(j = 0 ; j < 1141; j++) ;
+}
+
+#pragma interrupt_handler TC1:9
+void TC1()
+{
+  PORTD = 0x02;
+  PORTC = table_ca[GEWEI];
+  delay_ms(20);
+  COUNT++;
+  if(COUNT%25==0)
+  {
+    COUNT=0;
+	GEWEI++;
+  }
+  if(GEWEI==10)
+  {
+    GEWEI = 0;
+	SHIWEI++;
+  }
+  if(SHIWEI==10)
+  {
+    SHIWEI=0;
+  }
+  PORTD = 0x01;
+  PORTC = table_ca[SHIWEI];
+  delay_ms(20);
+  
+  TCNT1H = 0xFA;
+  TCNT1L = 0x9A;
+}
+
+void main()
+{
+  DDRC = 0xff;
+  PORTC = 0x00;
+  DDRD = 0x03;
+  PORTD = 0x00;
+  
+  TCCR1B = 0x04;
+  TCNT1H = 0xFA;
+  TCNT1L = 0x9A;
+  TIMSK = (1<<2);
+  SREG |= 0x80;
+  
+  while(1) { }
+}

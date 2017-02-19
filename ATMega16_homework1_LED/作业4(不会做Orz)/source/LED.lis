@@ -1,0 +1,1717 @@
+                        .module LED.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile LED.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile LED.c
+ 0000           _delayMs::
+ 0000                   .blkb 1
+                        .area idata
+ 0000 64                .byte 100
+                        .area data(ram, con, rel)
+ 0001                   .dbfile LED.c
+ 0001                   .dbfile C:\Users\z\Desktop\作业\作业4\source\LED.c
+ 0001                   .dbsym e delayMs _delayMs c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile C:\Users\z\Desktop\作业\作业4\source\LED.c
+ 0000                   .dbfunc e delay _delay fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              n -> R16,R17
+                        .even
+ 0000           _delay::
+ 0000 0E940000          xcall push_xgsetF000
+ 0004                   .dbline -1
+ 0004                   .dbline 6
+ 0004           ; #include <iom16v.h>
+ 0004           ; 
+ 0004           ; const unsigned char delayMs = 100;  //延时，单位：ms
+ 0004           ; 
+ 0004           ; void delay(int n)  //延时函数
+ 0004           ; {
+ 0004                   .dbline 8
+ 0004           ;   int i , j;
+ 0004           ;   for (i = 0 ; i < n ; i ++)  
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0AC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 9
+ 000A           ;     for(j = 0 ; j < 1141 ; j++)  ;
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E           L6:
+ 000E                   .dbline 9
+ 000E           L7:
+ 000E                   .dbline 9
+ 000E 6F5F              subi R22,255  ; offset = 1
+ 0010 7F4F              sbci R23,255
+ 0012                   .dbline 9
+ 0012 6537              cpi R22,117
+ 0014 E4E0              ldi R30,4
+ 0016 7E07              cpc R23,R30
+ 0018 D4F3              brlt L6
+ 001A           X0:
+ 001A           L3:
+ 001A                   .dbline 8
+ 001A 4F5F              subi R20,255  ; offset = 1
+ 001C 5F4F              sbci R21,255
+ 001E           L5:
+ 001E                   .dbline 8
+ 001E 4017              cp R20,R16
+ 0020 5107              cpc R21,R17
+ 0022 9CF3              brlt L2
+ 0024           X1:
+ 0024                   .dbline -2
+ 0024           L1:
+ 0024                   .dbline 0 ; func end
+ 0024 0C940000          xjmp pop_xgsetF000
+ 0028                   .dbsym r i 20 I
+ 0028                   .dbsym r j 22 I
+ 0028                   .dbsym r n 16 I
+ 0028                   .dbend
+ 0028                   .dbfunc e LED_down_0 _LED_down_0 fV
+                        .even
+ 0028           _LED_down_0::
+ 0028                   .dbline -1
+ 0028                   .dbline 13
+ 0028           ; }
+ 0028           ; 
+ 0028           ; void LED_down_0()  //按下下按键时
+ 0028           ; {
+ 0028                   .dbline 14
+ 0028           ;   if((PINC & (1<<PC3)) == 0)
+ 0028 9B99              sbic 0x13,3
+ 002A 3AC0              rjmp L11
+ 002C           X2:
+ 002C                   .dbline 15
+ 002C           ;   {
+ 002C 38C0              xjmp L14
+ 002E           L13:
+ 002E                   .dbline 17
+ 002E           ;     while(1)
+ 002E           ;       {
+ 002E                   .dbline 18
+ 002E           ;       PORTA = 0x01;
+ 002E 81E0              ldi R24,1
+ 0030 8BBB              out 0x1b,R24
+ 0032                   .dbline 19
+ 0032           ;         delay(delayMs);
+ 0032 00910000          lds R16,_delayMs
+ 0036 1127              clr R17
+ 0038 E3DF              xcall _delay
+ 003A                   .dbline 20
+ 003A           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 003A 989B              sbis 0x13,0
+ 003C 04C0              rjmp L19
+ 003E           X3:
+ 003E 999B              sbis 0x13,1
+ 0040 02C0              rjmp L19
+ 0042           X4:
+ 0042 9A99              sbic 0x13,2
+ 0044 01C0              rjmp L16
+ 0046           X5:
+ 0046           L19:
+ 0046                   .dbline 21
+ 0046           ;           break;
+ 0046 2CC0              xjmp L15
+ 0048           L16:
+ 0048                   .dbline 22
+ 0048           ;         PORTA = 0x10;
+ 0048 80E1              ldi R24,16
+ 004A 8BBB              out 0x1b,R24
+ 004C                   .dbline 23
+ 004C           ;         delay(delayMs);
+ 004C 00910000          lds R16,_delayMs
+ 0050 1127              clr R17
+ 0052 D6DF              xcall _delay
+ 0054                   .dbline 24
+ 0054           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 0054 989B              sbis 0x13,0
+ 0056 04C0              rjmp L23
+ 0058           X6:
+ 0058 999B              sbis 0x13,1
+ 005A 02C0              rjmp L23
+ 005C           X7:
+ 005C 9A99              sbic 0x13,2
+ 005E 01C0              rjmp L20
+ 0060           X8:
+ 0060           L23:
+ 0060                   .dbline 25
+ 0060           ;           break;
+ 0060 1FC0              xjmp L15
+ 0062           L20:
+ 0062                   .dbline 26
+ 0062           ;         PORTA = 0x00;
+ 0062 2224              clr R2
+ 0064 2BBA              out 0x1b,R2
+ 0066                   .dbline 27
+ 0066           ;         PORTB = 0x01;
+ 0066 81E0              ldi R24,1
+ 0068 88BB              out 0x18,R24
+ 006A                   .dbline 28
+ 006A           ;         delay(delayMs);
+ 006A 00910000          lds R16,_delayMs
+ 006E 1127              clr R17
+ 0070 C7DF              xcall _delay
+ 0072                   .dbline 29
+ 0072           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 0072 989B              sbis 0x13,0
+ 0074 04C0              rjmp L27
+ 0076           X9:
+ 0076 999B              sbis 0x13,1
+ 0078 02C0              rjmp L27
+ 007A           X10:
+ 007A 9A99              sbic 0x13,2
+ 007C 01C0              rjmp L24
+ 007E           X11:
+ 007E           L27:
+ 007E                   .dbline 30
+ 007E           ;           break;
+ 007E 10C0              xjmp L15
+ 0080           L24:
+ 0080                   .dbline 31
+ 0080           ;         PORTB = 0x10;
+ 0080 80E1              ldi R24,16
+ 0082 88BB              out 0x18,R24
+ 0084                   .dbline 32
+ 0084           ;         delay(delayMs);
+ 0084 00910000          lds R16,_delayMs
+ 0088 1127              clr R17
+ 008A BADF              xcall _delay
+ 008C                   .dbline 33
+ 008C           ;         PORTB = 0x00;
+ 008C 2224              clr R2
+ 008E 28BA              out 0x18,R2
+ 0090                   .dbline 34
+ 0090           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 0090 989B              sbis 0x13,0
+ 0092 04C0              rjmp L31
+ 0094           X12:
+ 0094 999B              sbis 0x13,1
+ 0096 02C0              rjmp L31
+ 0098           X13:
+ 0098 9A99              sbic 0x13,2
+ 009A 01C0              rjmp L28
+ 009C           X14:
+ 009C           L31:
+ 009C                   .dbline 35
+ 009C           ;           break;
+ 009C 01C0              xjmp L15
+ 009E           L28:
+ 009E                   .dbline 36
+ 009E           ;       }
+ 009E           L14:
+ 009E                   .dbline 16
+ 009E C7CF              xjmp L13
+ 00A0           L15:
+ 00A0                   .dbline 37
+ 00A0           ;   }
+ 00A0           L11:
+ 00A0                   .dbline -2
+ 00A0           L10:
+ 00A0                   .dbline 0 ; func end
+ 00A0 0895              ret
+ 00A2                   .dbend
+ 00A2                   .dbfunc e LED_down_1 _LED_down_1 fV
+                        .even
+ 00A2           _LED_down_1::
+ 00A2                   .dbline -1
+ 00A2                   .dbline 41
+ 00A2           ; }
+ 00A2           ; 
+ 00A2           ; void LED_down_1()  //按下下按键时
+ 00A2           ; {
+ 00A2                   .dbline 42
+ 00A2           ;   if((PINC & (1<<PC3)) == 0)
+ 00A2 9B99              sbic 0x13,3
+ 00A4 3AC0              rjmp L33
+ 00A6           X15:
+ 00A6                   .dbline 43
+ 00A6           ;   {
+ 00A6 38C0              xjmp L36
+ 00A8           L35:
+ 00A8                   .dbline 45
+ 00A8           ;     while(1)
+ 00A8           ;       {
+ 00A8                   .dbline 46
+ 00A8           ;       PORTA = 0x02;
+ 00A8 82E0              ldi R24,2
+ 00AA 8BBB              out 0x1b,R24
+ 00AC                   .dbline 47
+ 00AC           ;         delay(delayMs);
+ 00AC 00910000          lds R16,_delayMs
+ 00B0 1127              clr R17
+ 00B2 A6DF              xcall _delay
+ 00B4                   .dbline 48
+ 00B4           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 00B4 989B              sbis 0x13,0
+ 00B6 04C0              rjmp L41
+ 00B8           X16:
+ 00B8 999B              sbis 0x13,1
+ 00BA 02C0              rjmp L41
+ 00BC           X17:
+ 00BC 9A99              sbic 0x13,2
+ 00BE 01C0              rjmp L38
+ 00C0           X18:
+ 00C0           L41:
+ 00C0                   .dbline 49
+ 00C0           ;           break;
+ 00C0 2CC0              xjmp L37
+ 00C2           L38:
+ 00C2                   .dbline 50
+ 00C2           ;         PORTA = 0x20;
+ 00C2 80E2              ldi R24,32
+ 00C4 8BBB              out 0x1b,R24
+ 00C6                   .dbline 51
+ 00C6           ;         delay(delayMs);
+ 00C6 00910000          lds R16,_delayMs
+ 00CA 1127              clr R17
+ 00CC 99DF              xcall _delay
+ 00CE                   .dbline 52
+ 00CE           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 00CE 989B              sbis 0x13,0
+ 00D0 04C0              rjmp L45
+ 00D2           X19:
+ 00D2 999B              sbis 0x13,1
+ 00D4 02C0              rjmp L45
+ 00D6           X20:
+ 00D6 9A99              sbic 0x13,2
+ 00D8 01C0              rjmp L42
+ 00DA           X21:
+ 00DA           L45:
+ 00DA                   .dbline 53
+ 00DA           ;           break;
+ 00DA 1FC0              xjmp L37
+ 00DC           L42:
+ 00DC                   .dbline 54
+ 00DC           ;         PORTA = 0x00;
+ 00DC 2224              clr R2
+ 00DE 2BBA              out 0x1b,R2
+ 00E0                   .dbline 55
+ 00E0           ;         PORTB = 0x02;
+ 00E0 82E0              ldi R24,2
+ 00E2 88BB              out 0x18,R24
+ 00E4                   .dbline 56
+ 00E4           ;         delay(delayMs);
+ 00E4 00910000          lds R16,_delayMs
+ 00E8 1127              clr R17
+ 00EA 8ADF              xcall _delay
+ 00EC                   .dbline 57
+ 00EC           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 00EC 989B              sbis 0x13,0
+ 00EE 04C0              rjmp L49
+ 00F0           X22:
+ 00F0 999B              sbis 0x13,1
+ 00F2 02C0              rjmp L49
+ 00F4           X23:
+ 00F4 9A99              sbic 0x13,2
+ 00F6 01C0              rjmp L46
+ 00F8           X24:
+ 00F8           L49:
+ 00F8                   .dbline 58
+ 00F8           ;           break;
+ 00F8 10C0              xjmp L37
+ 00FA           L46:
+ 00FA                   .dbline 59
+ 00FA           ;         PORTB = 0x20;
+ 00FA 80E2              ldi R24,32
+ 00FC 88BB              out 0x18,R24
+ 00FE                   .dbline 60
+ 00FE           ;         delay(delayMs);
+ 00FE 00910000          lds R16,_delayMs
+ 0102 1127              clr R17
+ 0104 7DDF              xcall _delay
+ 0106                   .dbline 61
+ 0106           ;         PORTB = 0x00;
+ 0106 2224              clr R2
+ 0108 28BA              out 0x18,R2
+ 010A                   .dbline 62
+ 010A           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 010A 989B              sbis 0x13,0
+ 010C 04C0              rjmp L53
+ 010E           X25:
+ 010E 999B              sbis 0x13,1
+ 0110 02C0              rjmp L53
+ 0112           X26:
+ 0112 9A99              sbic 0x13,2
+ 0114 01C0              rjmp L50
+ 0116           X27:
+ 0116           L53:
+ 0116                   .dbline 63
+ 0116           ;           break;
+ 0116 01C0              xjmp L37
+ 0118           L50:
+ 0118                   .dbline 64
+ 0118           ;       }
+ 0118           L36:
+ 0118                   .dbline 44
+ 0118 C7CF              xjmp L35
+ 011A           L37:
+ 011A                   .dbline 65
+ 011A           ;   }
+ 011A           L33:
+ 011A                   .dbline -2
+ 011A           L32:
+ 011A                   .dbline 0 ; func end
+ 011A 0895              ret
+ 011C                   .dbend
+ 011C                   .dbfunc e LED_down_2 _LED_down_2 fV
+                        .even
+ 011C           _LED_down_2::
+ 011C                   .dbline -1
+ 011C                   .dbline 69
+ 011C           ; }
+ 011C           ; 
+ 011C           ; void LED_down_2()  //按下下按键时
+ 011C           ; {
+ 011C                   .dbline 70
+ 011C           ;   if((PINC & (1<<PC3)) == 0)
+ 011C 9B99              sbic 0x13,3
+ 011E 3AC0              rjmp L55
+ 0120           X28:
+ 0120                   .dbline 71
+ 0120           ;   {
+ 0120 38C0              xjmp L58
+ 0122           L57:
+ 0122                   .dbline 73
+ 0122           ;     while(1)
+ 0122           ;       {
+ 0122                   .dbline 74
+ 0122           ;       PORTA = 0x04;
+ 0122 84E0              ldi R24,4
+ 0124 8BBB              out 0x1b,R24
+ 0126                   .dbline 75
+ 0126           ;         delay(delayMs);
+ 0126 00910000          lds R16,_delayMs
+ 012A 1127              clr R17
+ 012C 69DF              xcall _delay
+ 012E                   .dbline 76
+ 012E           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 012E 989B              sbis 0x13,0
+ 0130 04C0              rjmp L63
+ 0132           X29:
+ 0132 999B              sbis 0x13,1
+ 0134 02C0              rjmp L63
+ 0136           X30:
+ 0136 9A99              sbic 0x13,2
+ 0138 01C0              rjmp L60
+ 013A           X31:
+ 013A           L63:
+ 013A                   .dbline 77
+ 013A           ;           break;
+ 013A 2CC0              xjmp L59
+ 013C           L60:
+ 013C                   .dbline 78
+ 013C           ;         PORTA = 0x40;
+ 013C 80E4              ldi R24,64
+ 013E 8BBB              out 0x1b,R24
+ 0140                   .dbline 79
+ 0140           ;         delay(delayMs);
+ 0140 00910000          lds R16,_delayMs
+ 0144 1127              clr R17
+ 0146 5CDF              xcall _delay
+ 0148                   .dbline 80
+ 0148           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 0148 989B              sbis 0x13,0
+ 014A 04C0              rjmp L67
+ 014C           X32:
+ 014C 999B              sbis 0x13,1
+ 014E 02C0              rjmp L67
+ 0150           X33:
+ 0150 9A99              sbic 0x13,2
+ 0152 01C0              rjmp L64
+ 0154           X34:
+ 0154           L67:
+ 0154                   .dbline 81
+ 0154           ;           break;
+ 0154 1FC0              xjmp L59
+ 0156           L64:
+ 0156                   .dbline 82
+ 0156           ;         PORTA = 0x00;
+ 0156 2224              clr R2
+ 0158 2BBA              out 0x1b,R2
+ 015A                   .dbline 83
+ 015A           ;         PORTB = 0x04;
+ 015A 84E0              ldi R24,4
+ 015C 88BB              out 0x18,R24
+ 015E                   .dbline 84
+ 015E           ;         delay(delayMs);
+ 015E 00910000          lds R16,_delayMs
+ 0162 1127              clr R17
+ 0164 4DDF              xcall _delay
+ 0166                   .dbline 85
+ 0166           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 0166 989B              sbis 0x13,0
+ 0168 04C0              rjmp L71
+ 016A           X35:
+ 016A 999B              sbis 0x13,1
+ 016C 02C0              rjmp L71
+ 016E           X36:
+ 016E 9A99              sbic 0x13,2
+ 0170 01C0              rjmp L68
+ 0172           X37:
+ 0172           L71:
+ 0172                   .dbline 86
+ 0172           ;           break;
+ 0172 10C0              xjmp L59
+ 0174           L68:
+ 0174                   .dbline 87
+ 0174           ;         PORTB = 0x40;
+ 0174 80E4              ldi R24,64
+ 0176 88BB              out 0x18,R24
+ 0178                   .dbline 88
+ 0178           ;         delay(delayMs);
+ 0178 00910000          lds R16,_delayMs
+ 017C 1127              clr R17
+ 017E 40DF              xcall _delay
+ 0180                   .dbline 89
+ 0180           ;         PORTB = 0x00;
+ 0180 2224              clr R2
+ 0182 28BA              out 0x18,R2
+ 0184                   .dbline 90
+ 0184           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 0184 989B              sbis 0x13,0
+ 0186 04C0              rjmp L75
+ 0188           X38:
+ 0188 999B              sbis 0x13,1
+ 018A 02C0              rjmp L75
+ 018C           X39:
+ 018C 9A99              sbic 0x13,2
+ 018E 01C0              rjmp L72
+ 0190           X40:
+ 0190           L75:
+ 0190                   .dbline 91
+ 0190           ;           break;
+ 0190 01C0              xjmp L59
+ 0192           L72:
+ 0192                   .dbline 92
+ 0192           ;       }
+ 0192           L58:
+ 0192                   .dbline 72
+ 0192 C7CF              xjmp L57
+ 0194           L59:
+ 0194                   .dbline 93
+ 0194           ;   }
+ 0194           L55:
+ 0194                   .dbline -2
+ 0194           L54:
+ 0194                   .dbline 0 ; func end
+ 0194 0895              ret
+ 0196                   .dbend
+ 0196                   .dbfunc e LED_down_3 _LED_down_3 fV
+                        .even
+ 0196           _LED_down_3::
+ 0196                   .dbline -1
+ 0196                   .dbline 97
+ 0196           ; }
+ 0196           ; 
+ 0196           ; void LED_down_3()  //按下下按键时
+ 0196           ; {
+ 0196                   .dbline 98
+ 0196           ;   if((PINC & (1<<PC3)) == 0)
+ 0196 9B99              sbic 0x13,3
+ 0198 3AC0              rjmp L77
+ 019A           X41:
+ 019A                   .dbline 99
+ 019A           ;   {
+ 019A 38C0              xjmp L80
+ 019C           L79:
+ 019C                   .dbline 101
+ 019C           ;     while(1)
+ 019C           ;       {
+ 019C                   .dbline 102
+ 019C           ;       PORTA = 0x08;
+ 019C 88E0              ldi R24,8
+ 019E 8BBB              out 0x1b,R24
+ 01A0                   .dbline 103
+ 01A0           ;         delay(delayMs);
+ 01A0 00910000          lds R16,_delayMs
+ 01A4 1127              clr R17
+ 01A6 2CDF              xcall _delay
+ 01A8                   .dbline 104
+ 01A8           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 01A8 989B              sbis 0x13,0
+ 01AA 04C0              rjmp L85
+ 01AC           X42:
+ 01AC 999B              sbis 0x13,1
+ 01AE 02C0              rjmp L85
+ 01B0           X43:
+ 01B0 9A99              sbic 0x13,2
+ 01B2 01C0              rjmp L82
+ 01B4           X44:
+ 01B4           L85:
+ 01B4                   .dbline 105
+ 01B4           ;           break;
+ 01B4 2CC0              xjmp L81
+ 01B6           L82:
+ 01B6                   .dbline 106
+ 01B6           ;         PORTA = 0x80;
+ 01B6 80E8              ldi R24,128
+ 01B8 8BBB              out 0x1b,R24
+ 01BA                   .dbline 107
+ 01BA           ;         delay(delayMs);
+ 01BA 00910000          lds R16,_delayMs
+ 01BE 1127              clr R17
+ 01C0 1FDF              xcall _delay
+ 01C2                   .dbline 108
+ 01C2           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 01C2 989B              sbis 0x13,0
+ 01C4 04C0              rjmp L89
+ 01C6           X45:
+ 01C6 999B              sbis 0x13,1
+ 01C8 02C0              rjmp L89
+ 01CA           X46:
+ 01CA 9A99              sbic 0x13,2
+ 01CC 01C0              rjmp L86
+ 01CE           X47:
+ 01CE           L89:
+ 01CE                   .dbline 109
+ 01CE           ;           break;
+ 01CE 1FC0              xjmp L81
+ 01D0           L86:
+ 01D0                   .dbline 110
+ 01D0           ;         PORTA = 0x00;
+ 01D0 2224              clr R2
+ 01D2 2BBA              out 0x1b,R2
+ 01D4                   .dbline 111
+ 01D4           ;         PORTB = 0x08;
+ 01D4 88E0              ldi R24,8
+ 01D6 88BB              out 0x18,R24
+ 01D8                   .dbline 112
+ 01D8           ;         delay(delayMs);
+ 01D8 00910000          lds R16,_delayMs
+ 01DC 1127              clr R17
+ 01DE 10DF              xcall _delay
+ 01E0                   .dbline 113
+ 01E0           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 01E0 989B              sbis 0x13,0
+ 01E2 04C0              rjmp L93
+ 01E4           X48:
+ 01E4 999B              sbis 0x13,1
+ 01E6 02C0              rjmp L93
+ 01E8           X49:
+ 01E8 9A99              sbic 0x13,2
+ 01EA 01C0              rjmp L90
+ 01EC           X50:
+ 01EC           L93:
+ 01EC                   .dbline 114
+ 01EC           ;           break;
+ 01EC 10C0              xjmp L81
+ 01EE           L90:
+ 01EE                   .dbline 115
+ 01EE           ;         PORTB = 0x80;
+ 01EE 80E8              ldi R24,128
+ 01F0 88BB              out 0x18,R24
+ 01F2                   .dbline 116
+ 01F2           ;         delay(delayMs);
+ 01F2 00910000          lds R16,_delayMs
+ 01F6 1127              clr R17
+ 01F8 03DF              xcall _delay
+ 01FA                   .dbline 117
+ 01FA           ;         PORTB = 0x00;
+ 01FA 2224              clr R2
+ 01FC 28BA              out 0x18,R2
+ 01FE                   .dbline 118
+ 01FE           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC2))==0) //若按下其他的按键则跳出循环
+ 01FE 989B              sbis 0x13,0
+ 0200 04C0              rjmp L97
+ 0202           X51:
+ 0202 999B              sbis 0x13,1
+ 0204 02C0              rjmp L97
+ 0206           X52:
+ 0206 9A99              sbic 0x13,2
+ 0208 01C0              rjmp L94
+ 020A           X53:
+ 020A           L97:
+ 020A                   .dbline 119
+ 020A           ;           break;
+ 020A 01C0              xjmp L81
+ 020C           L94:
+ 020C                   .dbline 120
+ 020C           ;       }
+ 020C           L80:
+ 020C                   .dbline 100
+ 020C C7CF              xjmp L79
+ 020E           L81:
+ 020E                   .dbline 121
+ 020E           ;   }
+ 020E           L77:
+ 020E                   .dbline -2
+ 020E           L76:
+ 020E                   .dbline 0 ; func end
+ 020E 0895              ret
+ 0210                   .dbend
+ 0210                   .dbfunc e LED_down _LED_down fV
+                        .even
+ 0210           _LED_down::
+ 0210                   .dbline -1
+ 0210                   .dbline 125
+ 0210           ; }
+ 0210           ; 
+ 0210           ; void LED_down()
+ 0210           ; {
+ 0210                   .dbline 126
+ 0210           ;   if(((PINA&(1<<PA0))==1) || ((PINA&(1<<4))==1) || ((PINB&(1<<PB0))==1) || ((PINB&(1<<4))==1))  //判断此时灯在何处是亮的
+ 0210 89B3              in R24,0x19
+ 0212 8170              andi R24,1
+ 0214 8130              cpi R24,1
+ 0216 61F0              breq L103
+ 0218           X54:
+ 0218 89B3              in R24,0x19
+ 021A 8071              andi R24,16
+ 021C 8130              cpi R24,1
+ 021E 41F0              breq L103
+ 0220           X55:
+ 0220 86B3              in R24,0x16
+ 0222 8170              andi R24,1
+ 0224 8130              cpi R24,1
+ 0226 21F0              breq L103
+ 0228           X56:
+ 0228 86B3              in R24,0x16
+ 022A 8071              andi R24,16
+ 022C 8130              cpi R24,1
+ 022E 09F4              brne L99
+ 0230           X57:
+ 0230           L103:
+ 0230                   .dbline 127
+ 0230           ;   {
+ 0230                   .dbline 128
+ 0230           ;     LED_down_0();
+ 0230 FBDE              xcall _LED_down_0
+ 0232                   .dbline 129
+ 0232           ;   }
+ 0232           L99:
+ 0232                   .dbline 130
+ 0232           ;   if(((PINA&(1<<1))==1) || ((PINA&(1<<5))==1) || ((PINB&(1<<1))==1) || ((PINB&(1<<5))==1))  //判断此时灯在何处是亮的
+ 0232 89B3              in R24,0x19
+ 0234 8270              andi R24,2
+ 0236 8130              cpi R24,1
+ 0238 61F0              breq L108
+ 023A           X58:
+ 023A 89B3              in R24,0x19
+ 023C 8072              andi R24,32
+ 023E 8130              cpi R24,1
+ 0240 41F0              breq L108
+ 0242           X59:
+ 0242 86B3              in R24,0x16
+ 0244 8270              andi R24,2
+ 0246 8130              cpi R24,1
+ 0248 21F0              breq L108
+ 024A           X60:
+ 024A 86B3              in R24,0x16
+ 024C 8072              andi R24,32
+ 024E 8130              cpi R24,1
+ 0250 09F4              brne L104
+ 0252           X61:
+ 0252           L108:
+ 0252                   .dbline 131
+ 0252           ;   {
+ 0252                   .dbline 132
+ 0252           ;     LED_down_1();
+ 0252 27DF              xcall _LED_down_1
+ 0254                   .dbline 133
+ 0254           ;   }
+ 0254           L104:
+ 0254                   .dbline 134
+ 0254           ;   if(((PINA&(1<<2))==1) || ((PINA&(1<<6))==1) || ((PINB&(1<<2))==1) || ((PINB&(1<<6))==1))  //判断此时灯在何处是亮的
+ 0254 89B3              in R24,0x19
+ 0256 8470              andi R24,4
+ 0258 8130              cpi R24,1
+ 025A 61F0              breq L113
+ 025C           X62:
+ 025C 89B3              in R24,0x19
+ 025E 8074              andi R24,64
+ 0260 8130              cpi R24,1
+ 0262 41F0              breq L113
+ 0264           X63:
+ 0264 86B3              in R24,0x16
+ 0266 8470              andi R24,4
+ 0268 8130              cpi R24,1
+ 026A 21F0              breq L113
+ 026C           X64:
+ 026C 86B3              in R24,0x16
+ 026E 8074              andi R24,64
+ 0270 8130              cpi R24,1
+ 0272 09F4              brne L109
+ 0274           X65:
+ 0274           L113:
+ 0274                   .dbline 135
+ 0274           ;   {
+ 0274                   .dbline 136
+ 0274           ;     LED_down_2();
+ 0274 53DF              xcall _LED_down_2
+ 0276                   .dbline 137
+ 0276           ;   }
+ 0276           L109:
+ 0276                   .dbline 138
+ 0276           ;   if(((PINA&(1<<3))==1) || ((PINA&(1<<7))==1) || ((PINB&(1<<3))==1) || ((PINB&(1<<7))==1))  //判断此时灯在何处是亮的
+ 0276 89B3              in R24,0x19
+ 0278 8870              andi R24,8
+ 027A 8130              cpi R24,1
+ 027C 61F0              breq L118
+ 027E           X66:
+ 027E 89B3              in R24,0x19
+ 0280 8078              andi R24,128
+ 0282 8130              cpi R24,1
+ 0284 41F0              breq L118
+ 0286           X67:
+ 0286 86B3              in R24,0x16
+ 0288 8870              andi R24,8
+ 028A 8130              cpi R24,1
+ 028C 21F0              breq L118
+ 028E           X68:
+ 028E 86B3              in R24,0x16
+ 0290 8078              andi R24,128
+ 0292 8130              cpi R24,1
+ 0294 09F4              brne L114
+ 0296           X69:
+ 0296           L118:
+ 0296                   .dbline 139
+ 0296           ;   {
+ 0296                   .dbline 140
+ 0296           ;     LED_down_3();
+ 0296 7FDF              xcall _LED_down_3
+ 0298                   .dbline 141
+ 0298           ;   }
+ 0298           L114:
+ 0298                   .dbline -2
+ 0298           L98:
+ 0298                   .dbline 0 ; func end
+ 0298 0895              ret
+ 029A                   .dbend
+ 029A                   .dbfunc e LED_right_0 _LED_right_0 fV
+                        .even
+ 029A           _LED_right_0::
+ 029A                   .dbline -1
+ 029A                   .dbline 145
+ 029A           ; }
+ 029A           ; 
+ 029A           ; void LED_right_0()
+ 029A           ; {
+ 029A                   .dbline 146
+ 029A           ;   if((PINC & (1<<PC2)) == 0)
+ 029A 9A99              sbic 0x13,2
+ 029C 3AC0              rjmp L120
+ 029E           X70:
+ 029E                   .dbline 147
+ 029E           ;   {
+ 029E 38C0              xjmp L123
+ 02A0           L122:
+ 02A0                   .dbline 149
+ 02A0           ;     while(1)
+ 02A0           ;       {
+ 02A0                   .dbline 150
+ 02A0           ;       PORTB = 0x00;
+ 02A0 2224              clr R2
+ 02A2 28BA              out 0x18,R2
+ 02A4                   .dbline 151
+ 02A4           ;       PORTA = 0x01;
+ 02A4 81E0              ldi R24,1
+ 02A6 8BBB              out 0x1b,R24
+ 02A8                   .dbline 152
+ 02A8           ;         delay(delayMs);
+ 02A8 00910000          lds R16,_delayMs
+ 02AC 1127              clr R17
+ 02AE A8DE              xcall _delay
+ 02B0                   .dbline 153
+ 02B0           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 02B0 989B              sbis 0x13,0
+ 02B2 04C0              rjmp L128
+ 02B4           X71:
+ 02B4 999B              sbis 0x13,1
+ 02B6 02C0              rjmp L128
+ 02B8           X72:
+ 02B8 9B99              sbic 0x13,3
+ 02BA 01C0              rjmp L125
+ 02BC           X73:
+ 02BC           L128:
+ 02BC                   .dbline 154
+ 02BC           ;           break;
+ 02BC 2AC0              xjmp L124
+ 02BE           L125:
+ 02BE                   .dbline 155
+ 02BE           ;         PORTA = 0x02;
+ 02BE 82E0              ldi R24,2
+ 02C0 8BBB              out 0x1b,R24
+ 02C2                   .dbline 156
+ 02C2           ;         delay(delayMs);
+ 02C2 00910000          lds R16,_delayMs
+ 02C6 1127              clr R17
+ 02C8 9BDE              xcall _delay
+ 02CA                   .dbline 157
+ 02CA           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 02CA 989B              sbis 0x13,0
+ 02CC 04C0              rjmp L132
+ 02CE           X74:
+ 02CE 999B              sbis 0x13,1
+ 02D0 02C0              rjmp L132
+ 02D2           X75:
+ 02D2 9B99              sbic 0x13,3
+ 02D4 01C0              rjmp L129
+ 02D6           X76:
+ 02D6           L132:
+ 02D6                   .dbline 158
+ 02D6           ;           break;
+ 02D6 1DC0              xjmp L124
+ 02D8           L129:
+ 02D8                   .dbline 159
+ 02D8           ;         PORTA = 0x04;
+ 02D8 84E0              ldi R24,4
+ 02DA 8BBB              out 0x1b,R24
+ 02DC                   .dbline 160
+ 02DC           ;         delay(delayMs);
+ 02DC 00910000          lds R16,_delayMs
+ 02E0 1127              clr R17
+ 02E2 8EDE              xcall _delay
+ 02E4                   .dbline 161
+ 02E4           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 02E4 989B              sbis 0x13,0
+ 02E6 04C0              rjmp L136
+ 02E8           X77:
+ 02E8 999B              sbis 0x13,1
+ 02EA 02C0              rjmp L136
+ 02EC           X78:
+ 02EC 9B99              sbic 0x13,3
+ 02EE 01C0              rjmp L133
+ 02F0           X79:
+ 02F0           L136:
+ 02F0                   .dbline 162
+ 02F0           ;           break;
+ 02F0 10C0              xjmp L124
+ 02F2           L133:
+ 02F2                   .dbline 163
+ 02F2           ;         PORTA = 0x08;
+ 02F2 88E0              ldi R24,8
+ 02F4 8BBB              out 0x1b,R24
+ 02F6                   .dbline 164
+ 02F6           ;         delay(delayMs);
+ 02F6 00910000          lds R16,_delayMs
+ 02FA 1127              clr R17
+ 02FC 81DE              xcall _delay
+ 02FE                   .dbline 165
+ 02FE           ;         PORTA = 0x00;
+ 02FE 2224              clr R2
+ 0300 2BBA              out 0x1b,R2
+ 0302                   .dbline 166
+ 0302           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 0302 989B              sbis 0x13,0
+ 0304 04C0              rjmp L140
+ 0306           X80:
+ 0306 999B              sbis 0x13,1
+ 0308 02C0              rjmp L140
+ 030A           X81:
+ 030A 9B99              sbic 0x13,3
+ 030C 01C0              rjmp L137
+ 030E           X82:
+ 030E           L140:
+ 030E                   .dbline 167
+ 030E           ;           break;
+ 030E 01C0              xjmp L124
+ 0310           L137:
+ 0310                   .dbline 168
+ 0310           ;     }
+ 0310           L123:
+ 0310                   .dbline 148
+ 0310 C7CF              xjmp L122
+ 0312           L124:
+ 0312                   .dbline 169
+ 0312           ;   }
+ 0312           L120:
+ 0312                   .dbline -2
+ 0312           L119:
+ 0312                   .dbline 0 ; func end
+ 0312 0895              ret
+ 0314                   .dbend
+ 0314                   .dbfunc e LED_right_1 _LED_right_1 fV
+                        .even
+ 0314           _LED_right_1::
+ 0314                   .dbline -1
+ 0314                   .dbline 173
+ 0314           ; }
+ 0314           ; 
+ 0314           ; void LED_right_1()
+ 0314           ; {
+ 0314                   .dbline 174
+ 0314           ;   if((PINC & (1<<PC2)) == 0)
+ 0314 9A99              sbic 0x13,2
+ 0316 3AC0              rjmp L142
+ 0318           X83:
+ 0318                   .dbline 175
+ 0318           ;   {
+ 0318 38C0              xjmp L145
+ 031A           L144:
+ 031A                   .dbline 177
+ 031A           ;     while(1)
+ 031A           ;       {
+ 031A                   .dbline 178
+ 031A           ;       PORTB = 0x00;
+ 031A 2224              clr R2
+ 031C 28BA              out 0x18,R2
+ 031E                   .dbline 179
+ 031E           ;       PORTA = 0x10;
+ 031E 80E1              ldi R24,16
+ 0320 8BBB              out 0x1b,R24
+ 0322                   .dbline 180
+ 0322           ;         delay(delayMs);
+ 0322 00910000          lds R16,_delayMs
+ 0326 1127              clr R17
+ 0328 6BDE              xcall _delay
+ 032A                   .dbline 181
+ 032A           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 032A 989B              sbis 0x13,0
+ 032C 04C0              rjmp L150
+ 032E           X84:
+ 032E 999B              sbis 0x13,1
+ 0330 02C0              rjmp L150
+ 0332           X85:
+ 0332 9B99              sbic 0x13,3
+ 0334 01C0              rjmp L147
+ 0336           X86:
+ 0336           L150:
+ 0336                   .dbline 182
+ 0336           ;           break;
+ 0336 2AC0              xjmp L146
+ 0338           L147:
+ 0338                   .dbline 183
+ 0338           ;         PORTA = 0x20;
+ 0338 80E2              ldi R24,32
+ 033A 8BBB              out 0x1b,R24
+ 033C                   .dbline 184
+ 033C           ;         delay(delayMs);
+ 033C 00910000          lds R16,_delayMs
+ 0340 1127              clr R17
+ 0342 5EDE              xcall _delay
+ 0344                   .dbline 185
+ 0344           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 0344 989B              sbis 0x13,0
+ 0346 04C0              rjmp L154
+ 0348           X87:
+ 0348 999B              sbis 0x13,1
+ 034A 02C0              rjmp L154
+ 034C           X88:
+ 034C 9B99              sbic 0x13,3
+ 034E 01C0              rjmp L151
+ 0350           X89:
+ 0350           L154:
+ 0350                   .dbline 186
+ 0350           ;           break;
+ 0350 1DC0              xjmp L146
+ 0352           L151:
+ 0352                   .dbline 187
+ 0352           ;         PORTA = 0x40;
+ 0352 80E4              ldi R24,64
+ 0354 8BBB              out 0x1b,R24
+ 0356                   .dbline 188
+ 0356           ;         delay(delayMs);
+ 0356 00910000          lds R16,_delayMs
+ 035A 1127              clr R17
+ 035C 51DE              xcall _delay
+ 035E                   .dbline 189
+ 035E           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 035E 989B              sbis 0x13,0
+ 0360 04C0              rjmp L158
+ 0362           X90:
+ 0362 999B              sbis 0x13,1
+ 0364 02C0              rjmp L158
+ 0366           X91:
+ 0366 9B99              sbic 0x13,3
+ 0368 01C0              rjmp L155
+ 036A           X92:
+ 036A           L158:
+ 036A                   .dbline 190
+ 036A           ;           break;
+ 036A 10C0              xjmp L146
+ 036C           L155:
+ 036C                   .dbline 191
+ 036C           ;         PORTA = 0x80;
+ 036C 80E8              ldi R24,128
+ 036E 8BBB              out 0x1b,R24
+ 0370                   .dbline 192
+ 0370           ;         delay(delayMs);
+ 0370 00910000          lds R16,_delayMs
+ 0374 1127              clr R17
+ 0376 44DE              xcall _delay
+ 0378                   .dbline 193
+ 0378           ;         PORTA = 0x00;
+ 0378 2224              clr R2
+ 037A 2BBA              out 0x1b,R2
+ 037C                   .dbline 194
+ 037C           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 037C 989B              sbis 0x13,0
+ 037E 04C0              rjmp L162
+ 0380           X93:
+ 0380 999B              sbis 0x13,1
+ 0382 02C0              rjmp L162
+ 0384           X94:
+ 0384 9B99              sbic 0x13,3
+ 0386 01C0              rjmp L159
+ 0388           X95:
+ 0388           L162:
+ 0388                   .dbline 195
+ 0388           ;           break;
+ 0388 01C0              xjmp L146
+ 038A           L159:
+ 038A                   .dbline 196
+ 038A           ;     }
+ 038A           L145:
+ 038A                   .dbline 176
+ 038A C7CF              xjmp L144
+ 038C           L146:
+ 038C                   .dbline 197
+ 038C           ;   }
+ 038C           L142:
+ 038C                   .dbline -2
+ 038C           L141:
+ 038C                   .dbline 0 ; func end
+ 038C 0895              ret
+ 038E                   .dbend
+ 038E                   .dbfunc e LED_right_2 _LED_right_2 fV
+                        .even
+ 038E           _LED_right_2::
+ 038E                   .dbline -1
+ 038E                   .dbline 201
+ 038E           ; }
+ 038E           ; 
+ 038E           ; void LED_right_2()
+ 038E           ; {
+ 038E                   .dbline 202
+ 038E           ;   if((PINC & (1<<PC2)) == 0)
+ 038E 9A99              sbic 0x13,2
+ 0390 3AC0              rjmp L164
+ 0392           X96:
+ 0392                   .dbline 203
+ 0392           ;   {
+ 0392 38C0              xjmp L167
+ 0394           L166:
+ 0394                   .dbline 205
+ 0394           ;     while(1)
+ 0394           ;       {
+ 0394                   .dbline 206
+ 0394           ;       PORTA = 0x00;
+ 0394 2224              clr R2
+ 0396 2BBA              out 0x1b,R2
+ 0398                   .dbline 207
+ 0398           ;       PORTB = 0x01;
+ 0398 81E0              ldi R24,1
+ 039A 88BB              out 0x18,R24
+ 039C                   .dbline 208
+ 039C           ;         delay(delayMs);
+ 039C 00910000          lds R16,_delayMs
+ 03A0 1127              clr R17
+ 03A2 2EDE              xcall _delay
+ 03A4                   .dbline 209
+ 03A4           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 03A4 989B              sbis 0x13,0
+ 03A6 04C0              rjmp L172
+ 03A8           X97:
+ 03A8 999B              sbis 0x13,1
+ 03AA 02C0              rjmp L172
+ 03AC           X98:
+ 03AC 9B99              sbic 0x13,3
+ 03AE 01C0              rjmp L169
+ 03B0           X99:
+ 03B0           L172:
+ 03B0                   .dbline 210
+ 03B0           ;           break;
+ 03B0 2AC0              xjmp L168
+ 03B2           L169:
+ 03B2                   .dbline 211
+ 03B2           ;         PORTB = 0x02;
+ 03B2 82E0              ldi R24,2
+ 03B4 88BB              out 0x18,R24
+ 03B6                   .dbline 212
+ 03B6           ;         delay(delayMs);
+ 03B6 00910000          lds R16,_delayMs
+ 03BA 1127              clr R17
+ 03BC 21DE              xcall _delay
+ 03BE                   .dbline 213
+ 03BE           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 03BE 989B              sbis 0x13,0
+ 03C0 04C0              rjmp L176
+ 03C2           X100:
+ 03C2 999B              sbis 0x13,1
+ 03C4 02C0              rjmp L176
+ 03C6           X101:
+ 03C6 9B99              sbic 0x13,3
+ 03C8 01C0              rjmp L173
+ 03CA           X102:
+ 03CA           L176:
+ 03CA                   .dbline 214
+ 03CA           ;           break;
+ 03CA 1DC0              xjmp L168
+ 03CC           L173:
+ 03CC                   .dbline 215
+ 03CC           ;         PORTB = 0x04;
+ 03CC 84E0              ldi R24,4
+ 03CE 88BB              out 0x18,R24
+ 03D0                   .dbline 216
+ 03D0           ;         delay(delayMs);
+ 03D0 00910000          lds R16,_delayMs
+ 03D4 1127              clr R17
+ 03D6 14DE              xcall _delay
+ 03D8                   .dbline 217
+ 03D8           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 03D8 989B              sbis 0x13,0
+ 03DA 04C0              rjmp L180
+ 03DC           X103:
+ 03DC 999B              sbis 0x13,1
+ 03DE 02C0              rjmp L180
+ 03E0           X104:
+ 03E0 9B99              sbic 0x13,3
+ 03E2 01C0              rjmp L177
+ 03E4           X105:
+ 03E4           L180:
+ 03E4                   .dbline 218
+ 03E4           ;           break;
+ 03E4 10C0              xjmp L168
+ 03E6           L177:
+ 03E6                   .dbline 219
+ 03E6           ;         PORTB = 0x08;
+ 03E6 88E0              ldi R24,8
+ 03E8 88BB              out 0x18,R24
+ 03EA                   .dbline 220
+ 03EA           ;         delay(delayMs);
+ 03EA 00910000          lds R16,_delayMs
+ 03EE 1127              clr R17
+ 03F0 07DE              xcall _delay
+ 03F2                   .dbline 221
+ 03F2           ;         PORTB = 0x00;
+ 03F2 2224              clr R2
+ 03F4 28BA              out 0x18,R2
+ 03F6                   .dbline 222
+ 03F6           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 03F6 989B              sbis 0x13,0
+ 03F8 04C0              rjmp L184
+ 03FA           X106:
+ 03FA 999B              sbis 0x13,1
+ 03FC 02C0              rjmp L184
+ 03FE           X107:
+ 03FE 9B99              sbic 0x13,3
+ 0400 01C0              rjmp L181
+ 0402           X108:
+ 0402           L184:
+ 0402                   .dbline 223
+ 0402           ;           break;
+ 0402 01C0              xjmp L168
+ 0404           L181:
+ 0404                   .dbline 224
+ 0404           ;     }
+ 0404           L167:
+ 0404                   .dbline 204
+ 0404 C7CF              xjmp L166
+ 0406           L168:
+ 0406                   .dbline 225
+ 0406           ;   }
+ 0406           L164:
+ 0406                   .dbline -2
+ 0406           L163:
+ 0406                   .dbline 0 ; func end
+ 0406 0895              ret
+ 0408                   .dbend
+ 0408                   .dbfunc e LED_right_3 _LED_right_3 fV
+                        .even
+ 0408           _LED_right_3::
+ 0408                   .dbline -1
+ 0408                   .dbline 229
+ 0408           ; }
+ 0408           ; 
+ 0408           ; void LED_right_3()
+ 0408           ; {
+ 0408                   .dbline 230
+ 0408           ;   if((PINC & (1<<PC2)) == 0)
+ 0408 9A99              sbic 0x13,2
+ 040A 3AC0              rjmp L186
+ 040C           X109:
+ 040C                   .dbline 231
+ 040C           ;   {
+ 040C 38C0              xjmp L189
+ 040E           L188:
+ 040E                   .dbline 233
+ 040E           ;     while(1)
+ 040E           ;       {
+ 040E                   .dbline 234
+ 040E           ;       PORTA = 0x00;
+ 040E 2224              clr R2
+ 0410 2BBA              out 0x1b,R2
+ 0412                   .dbline 235
+ 0412           ;       PORTB = 0x10;
+ 0412 80E1              ldi R24,16
+ 0414 88BB              out 0x18,R24
+ 0416                   .dbline 236
+ 0416           ;         delay(delayMs);
+ 0416 00910000          lds R16,_delayMs
+ 041A 1127              clr R17
+ 041C F1DD              xcall _delay
+ 041E                   .dbline 237
+ 041E           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 041E 989B              sbis 0x13,0
+ 0420 04C0              rjmp L194
+ 0422           X110:
+ 0422 999B              sbis 0x13,1
+ 0424 02C0              rjmp L194
+ 0426           X111:
+ 0426 9B99              sbic 0x13,3
+ 0428 01C0              rjmp L191
+ 042A           X112:
+ 042A           L194:
+ 042A                   .dbline 238
+ 042A           ;           break;
+ 042A 2AC0              xjmp L190
+ 042C           L191:
+ 042C                   .dbline 239
+ 042C           ;         PORTB = 0x20;
+ 042C 80E2              ldi R24,32
+ 042E 88BB              out 0x18,R24
+ 0430                   .dbline 240
+ 0430           ;         delay(delayMs);
+ 0430 00910000          lds R16,_delayMs
+ 0434 1127              clr R17
+ 0436 E4DD              xcall _delay
+ 0438                   .dbline 241
+ 0438           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 0438 989B              sbis 0x13,0
+ 043A 04C0              rjmp L198
+ 043C           X113:
+ 043C 999B              sbis 0x13,1
+ 043E 02C0              rjmp L198
+ 0440           X114:
+ 0440 9B99              sbic 0x13,3
+ 0442 01C0              rjmp L195
+ 0444           X115:
+ 0444           L198:
+ 0444                   .dbline 242
+ 0444           ;           break;
+ 0444 1DC0              xjmp L190
+ 0446           L195:
+ 0446                   .dbline 243
+ 0446           ;         PORTB = 0x40;
+ 0446 80E4              ldi R24,64
+ 0448 88BB              out 0x18,R24
+ 044A                   .dbline 244
+ 044A           ;         delay(delayMs);
+ 044A 00910000          lds R16,_delayMs
+ 044E 1127              clr R17
+ 0450 D7DD              xcall _delay
+ 0452                   .dbline 245
+ 0452           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 0452 989B              sbis 0x13,0
+ 0454 04C0              rjmp L202
+ 0456           X116:
+ 0456 999B              sbis 0x13,1
+ 0458 02C0              rjmp L202
+ 045A           X117:
+ 045A 9B99              sbic 0x13,3
+ 045C 01C0              rjmp L199
+ 045E           X118:
+ 045E           L202:
+ 045E                   .dbline 246
+ 045E           ;           break;
+ 045E 10C0              xjmp L190
+ 0460           L199:
+ 0460                   .dbline 247
+ 0460           ;         PORTB = 0x80;
+ 0460 80E8              ldi R24,128
+ 0462 88BB              out 0x18,R24
+ 0464                   .dbline 248
+ 0464           ;         delay(delayMs);
+ 0464 00910000          lds R16,_delayMs
+ 0468 1127              clr R17
+ 046A CADD              xcall _delay
+ 046C                   .dbline 249
+ 046C           ;         PORTB = 0x00;
+ 046C 2224              clr R2
+ 046E 28BA              out 0x18,R2
+ 0470                   .dbline 250
+ 0470           ;         if((PINC&(1<<PC0))==0 || (PINC&(1<<PC1))==0 || (PINC&(1<<PC3))==0) //若按下其他的按键则跳出循环
+ 0470 989B              sbis 0x13,0
+ 0472 04C0              rjmp L206
+ 0474           X119:
+ 0474 999B              sbis 0x13,1
+ 0476 02C0              rjmp L206
+ 0478           X120:
+ 0478 9B99              sbic 0x13,3
+ 047A 01C0              rjmp L203
+ 047C           X121:
+ 047C           L206:
+ 047C                   .dbline 251
+ 047C           ;           break;
+ 047C 01C0              xjmp L190
+ 047E           L203:
+ 047E                   .dbline 253
+ 047E           ;         
+ 047E           ;     }
+ 047E           L189:
+ 047E                   .dbline 232
+ 047E C7CF              xjmp L188
+ 0480           L190:
+ 0480                   .dbline 254
+ 0480           ;   }
+ 0480           L186:
+ 0480                   .dbline -2
+ 0480           L185:
+ 0480                   .dbline 0 ; func end
+ 0480 0895              ret
+ 0482                   .dbend
+ 0482                   .dbfunc e LED_right _LED_right fV
+                        .even
+ 0482           _LED_right::
+ 0482                   .dbline -1
+ 0482                   .dbline 258
+ 0482           ; }
+ 0482           ; 
+ 0482           ; void LED_right()  
+ 0482           ; {
+ 0482                   .dbline 259
+ 0482           ;   if(((PINA&(1<<PA0))==1) || ((PINA&(1<<PA1))==1) || ((PINA&(1<<PA2))==1) || ((PINA&(1<<PA3))==1))  //判断此时灯在何处是亮的
+ 0482 89B3              in R24,0x19
+ 0484 8170              andi R24,1
+ 0486 8130              cpi R24,1
+ 0488 61F0              breq L212
+ 048A           X122:
+ 048A 89B3              in R24,0x19
+ 048C 8270              andi R24,2
+ 048E 8130              cpi R24,1
+ 0490 41F0              breq L212
+ 0492           X123:
+ 0492 89B3              in R24,0x19
+ 0494 8470              andi R24,4
+ 0496 8130              cpi R24,1
+ 0498 21F0              breq L212
+ 049A           X124:
+ 049A 89B3              in R24,0x19
+ 049C 8870              andi R24,8
+ 049E 8130              cpi R24,1
+ 04A0 09F4              brne L208
+ 04A2           X125:
+ 04A2           L212:
+ 04A2                   .dbline 260
+ 04A2           ;   {
+ 04A2                   .dbline 261
+ 04A2           ;     LED_right_0();
+ 04A2 FBDE              xcall _LED_right_0
+ 04A4                   .dbline 262
+ 04A4           ;   }
+ 04A4           L208:
+ 04A4                   .dbline 263
+ 04A4           ;   if(((PINA&(1<<PA4))==1) || ((PINA&(1<<PA5))==1) || ((PINA&(1<<PA6))==1) || ((PINA&(1<<PA7))==1))  //判断此时灯在何处是亮的
+ 04A4 89B3              in R24,0x19
+ 04A6 8071              andi R24,16
+ 04A8 8130              cpi R24,1
+ 04AA 61F0              breq L217
+ 04AC           X126:
+ 04AC 89B3              in R24,0x19
+ 04AE 8072              andi R24,32
+ 04B0 8130              cpi R24,1
+ 04B2 41F0              breq L217
+ 04B4           X127:
+ 04B4 89B3              in R24,0x19
+ 04B6 8074              andi R24,64
+ 04B8 8130              cpi R24,1
+ 04BA 21F0              breq L217
+ 04BC           X128:
+ 04BC 89B3              in R24,0x19
+ 04BE 8078              andi R24,128
+ 04C0 8130              cpi R24,1
+ 04C2 09F4              brne L213
+ 04C4           X129:
+ 04C4           L217:
+ 04C4                   .dbline 264
+ 04C4           ;   {
+ 04C4                   .dbline 265
+ 04C4           ;     LED_right_1();
+ 04C4 27DF              xcall _LED_right_1
+ 04C6                   .dbline 266
+ 04C6           ;   }
+ 04C6           L213:
+ 04C6                   .dbline 267
+ 04C6           ;   if(((PINB&(1<<PB0))==1) || ((PINB&(1<<PB1))==1) || ((PINB&(1<<PB2))==1) || ((PINB&(1<<PB3))==1))  //判断此时灯在何处是亮的
+ 04C6 86B3              in R24,0x16
+ 04C8 8170              andi R24,1
+ 04CA 8130              cpi R24,1
+ 04CC 61F0              breq L222
+ 04CE           X130:
+ 04CE 86B3              in R24,0x16
+ 04D0 8270              andi R24,2
+ 04D2 8130              cpi R24,1
+ 04D4 41F0              breq L222
+ 04D6           X131:
+ 04D6 86B3              in R24,0x16
+ 04D8 8470              andi R24,4
+ 04DA 8130              cpi R24,1
+ 04DC 21F0              breq L222
+ 04DE           X132:
+ 04DE 86B3              in R24,0x16
+ 04E0 8870              andi R24,8
+ 04E2 8130              cpi R24,1
+ 04E4 09F4              brne L218
+ 04E6           X133:
+ 04E6           L222:
+ 04E6                   .dbline 268
+ 04E6           ;   {
+ 04E6                   .dbline 269
+ 04E6           ;     LED_right_2();
+ 04E6 53DF              xcall _LED_right_2
+ 04E8                   .dbline 270
+ 04E8           ;   }
+ 04E8           L218:
+ 04E8                   .dbline 271
+ 04E8           ;   if(((PINB&(1<<PB4))==1) || ((PINB&(1<<PB5))==1) || ((PINB&(1<<PB6))==1) || ((PINB&(1<<PB7))==1))  //判断此时灯在何处是亮的
+ 04E8 86B3              in R24,0x16
+ 04EA 8071              andi R24,16
+ 04EC 8130              cpi R24,1
+ 04EE 61F0              breq L227
+ 04F0           X134:
+ 04F0 86B3              in R24,0x16
+ 04F2 8072              andi R24,32
+ 04F4 8130              cpi R24,1
+ 04F6 41F0              breq L227
+ 04F8           X135:
+ 04F8 86B3              in R24,0x16
+ 04FA 8074              andi R24,64
+ 04FC 8130              cpi R24,1
+ 04FE 21F0              breq L227
+ 0500           X136:
+ 0500 86B3              in R24,0x16
+ 0502 8078              andi R24,128
+ 0504 8130              cpi R24,1
+ 0506 09F4              brne L223
+ 0508           X137:
+ 0508           L227:
+ 0508                   .dbline 272
+ 0508           ;   {
+ 0508                   .dbline 273
+ 0508           ;     LED_right_3();
+ 0508 7FDF              xcall _LED_right_3
+ 050A                   .dbline 274
+ 050A           ;   }
+ 050A           L223:
+ 050A                   .dbline -2
+ 050A           L207:
+ 050A                   .dbline 0 ; func end
+ 050A 0895              ret
+ 050C                   .dbend
+ 050C                   .dbfunc e LED_up _LED_up fV
+                        .even
+ 050C           _LED_up::
+ 050C                   .dbline -1
+ 050C                   .dbline 278
+ 050C           ; }
+ 050C           ; 
+ 050C           ; void LED_up()
+ 050C           ; {
+ 050C                   .dbline -2
+ 050C           L228:
+ 050C                   .dbline 0 ; func end
+ 050C 0895              ret
+ 050E                   .dbend
+ 050E                   .dbfunc e LED_left _LED_left fV
+                        .even
+ 050E           _LED_left::
+ 050E                   .dbline -1
+ 050E                   .dbline 283
+ 050E           ; 
+ 050E           ; }
+ 050E           ; 
+ 050E           ; void LED_left()
+ 050E           ; {
+ 050E                   .dbline -2
+ 050E           L229:
+ 050E                   .dbline 0 ; func end
+ 050E 0895              ret
+ 0510                   .dbend
+ 0510                   .dbfunc e LED_init _LED_init fV
+                        .even
+ 0510           _LED_init::
+ 0510                   .dbline -1
+ 0510                   .dbline 288
+ 0510           ; 
+ 0510           ; }
+ 0510           ; 
+ 0510           ; void LED_init()  //向右移动，初始值
+ 0510           ; {
+ 0510                   .dbline 289
+ 0510           ;   PORTA = 0x01;
+ 0510 81E0              ldi R24,1
+ 0512 8BBB              out 0x1b,R24
+ 0514                   .dbline 290
+ 0514           ;   delay(delayMs);
+ 0514 00910000          lds R16,_delayMs
+ 0518 1127              clr R17
+ 051A 72DD              xcall _delay
+ 051C                   .dbline 291
+ 051C           ;   LED_down_0();  //按下下按键时
+ 051C 85DD              xcall _LED_down_0
+ 051E                   .dbline 292
+ 051E           ;   PORTA = 0x02;
+ 051E 82E0              ldi R24,2
+ 0520 8BBB              out 0x1b,R24
+ 0522                   .dbline 293
+ 0522           ;   delay(delayMs);
+ 0522 00910000          lds R16,_delayMs
+ 0526 1127              clr R17
+ 0528 6BDD              xcall _delay
+ 052A                   .dbline 294
+ 052A           ;   LED_down_1();  //按下下按键时
+ 052A BBDD              xcall _LED_down_1
+ 052C                   .dbline 295
+ 052C           ;   PORTA = 0x04;
+ 052C 84E0              ldi R24,4
+ 052E 8BBB              out 0x1b,R24
+ 0530                   .dbline 296
+ 0530           ;   delay(delayMs);
+ 0530 00910000          lds R16,_delayMs
+ 0534 1127              clr R17
+ 0536 64DD              xcall _delay
+ 0538                   .dbline 297
+ 0538           ;   LED_down_2();  //按下下按键时
+ 0538 F1DD              xcall _LED_down_2
+ 053A                   .dbline 298
+ 053A           ;   PORTA = 0x08;
+ 053A 88E0              ldi R24,8
+ 053C 8BBB              out 0x1b,R24
+ 053E                   .dbline 299
+ 053E           ;   delay(delayMs);
+ 053E 00910000          lds R16,_delayMs
+ 0542 1127              clr R17
+ 0544 5DDD              xcall _delay
+ 0546                   .dbline 300
+ 0546           ;   LED_down_3();  //按下下按键时
+ 0546                   .dbline -2
+ 0546           L230:
+ 0546                   .dbline 0 ; func end
+ 0546 27CE              xjmp _LED_down_3
+ 0548                   .dbend
+ 0548                   .dbfunc e main _main fV
+                        .even
+ 0548           _main::
+ 0548                   .dbline -1
+ 0548                   .dbline 304
+ 0548           ; }
+ 0548           ; 
+ 0548           ; void main()
+ 0548           ; {
+ 0548                   .dbline 305
+ 0548           ;   DDRA = 0xff;
+ 0548 8FEF              ldi R24,255
+ 054A 8ABB              out 0x1a,R24
+ 054C                   .dbline 306
+ 054C           ;   DDRB = 0xff;
+ 054C 87BB              out 0x17,R24
+ 054E                   .dbline 307
+ 054E           ;   DDRC = 0x00;
+ 054E 2224              clr R2
+ 0550 24BA              out 0x14,R2
+ 0552                   .dbline 308
+ 0552           ;   PORTA = 0x00;
+ 0552 2BBA              out 0x1b,R2
+ 0554                   .dbline 309
+ 0554           ;   PORTB = 0x00;
+ 0554 28BA              out 0x18,R2
+ 0556                   .dbline 310
+ 0556           ;   PORTC = 0x0f;
+ 0556 8FE0              ldi R24,15
+ 0558 85BB              out 0x15,R24
+ 055A 28C0              xjmp L233
+ 055C           L232:
+ 055C                   .dbline 312
+ 055C           ;   while(1)
+ 055C           ;   {
+ 055C                   .dbline 313
+ 055C           ;     PORTA = 0x01;
+ 055C 81E0              ldi R24,1
+ 055E 8BBB              out 0x1b,R24
+ 0560                   .dbline 314
+ 0560           ;       delay(delayMs);
+ 0560 00910000          lds R16,_delayMs
+ 0564 1127              clr R17
+ 0566 4CDD              xcall _delay
+ 0568                   .dbline 315
+ 0568           ;       LED_up();
+ 0568 D1DF              xcall _LED_up
+ 056A                   .dbline 316
+ 056A           ;       LED_down();
+ 056A 52DE              xcall _LED_down
+ 056C                   .dbline 317
+ 056C           ;       LED_left();
+ 056C D0DF              xcall _LED_left
+ 056E                   .dbline 318
+ 056E           ;       LED_right();
+ 056E 89DF              xcall _LED_right
+ 0570                   .dbline 320
+ 0570           ;       
+ 0570           ;       PORTA = 0x02;
+ 0570 82E0              ldi R24,2
+ 0572 8BBB              out 0x1b,R24
+ 0574                   .dbline 321
+ 0574           ;       delay(delayMs);
+ 0574 00910000          lds R16,_delayMs
+ 0578 1127              clr R17
+ 057A 42DD              xcall _delay
+ 057C                   .dbline 322
+ 057C           ;       LED_up();
+ 057C C7DF              xcall _LED_up
+ 057E                   .dbline 323
+ 057E           ;       LED_down();
+ 057E 48DE              xcall _LED_down
+ 0580                   .dbline 324
+ 0580           ;       LED_left();
+ 0580 C6DF              xcall _LED_left
+ 0582                   .dbline 325
+ 0582           ;       LED_right();
+ 0582 7FDF              xcall _LED_right
+ 0584                   .dbline 327
+ 0584           ;       
+ 0584           ;       PORTA = 0x04;
+ 0584 84E0              ldi R24,4
+ 0586 8BBB              out 0x1b,R24
+ 0588                   .dbline 328
+ 0588           ;       delay(delayMs);
+ 0588 00910000          lds R16,_delayMs
+ 058C 1127              clr R17
+ 058E 38DD              xcall _delay
+ 0590                   .dbline 329
+ 0590           ;       LED_up();
+ 0590 BDDF              xcall _LED_up
+ 0592                   .dbline 330
+ 0592           ;       LED_down();
+ 0592 3EDE              xcall _LED_down
+ 0594                   .dbline 331
+ 0594           ;       LED_left();
+ 0594 BCDF              xcall _LED_left
+ 0596                   .dbline 332
+ 0596           ;       LED_right();
+ 0596 75DF              xcall _LED_right
+ 0598                   .dbline 334
+ 0598           ;       
+ 0598           ;       PORTA = 0x08;
+ 0598 88E0              ldi R24,8
+ 059A 8BBB              out 0x1b,R24
+ 059C                   .dbline 335
+ 059C           ;       delay(delayMs);
+ 059C 00910000          lds R16,_delayMs
+ 05A0 1127              clr R17
+ 05A2 2EDD              xcall _delay
+ 05A4                   .dbline 336
+ 05A4           ;       LED_up();
+ 05A4 B3DF              xcall _LED_up
+ 05A6                   .dbline 337
+ 05A6           ;       LED_down();
+ 05A6 34DE              xcall _LED_down
+ 05A8                   .dbline 338
+ 05A8           ;       LED_left();
+ 05A8 B2DF              xcall _LED_left
+ 05AA                   .dbline 339
+ 05AA           ;       LED_right();
+ 05AA 6BDF              xcall _LED_right
+ 05AC                   .dbline 340
+ 05AC           ;   }
+ 05AC           L233:
+ 05AC                   .dbline 311
+ 05AC D7CF              xjmp L232
+ 05AE           X138:
+ 05AE                   .dbline -2
+ 05AE           L231:
+ 05AE                   .dbline 0 ; func end
+ 05AE 0895              ret
+ 05B0                   .dbend
+ 05B0           ; }

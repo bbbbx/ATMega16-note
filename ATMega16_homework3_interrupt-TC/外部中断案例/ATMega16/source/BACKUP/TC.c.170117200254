@@ -1,0 +1,47 @@
+#include <iom16v.h>
+
+#pragma interrupt_handler interrupt_seriver0:2
+#pragma interrupt_handler interrupt_seriver1:3
+
+unsigned char COUNT;
+
+void delay_ms(unsigned int n)
+{
+  unsigned int i , j;
+  for(i = 0 ; i < n ; n++)
+    for(j = 0 ; j < 1141 ; j ++) ;
+}
+
+void interrupt_seriver0()
+{
+  delay_ms(20);
+  if((PIND&(1<<2))==0)
+  {
+    COUNT++;
+	PORTC = ~COUNT;
+  }
+}
+
+void interrupt_seriver1()
+{
+  delay_ms(2);
+  if((PIND&(1<<3))==0)
+  {
+    COUNT--;
+	PORTC = ~COUNT;
+  }
+}
+
+void main()
+{
+  DDRC = 0xff;
+  PORTC = 0xff;
+  DDRD = 0x00;
+  PORTD = 0xff;
+ 
+  SREG |= 0x80;
+  MCUCR = 0x0a;
+  GICR |= 0xc0;
+  
+  while(1) { }
+}

@@ -1,0 +1,76 @@
+XL
+H 1 areas 6 global symbols
+M usart.c
+S push_xgsetF000 Ref0000
+S pop_xgsetF000 Ref0000
+A text size 5C flags 0
+dbfile usart.c
+dbfile C:\Users\z\Desktop\作业\作业1\source\usart.c
+dbfunc e USART_Init 0 fV
+dbline FFFFFFFF 0
+dbline 4 0
+dbline 5 0
+dbline 6 2
+dbline 7 4
+dbline 8 6
+dbline 9 C
+dbline FFFFFFFE 10
+dbline 0 10
+dbfunc e USART_Send 12 fV
+dbsym r data 10 c
+dbline FFFFFFFF 12
+dbline D 12
+dbline E 12
+dbline E 12
+dbline F 16
+dbline 10 18
+dbline 10 18
+dbline FFFFFFFE 1C
+dbline 0 1C
+dbfunc e delay_ms 1E fV
+dbsym r i 14 i
+dbsym r j 16 i
+dbsym r ms 10 i
+dbline FFFFFFFF 22
+dbline 15 22
+dbline 17 22
+dbline 18 28
+dbline 18 2E
+dbline 18 2E
+dbline 18 32
+dbline 17 3A
+dbline 17 3E
+dbline FFFFFFFE 44
+dbline 0 44
+dbfunc e main 48 fV
+dbline FFFFFFFF 48
+dbline 1C 48
+dbline 1D 48
+dbline 1E 4A
+dbline 21 4E
+dbline 22 4E
+dbline 23 52
+dbline 24 58
+dbline 20 58
+dbline FFFFFFFE 5A
+dbline 0 5A
+S _main Def0048
+S _delay_ms Def001E
+S _USART_Send Def0012
+S _USART_Init Def0000
+T 00 00 89 9A 91 9A 53 9A 80 B5 86 68 80 BD 83 E3
+R 00 00 00 00
+T 0E 00 89 B9 08 95
+R 00 00 00 00
+T 12 00 5D 9B FE CF 0C B9 5E 9B FE CF 08 95
+R 00 00 00 00
+T 1E 00 0E 94 00 00 44 27 55 27 0B C0 66 27 77 27
+R 00 00 00 00 12 04 00 00
+T 2C 00 02 C0 6F 5F 7F 4F 65 37 E4 E0 7E 07 D0 F3
+R 00 00 00 00
+T 3A 00 4F 5F 5F 4F 40 17 51 07 90 F3 0C 94 00 00
+R 00 00 00 00 12 0E 01 00
+T 48 00 78 94 DA DF 05 C0 01 E4 E0 DF 08 EE 13 E0
+R 00 00 00 00
+T 56 00 E3 DF FA CF 08 95
+R 00 00 00 00

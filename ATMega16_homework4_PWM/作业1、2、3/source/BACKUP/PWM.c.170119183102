@@ -1,0 +1,42 @@
+#include <iom16v.h>
+
+void PWM_OC2_init()
+{
+  DDRD = 0x80;	  //设置OC2位输出；
+  PORTD = 0x80;	  //输出高电平
+  
+  TCCR2 = (1<<WGM21)|(1<<WGM20);   //设置T/C工作模式为快速PWM，TOP值为0xff
+  TCCR2 |= (1<<COM21)|(0<<COM20);  //设置比较匹配发生时OC2清零，计数到TOP时OC2置位
+  TCCR2 |= (1<<CS22)|(0<<CS21)|(1<<CS20);	//设置分频为128，f=8000000/(128*256)=244，输出频率为244Hz
+  
+  OCR2 = 0x33;    //占空比20%，0xff*0.2=0x33
+}
+
+void PWM_OC0_init()
+{
+  DDRB = 0x08;
+  PORTB = 0x08;
+  
+  TCCR0 = (1<<WGM01)|(1<<WGM00);   //设置T/C工作模式为快速PWM，TOP值为0xff
+  TCCR0 |= (1<<COM01)|(0<<COM00);  //设置比较匹配发生时OC0清零，计数到TOP时OC0置位
+  TCCR0 |= (1<<CS02)|(0<<CS01)|(0<<CS00);	//设置分频为256，f=8000000/(256*256)=122，输出频率为122Hz
+  
+  OCR0 = 0x33;
+}
+
+void main()
+{
+  unsigned char count=0x00;
+  
+  PWM_OC2_init();
+  PWM_OC0_init();
+  
+  while(1)
+  {
+    /*if(count<0xff)
+	{
+	  OCR0 += 0x0f;
+	}*/
+  
+  };
+}

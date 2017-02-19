@@ -1,0 +1,37 @@
+#include <iom16v.h>
+
+void delay_ms(unsigned int n)	//延时函数
+{
+  unsigned int i,j;
+  for(i = 0 ; i < n ; i ++)
+    for(j = 0 ; j <1141; j ++) ;
+}
+
+const unsigned char table_ca[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};  //共阳数码管键码
+
+void main()
+{
+  DDRA = 0x0f;
+  DDRC = 0xff;
+  DDRD = 0x03;
+  
+  PORTA = 0xf0;
+  PORTC = 0x00;
+  PORTD = 0x00;
+  while(1)
+  {
+    PORTA = 0xfe;
+	
+	delay_ms(200);
+	PORTA = 0xfd;
+	delay_ms(200);
+	
+	PORTA = 0xfb;
+	delay_ms(200);
+	
+	PORTA = 0xf7;
+	delay_ms(200);
+	
+	
+  }
+}
